@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Import Project="ProjectDefaults.targets" />
+  <Import Project="Versions.targets" />
+  <Import Project="Tests.targets" />
+  <Import Project="CodeCoverage.targets" />
+  <Import Project="CoverageReports.targets" />
+  
+</Project>

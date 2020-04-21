@@ -1,0 +1,105 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
+    <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
+
+    <NoWarn>$(NoWarn);CA1812</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Flashy.Sdk\Flashy.Sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="$(MicrosoftBuildFrameworkVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisCommonVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisWorkspacesCommonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Common\MockEngine.cs" Link="TestUtilities\MockEngine.cs" />
+    <Compile Include="..\Common\Sandbox.cs" Link="TestUtilities\Sandbox.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="testassets\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="$(RepoRoot)eng\common\**\*" LinkBase="testassets\boilerplate\eng\common\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="$(RepoRoot)build.sh" LinkBase="testassets\boilerplate\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="$(RepoRoot)build.cmd" LinkBase="testassets\boilerplate\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="$(RepoRoot)tests\testassets\empty-git-repo\**\*" LinkBase="testassets\repo\" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>NuGetPackageRoot</_Parameter1>
+      <_Parameter2>$(NuGetPackageRoot)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>PackageVersion</_Parameter1>
+      <_Parameter2>$(PackageVersion)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>CharadeSdkAssemblyPath</_Parameter1>
+      <_Parameter2>$(OutputPath)Flashy.Sdk.dll</_Parameter2>
+    </AssemblyAttribute>
+    <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>LogOutputDir</_Parameter1>
+      <_Parameter2>$(ArtifactsLogDir)tests\</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <Target Name="GenerateTestGlobalJson" AfterTargets="CopyFilesToOutputDirectory">
+    <PropertyGroup>
+      <GlobalJsonContent>
+{
+  "tools": {
+    "dotnet": "$(NETCoreSdkVersion)"
+  },
+  "msbuild-sdks": {
+    "Flashy.Sdk": "$(PackageVersion)"
+  }
+}
+      </GlobalJsonContent>
+    </PropertyGroup>
+    <WriteLinesToFile Lines="$(GlobalJsonContent)" File="$(TargetDir)testassets\boilerplate\global.json" Overwrite="true" />
+  </Target>
+
+  <Target Name="GenerateTestNuGetConfig" AfterTargets="CopyFilesToOutputDirectory">
+    <PropertyGroup>
+      <TestNuGetConfigContent>
+<![CDATA[
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+    <add key="non-shipping Flashy" value="$(ArtifactsNonShippingPackagesDir)" />
+    <add key="shipping Flashy" value="$(ArtifactsShippingPackagesDir)" />
+  </packageSources>
+  <disabledPackageSources>
+    <clear />
+  </disabledPackageSources>
+</configuration>
+]]>
+      </TestNuGetConfigContent>
+    </PropertyGroup>
+    <WriteLinesToFile Lines="$(TestNuGetConfigContent)" File="$(TargetDir)testassets\boilerplate\NuGet.config" Overwrite="true" />
+  </Target>
+
+  <Target Name="DeletePackageDirectories" BeforeTargets="InitialTargets">
+    <RemoveDir Directories="$(ArtifactsShippingPackagesDir)" Condition="Exists('$(ArtifactsShippingPackagesDir)')" />
+    <RemoveDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="Exists('$(ArtifactsNonShippingPackagesDir)')" />
+  </Target>
+
+  <Target Name="GeneratePackageDirectories" AfterTargets="Build">
+    <MakeDir Directories="$(ArtifactsShippingPackagesDir)" Condition="!Exists('$(ArtifactsShippingPackagesDir)')" />
+    <MakeDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="!Exists('$(ArtifactsNonShippingPackagesDir)')" />
+  </Target>
+
+  <Target Name="DeletePackageFromLocalFeed" BeforeTargets="Build">
+    <RemoveDir Directories="$(NuGetPackageRoot)Flashy.sdk" Condition="Exists('$(NuGetPackageRoot)Flashy.sdk')" />
+  </Target>
+  
+</Project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Import Project="RepoLayout.props"/>
+
+  <PropertyGroup>
+    <OutDirName Condition="'$(OutDirName)' == ''">$(MSBuildProjectName)</OutDirName>
+
+    <BaseOutputPath Condition="'$(BaseOutputPath)' == ''">$([System.IO.Path]::GetFullPath('$(ArtifactsBinDir)$(OutDirName)\'))</BaseOutputPath>
+    <OutputPath Condition="'$(PlatformName)' == 'AnyCPU'">$(BaseOutputPath)$(Configuration)\</OutputPath>
+    <OutputPath Condition="'$(PlatformName)' != 'AnyCPU'">$(BaseOutputPath)$(PlatformName)\$(Configuration)\</OutputPath>
+
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)' == ''">$([System.IO.Path]::GetFullPath('$(ArtifactsObjDir)$(OutDirName)\'))</BaseIntermediateOutputPath>
+    <IntermediateOutputPath Condition="'$(PlatformName)' == 'AnyCPU'">$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition="'$(PlatformName)' != 'AnyCPU'">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+
+</Project>

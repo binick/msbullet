@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <CoverageReportOutDir>$([System.IO.Path]::GetFullPath('$(ArtifactsCoverageDir)$(OutDirName).json'))</CoverageReportOutDir>
+  </PropertyGroup>
+
+  <!-- Import specialized targets files of supported coverage report generator -->
+  <Import Project="$(MSBuildThisFileDirectory)$(CoverageReportToolName)\$(CoverageReportToolName).targets" Condition="'$(CoverageReportToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(CoverageReportToolName)\$(CoverageReportToolName).targets')"/>
+
+</Project>

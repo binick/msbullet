@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
+    <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
+
+    <NoWarn>$(NoWarn);CA1812</NoWarn>
+    <CollectCoverageOnTest>true</CollectCoverageOnTest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Flashy.Sdk\Flashy.Sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="$(MicrosoftBuildFrameworkVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisCommonVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisWorkspacesCommonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Common\MockEngine.cs" Link="TestUtilities\MockEngine.cs" />
+    <Compile Include="..\Common\Sandbox.cs" Link="TestUtilities\Sandbox.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\Flashy.Sdk\tools\**\*" LinkBase="sdktools\" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <_IsVersionable>false</_IsVersionable>
+    <_IsVersionable Condition="'$(IsPackable)' == 'true'">true</_IsVersionable>
+  </PropertyGroup>
+
+  <Target Name="GenerateVersion" DependsOnTargets="_GenerateVersion" Condition="'$(_IsVersionable)' == 'true'" />
+
+  <!-- Import specialized targets files of supported version tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(VersionToolName)\$(VersionToolName).targets" Condition="'$(VersionToolName)' != '' and '$(_UpdateAssemblyVersionOnBuild)' == 'true' and Exists('$(MSBuildThisFileDirectory)$(VersionToolName)\$(VersionToolName).targets')"/>
+
+</Project>

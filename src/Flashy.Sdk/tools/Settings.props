@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Import Project="ProjectLayout.props" />
+  <Import Project="DefaultVersions.props" />
+  <Import Project="ProjectDefaults.props" />
+  <Import Project="Versions.props" />
+  <Import Project="Tests.props" />
+  <Import Project="CodeCoverage.props" />
+  <Import Project="CoverageReports.props" />
+
+</Project>
