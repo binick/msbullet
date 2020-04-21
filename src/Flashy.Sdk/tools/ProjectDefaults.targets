@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <DeployProjectOutput Condition="'$(DeployProjectOutput)' == ''">$(__DeployProjectOutput)</DeployProjectOutput>
+    
+    <!-- Run Deploy step by default when the solution is build directly via msbuild (from command line or VS). -->
+    <DeployProjectOutput Condition="'$(DeployProjectOutput)' == ''">true</DeployProjectOutput>
+  </PropertyGroup>
+
+  <!-- Default empty deploy target. -->
+  <Target Name="Deploy" AfterTargets="Build" Condition="'$(DeployProjectOutput)' == 'true'" />
+
+  <PropertyGroup>
+    <PackageOutputPath Condition="'$(IsShippable)' == 'true'">$(ArtifactsShippingPackagesDir)</PackageOutputPath>
+    <PackageOutputPath Condition="'$(IsShippable)' != 'true'">$(ArtifactsNonShippingPackagesDir)</PackageOutputPath>
+  </PropertyGroup>
+
+  <!--
+    Closed source license must be added to the package. 
+    NuGet.org accepts only OSI or FSF approved licenses when using license type expression. 
+  -->
+  <PropertyGroup Condition="'$(PackageLicenseExpressionInternal)' != '' and '$(IsPackable)' == 'true' and '$(PackageLicenseFile)' == ''">
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(PackageLicenseExpressionInternal)' != '' and '$(IsPackable)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)Licenses\$(PackageLicenseExpressionInternal).txt" Pack="true" PackagePath="$(PackageLicenseFile)" Visible="false" />
+  </ItemGroup>
+
+</Project>

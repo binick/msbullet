@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  
+  <PropertyGroup>
+    <ReportTypes Condition="'$(ReportTypes)' == ''">Html;Latex</ReportTypes>
+    <AssemblyToInclude Condition="'$(AssemblyToInclude)' == ''"></AssemblyToInclude>
+    <AssemblyToExclude Condition="'$(AssemblyToExclude)' == ''"></AssemblyToExclude>
+  </PropertyGroup>
+  
+</Project>

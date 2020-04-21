@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <ItemGroup>
+    <PackageReference Include="ReportGenerator" Version="$(ReportGeneratorVersion)" IsImplicitlyDefined="true" PrivateAssets="all" />
+  </ItemGroup>
+
+  <Target Name="Coverage">
+    <ItemGroup>
+      <CoverageFiles Include="$(ArtifactsCoverageDir)/*" />
+    </ItemGroup>
+    <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="$(ArtifactsCoverageReportsDir)" ReportTypes="$(ReportTypes)" HistoryDirectory="history" AssemblyFilters="$(AssemblyToInclude);$(AssemblyToExclude)" />
+  </Target>
+  
+</Project>

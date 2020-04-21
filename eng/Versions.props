@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <MicrosoftBuildFrameworkVersion>16.5.0</MicrosoftBuildFrameworkVersion>
+    <MicrosoftCodeAnalysisCommonVersion>3.5.0</MicrosoftCodeAnalysisCommonVersion>
+    <MicrosoftCodeAnalysisWorkspacesCommonVersion>3.5.0</MicrosoftCodeAnalysisWorkspacesCommonVersion>
+  </PropertyGroup>
+
+</Project>

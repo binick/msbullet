@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="Sdk.props" Sdk="Flashy.Sdk" />
+
+  <PropertyGroup>
+    <PackageProjectUrl>https://localhost/</PackageProjectUrl>
+    <PackageDescription>Flashy SDK minimal boilerplate test repo.</PackageDescription>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  
+</Project>
