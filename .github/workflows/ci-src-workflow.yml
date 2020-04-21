@@ -1,0 +1,21 @@
+name: 
+on:
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - 'docs/**'
+jobs:
+  build:
+    name: Build & Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest,  macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - run: build.cmd -t -integrationTest -c Release
+      - uses: actions/upload-artifact@v1
+        with:
+          name: sdk-nupgk
+          path: /artifacts/packages/Release/Shippable/Flashy.Sdk.*.nupgk
