@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="Flashy.Sdk.Tests" />
+    <InternalsVisibleTo Include="MsBullet.Sdk.Tests" />
   </ItemGroup>
 
   <ItemGroup>

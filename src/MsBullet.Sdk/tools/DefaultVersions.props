@@ -4,7 +4,7 @@
   <Import Project="$(VersionsPropsPath)" Condition="Exists('$(VersionsPropsPath)')" />
   
   <!--
-    Flashy SDK features.
+    MsBullet SDK features.
   -->
   <PropertyGroup>
     <!-- Opt-out features -->

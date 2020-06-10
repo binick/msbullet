@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 
 using Project = Microsoft.Build.Evaluation.Project;
 
-namespace Flashy.Sdk.Tests.Utilities
+namespace MsBullet.Sdk.Tests.Utilities
 {
     public class DiagnosticWorkspace
     {

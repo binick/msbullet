@@ -6,7 +6,7 @@ using System.Reflection;
 
 using Microsoft.CodeAnalysis;
 
-namespace Flashy.Sdk.IntegrationTests
+namespace MsBullet.Sdk.IntegrationTests
 {
     public class InMemoryApp : TestApp
     {

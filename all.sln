@@ -1,15 +1,14 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{61117DC7-CFBD-4EB1-B781-CCDB2476824D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flashy.Sdk", "src\Flashy.Sdk\Flashy.Sdk.csproj", "{CE3A2706-BDD6-4E57-9DF8-90D8F372023F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsBullet.Sdk", "src\MsBullet.Sdk\MsBullet.Sdk.csproj", "{CE3A2706-BDD6-4E57-9DF8-90D8F372023F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flashy.Sdk.IntegrationTests", "src\Flashy.Sdk.IntegrationTests\Flashy.Sdk.IntegrationTests.csproj", "{237B2C8B-4778-43A4-8059-11929C09BED2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsBullet.Sdk.IntegrationTests", "src\MsBullet.Sdk.IntegrationTests\MsBullet.Sdk.IntegrationTests.csproj", "{237B2C8B-4778-43A4-8059-11929C09BED2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flashy.Sdk.Tests", "src\Flashy.Sdk.Tests\Flashy.Sdk.Tests.csproj", "{104E6DFE-086F-4EED-8A7C-DCBE89BED572}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsBullet.Sdk.Tests", "src\MsBullet.Sdk.Tests\MsBullet.Sdk.Tests.csproj", "{104E6DFE-086F-4EED-8A7C-DCBE89BED572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

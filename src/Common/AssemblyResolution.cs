@@ -9,7 +9,7 @@ using System.Reflection;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-namespace Flashy
+namespace MsBullet
 {
     internal static class AssemblyResolution
     {

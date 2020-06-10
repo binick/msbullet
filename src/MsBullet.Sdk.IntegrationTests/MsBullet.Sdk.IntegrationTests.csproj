@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Flashy.Sdk\Flashy.Sdk.csproj" />
+    <ProjectReference Include="..\MsBullet.Sdk\MsBullet.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +42,7 @@
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
       <_Parameter1>CharadeSdkAssemblyPath</_Parameter1>
-      <_Parameter2>$(OutputPath)Flashy.Sdk.dll</_Parameter2>
+      <_Parameter2>$(OutputPath)MsBullet.Sdk.dll</_Parameter2>
     </AssemblyAttribute>
     <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
@@ -59,7 +59,7 @@
     "dotnet": "$(NETCoreSdkVersion)"
   },
   "msbuild-sdks": {
-    "Flashy.Sdk": "$(PackageVersion)"
+    "MsBullet.Sdk": "$(PackageVersion)"
   }
 }
       </GlobalJsonContent>
@@ -75,8 +75,8 @@
   <packageSources>
     <clear />
     <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
-    <add key="non-shipping Flashy" value="$(ArtifactsNonShippingPackagesDir)" />
-    <add key="shipping Flashy" value="$(ArtifactsShippingPackagesDir)" />
+    <add key="non-shipping MsBullet" value="$(ArtifactsNonShippingPackagesDir)" />
+    <add key="shipping MsBullet" value="$(ArtifactsShippingPackagesDir)" />
   </packageSources>
   <disabledPackageSources>
     <clear />
@@ -99,7 +99,7 @@
   </Target>
 
   <Target Name="DeletePackageFromLocalFeed" BeforeTargets="Build">
-    <RemoveDir Directories="$(NuGetPackageRoot)Flashy.sdk" Condition="Exists('$(NuGetPackageRoot)Flashy.sdk')" />
+    <RemoveDir Directories="$(NuGetPackageRoot)MsBullet.sdk" Condition="Exists('$(NuGetPackageRoot)MsBullet.sdk')" />
   </Target>
   
 </Project>
