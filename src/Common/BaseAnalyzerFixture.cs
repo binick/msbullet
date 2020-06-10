@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Flashy.Sdk.Tests.Utilities
+namespace MsBullet.Sdk.Tests.Utilities
 {
     public abstract class BaseAnalyzerFixture
     {

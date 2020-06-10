@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
 
-namespace Flashy.Sdk.Tests.Utilities
+namespace MsBullet.Sdk.Tests.Utilities
 {
     public abstract class CodeFixFixture : BaseAnalyzerFixture
     {

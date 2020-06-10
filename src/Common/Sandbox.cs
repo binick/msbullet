@@ -10,7 +10,7 @@ using System.Threading;
 
 using Xunit.Abstractions;
 
-namespace Flashy.Sdk.IntegrationTests.Utilities
+namespace MsBullet.Sdk.IntegrationTests.Utilities
 {
     public class Sandbox : IDisposable
     {

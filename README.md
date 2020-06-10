@@ -1,4 +1,4 @@
-# Flashy SDK
+# MsBullet SDK
 The project is inspired to [Arcade](https://github.com/dotnet/arcade) and your intent is that to avoid the tedious configuration of tools related to development cycle such as testing, versioning and other best practices.
 
 ## How to use
@@ -10,7 +10,7 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us
     "dotnet": "[dotnet sdk version]"
   },
   "msbuild-sdks": {
-    "Flashy.Sdk": "[Flashy.Sdk version]"
+    "MsBullet.Sdk": "[MsBullet.Sdk version]"
   }
 }
 
@@ -20,7 +20,7 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <Import Project="Sdk.props" Sdk="Flashy.Sdk" />
+  <Import Project="Sdk.props" Sdk="MsBullet.Sdk" />
 
 </Project>
 ```
@@ -29,7 +29,7 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <Import Project="Sdk.targets" Sdk="Flashy.Sdk" />
+  <Import Project="Sdk.targets" Sdk="MsBullet.Sdk" />
 
 </Project>
 ```

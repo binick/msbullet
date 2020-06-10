@@ -4,7 +4,7 @@
 using System;
 using System.Reflection;
 
-namespace Flashy.Sdk.Tests.Utilities
+namespace MsBullet.Sdk.Tests.Utilities
 {
     internal static class ReflectionExtensions
     {

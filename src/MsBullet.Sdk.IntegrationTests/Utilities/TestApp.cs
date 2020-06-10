@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-using Flashy.Sdk.IntegrationTests.Utilities;
+using MsBullet.Sdk.IntegrationTests.Utilities;
 using Xunit.Abstractions;
 
-namespace Flashy.Sdk.IntegrationTests
+namespace MsBullet.Sdk.IntegrationTests
 {
     public class TestApp : Sandbox
     {

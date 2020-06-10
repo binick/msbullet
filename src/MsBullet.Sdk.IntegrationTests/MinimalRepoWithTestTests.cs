@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Flashy.Sdk.IntegrationTests
+namespace MsBullet.Sdk.IntegrationTests
 {
     [Collection(TestProjectCollection.Name)]
     public class MinimalRepoWithTestTests

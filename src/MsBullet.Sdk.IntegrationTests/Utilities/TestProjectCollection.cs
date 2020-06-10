@@ -2,7 +2,7 @@
 
 using Xunit;
 
-namespace Flashy.Sdk.IntegrationTests
+namespace MsBullet.Sdk.IntegrationTests
 {
     [CollectionDefinition(Name)]
     public class TestProjectCollection : ICollectionFixture<TestProjectFixture>

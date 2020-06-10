@@ -8,14 +8,14 @@ using System.Reflection;
 
 using Xunit;
 
-namespace Flashy.Sdk.IntegrationTests
+namespace MsBullet.Sdk.IntegrationTests
 {
     [Collection(TestProjectCollection.Name)]
     public class TestProjectFixture : IDisposable
     {
         private static readonly string[] packagesToClear =
         {
-            "Flashy",
+            "MsBullet",
         };
 
         private readonly ConcurrentQueue<IDisposable> disposables = new ConcurrentQueue<IDisposable>();
@@ -37,7 +37,7 @@ namespace Flashy.Sdk.IntegrationTests
         {
             string testAppFiles = Path.Combine(this.testAssets, name);
             string instanceName = Path.GetRandomFileName();
-            string tempDir = Path.Combine(Path.GetTempPath(), "Flashy", instanceName);
+            string tempDir = Path.Combine(Path.GetTempPath(), "MsBullet", instanceName);
             var app = new TestApp(tempDir, this.logOutputDir, new[] { testAppFiles, this.boilerplateDir, this.repoDir });
             this.disposables.Enqueue(app);
             return app;
