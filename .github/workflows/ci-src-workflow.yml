@@ -35,8 +35,8 @@ jobs:
 
       # Publish artifact
       - name: Upload artifact
-        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v2
-          with:
-            name: sdk-nupgk
-            path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk'
+        if: matrix.os == 'windows-latest'
+        with:
+          name: sdk-nupgk
+          path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk'
