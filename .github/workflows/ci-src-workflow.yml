@@ -12,10 +12,11 @@ jobs:
   build:
     name: Build and Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
     strategy:
 
       matrix:
-        os: [windows-latest]
+        os: ['windows-latest']
         
         include:
           - os: windows-latest
@@ -24,14 +25,17 @@ jobs:
 
     steps:
 
+      # Checkout
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Run build and test
       - name: Build and Test
-        run: ${{ run-build }}
+        run: ${{ matrix.run-build }}
 
+      # Publish artifact
       - name: Upload artifact
-        if: ${{ os == 'windows-latest' }}
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v2
           with:
             name: sdk-nupgk
