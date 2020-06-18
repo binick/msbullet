@@ -92,52 +92,5 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.True(Directory.Exists(outDir));
             Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
         }
-
-        [Fact]
-        public void MinimalRepoRunCollectCoverageWithoutErrors()
-        {
-#pragma warning disable CA2000 // Dispose objects before losing scope
-            TestApp app = this.fixture.CreateTestApp("MinimalRepoWithTests");
-#pragma warning restore CA2000 // Dispose objects before losing scope
-
-            // When
-            int exitCode = app.ExecuteBuild(
-                this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-collect" : "--collect");
-
-            // Then
-            Assert.Equal(0, exitCode);
-        }
-
-        [Theory]
-        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp2.1", "x64", "json", "opencover", "cobertura")]
-        [InlineData("Release", "ClassLib1.Tests", "netcoreapp2.1", "x64", "json", "opencover", "cobertura")]
-        public void MinimalRepoRunCollectCoverageShoudProduceCodeCoverageResults(string configuration, string project, string targetFramwork, string architecture, params string[] reportFormats)
-        {
-            // Given
-#pragma warning disable CA2000 // Dispose objects before losing scope
-            TestApp app = this.fixture.CreateTestApp("MinimalRepoWithTests");
-#pragma warning restore CA2000 // Dispose objects before losing scope
-            var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration, "Coverage");
-            var reports = reportFormats.Select(format => $"{project}_{targetFramwork}_{architecture}.{format}");
-
-            // When
-            int exitCode = app.ExecuteBuild(
-                this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-collect" : "--collect",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
-
-            // Then
-            Assert.Equal(0, exitCode);
-            Assert.True(Directory.Exists(outDir));
-
-            var outDirPahts = Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path));
-            foreach (var report in reports)
-            {
-                Assert.Contains(report, outDirPahts);
-            }
-        }
     }
 }
