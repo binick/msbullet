@@ -23,9 +23,16 @@ jobs:
 
 
     steps:
-      - uses: actions/checkout@v2
-      - run: ${{ run-build }}
-      - uses: actions/upload-artifact@v2
-        with:
-          name: sdk-nupgk
-          path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build and Test
+        run: ${{ run-build }}
+
+      - name: Upload artifact
+        if: ${{ os == 'windows-latest' }}
+        uses: actions/upload-artifact@v2
+          with:
+            name: sdk-nupgk
+            path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk'
