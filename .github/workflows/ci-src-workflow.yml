@@ -8,15 +8,23 @@ on:
       - 'docs/**'
 
 jobs:
+
   build:
     name: Build and Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+
       matrix:
         os: [windows-latest]
+        
+        include:
+          - os: windows-latest
+            run-build: .\build.cmd -t -integrationTest -c Release
+
+
     steps:
       - uses: actions/checkout@v2
-      - run: build.cmd -t -integrationTest -c Release
+      - run: ${{ run-build }}
       - uses: actions/upload-artifact@v2
         with:
           name: sdk-nupgk
