@@ -1,4 +1,5 @@
-name: 
+name: Build and Test
+
 on:
   pull_request:
     branches:
@@ -6,22 +7,17 @@ on:
     paths-ignore:
       - 'docs/**'
 
-env:
-  REPO_PATH: $GITHUB_WORKSPACE/msbullet
-
 jobs:
   build:
-    name: Build & Test on ${{ matrix.os }}
+    name: Build and Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest]
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: $REPO_PATH
-      - run: cd $REPO_PATH && .\build.cmd -t -integrationTest -c Release
-      - uses: actions/upload-artifact@v1
+      - run: build.cmd -t -integrationTest -c Release
+      - uses: actions/upload-artifact@v2
         with:
           name: sdk-nupgk
-          path: $REPO_PATH/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk
+          path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk'
