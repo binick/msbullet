@@ -5,6 +5,10 @@ on:
       - master
     paths-ignore:
       - 'docs/**'
+
+env:
+  repo-path: $GITHUB_WORKSPACE/msbullet
+  
 jobs:
   build:
     name: Build & Test on ${{ matrix.os }}
@@ -14,8 +18,9 @@ jobs:
         os: [windows-latest]
     steps:
       - uses: actions/checkout@v2
+        path: $repo-path
       - run: .\build.cmd -t -integrationTest -c Release
       - uses: actions/upload-artifact@v1
         with:
           name: sdk-nupgk
-          path: /artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk
+          path: $repo-path/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk
