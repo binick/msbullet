@@ -9,9 +9,7 @@
   <PropertyGroup>
     <!-- Opt-out features -->
     <UsingToolXUnit Condition="'$(UsingToolXUnit)' == ''">true</UsingToolXUnit>
-    <UsingToolReportGenerator Condition="'$(UsingToolReportGenerator)' == ''">true</UsingToolReportGenerator>
     <UsingToolGitVersion Condition="'$(UsingToolGitVersion)' == ''">true</UsingToolGitVersion>
-    <UsingToolCoverlet Condition="'$(UsingToolCoverlet)' == ''">true</UsingToolCoverlet>
   </PropertyGroup>
   
   <!-- Libs -->
@@ -20,8 +18,6 @@
     <MicrosoftVisualStudioThreadingAnalyzersVersion Condition="'$(MicrosoftVisualStudioThreadingAnalyzersVersion)' == ''">16.5.132</MicrosoftVisualStudioThreadingAnalyzersVersion>
     <StyleCopAnalyzersVersion Condition="'$(StyleCopAnalyzersVersion)' == ''">1.1.118</StyleCopAnalyzersVersion>
     <MicrosoftNETTestSdkVersion Condition="'$(MicrosoftNETTestSdkVersion)' == ''">16.5.0</MicrosoftNETTestSdkVersion>
-    <CoverletMSBuildVersion Condition="'$(CoverletMSBuildVersion)' == ''">2.8.1</CoverletMSBuildVersion>
-    <ReportGeneratorVersion Condition="'$(ReportGeneratorVersion)' == ''">4.5.2</ReportGeneratorVersion>
     <XUnitVersion Condition="'$(XUnitVersion)' == ''">2.4.1</XUnitVersion>
     <XUnitAssertVersion Condition="'$(XUnitAssertVersion)' == ''">$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerVisualstudioVersion Condition="'$(XUnitRunnerVisualstudioVersion)' == ''">$(XUnitVersion)</XUnitRunnerVisualstudioVersion>

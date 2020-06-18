@@ -1,21 +1,42 @@
-name: 
+name: Build and Test
+
 on:
   pull_request:
     branches:
       - master
     paths-ignore:
       - 'docs/**'
+
 jobs:
+
   build:
-    name: Build & Test on ${{ matrix.os }}
+    name: Build and Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
     strategy:
+
       matrix:
-        os: [windows-latest]
+        os: ['windows-latest']
+        
+        include:
+          - os: windows-latest
+            run-build: .\build.cmd -t -integrationTest -c Release
+
+
     steps:
-      - uses: actions/checkout@v2
-      - run: build.cmd -t -integrationTest -c Release
-      - uses: actions/upload-artifact@v1
+
+      # Checkout
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Run build and test
+      - name: Build and Test
+        run: ${{ matrix.run-build }}
+
+      # Publish artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        if: matrix.os == 'windows-latest'
         with:
-          name: sdk-nupgk
-          path: /artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupgk
+          name: sdk-nupkg
+          path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupkg'

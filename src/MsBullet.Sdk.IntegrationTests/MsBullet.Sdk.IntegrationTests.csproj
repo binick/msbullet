@@ -99,7 +99,7 @@
   </Target>
 
   <Target Name="DeletePackageFromLocalFeed" BeforeTargets="Build">
-    <RemoveDir Directories="$(NuGetPackageRoot)MsBullet.sdk" Condition="Exists('$(NuGetPackageRoot)MsBullet.sdk')" />
+    <RemoveDir Directories="$(NuGetPackageRoot)msbullet.sdk" Condition="Exists('$(NuGetPackageRoot)msbullet.sdk')" />
   </Target>
   
 </Project>
