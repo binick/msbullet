@@ -1,5 +1,3 @@
-#! /usr/bin/pwsh
-
 # Initialize variables if they aren't already defined.
 # These may be defined as parameters of the importing script, or set after importing this script.
 
