@@ -25,7 +25,7 @@
 [bool]$useInstalledDotNetCli = if (Test-Path variable:useInstalledDotNetCli) { $useInstalledDotNetCli } else { $true }
 
 # Enable repos to use a particular version of the on-line dotnet-install scripts.
-#    default URL: https://dot.net/v1/dotnet-install.ps1
+#    default URL: https://dot.net/v1/dotnet-install.{ps1|sh} OS dependent
 [string]$dotnetInstallScriptVersion = if (Test-Path variable:dotnetInstallScriptVersion) { $dotnetInstallScriptVersion } else { 'v1' }
 
 # True to use global NuGet cache instead of restoring packages to repository-local directory.
@@ -127,7 +127,9 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
 }
 
 function GetDotNetInstallScript([string] $dotnetRoot) {
-  $installScript = Join-Path $dotnetRoot 'dotnet-install.ps1'
+  $installerOsExt = if ($env:OS -eq 'Windows_NT') { 'ps1' } else { 'sh' }
+
+  $installScript = Join-Path $dotnetRoot "dotnet-install.$installerOsExt"
   if (!(Test-Path $installScript)) {
     Create-Directory $dotnetRoot
     $ProgressPreference = 'SilentlyContinue' # Don't display the console progress UI - it's a huge perf hit
@@ -135,7 +137,7 @@ function GetDotNetInstallScript([string] $dotnetRoot) {
     $maxRetries = 5
     $retries = 1
 
-    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.ps1"
+    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.$installerOsExt"
 
     while ($true) {
       try {
