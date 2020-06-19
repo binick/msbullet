@@ -21,7 +21,11 @@ jobs:
         
         include:
           - os: windows-latest
-            run-build: .\build.cmd -t -integrationTest -c Release -platform $PLATFORM -pack  -ci
+            run-build: .\build.cmd -t -integrationTest -c Release -platform $PLATFORM -pack -ci
+          - os: ubuntu-latest
+            run-build: ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci    
+          - os: macos-latest
+            run-build: ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci
 
     steps:
 
