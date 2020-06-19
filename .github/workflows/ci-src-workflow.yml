@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: Build and Test on ${{ matrix.os }}
+    name: Build and Test on ${{ matrix.os }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -31,7 +31,7 @@ jobs:
 
       # Run build and test
       - name: Build and Test
-        run: format(${{ matrix.run-build }}, ${{ matrix.platform }})
+        run: ${{ format(${{ matrix.run-build }}, ${{ matrix.platform }}) }}
 
       # Publish artifact
       - name: Upload artifact
