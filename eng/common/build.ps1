@@ -1,3 +1,5 @@
+#! /usr/bin/pwsh
+
 [CmdletBinding(PositionalBinding = $false)]
 Param(
     [string][Alias('c')] $configuration = "Debug",

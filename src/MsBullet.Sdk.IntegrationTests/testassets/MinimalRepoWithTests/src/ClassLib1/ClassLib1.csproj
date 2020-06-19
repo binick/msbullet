@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
 
-    <NoWarn>$(NoWarn);SA0001;SA1633;SA1200</NoWarn>
+    <NoWarn>$(NoWarn);CA1822;SA0001;SA1633;SA1200</NoWarn>
   </PropertyGroup>
 
 </Project>

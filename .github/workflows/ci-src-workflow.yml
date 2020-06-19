@@ -16,12 +16,12 @@ jobs:
     strategy:
 
       matrix:
-        os: ['windows-latest']
+        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+        platform: ['x86', 'x64']
         
         include:
           - os: windows-latest
-            run-build: .\build.cmd -t -integrationTest -c Release
-
+            run-build: .\build.cmd -t -integrationTest -c Release -platform ${{ matrix.platform }} -pack  -ci
 
     steps:
 
@@ -38,5 +38,5 @@ jobs:
         uses: actions/upload-artifact@v2
         if: matrix.os == 'windows-latest'
         with:
-          name: sdk-nupkg
+          name: format('sdk-nupkg-{}', ${{ matrix.platform }})
           path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupkg'

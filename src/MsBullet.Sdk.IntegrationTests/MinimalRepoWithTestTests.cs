@@ -92,5 +92,22 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.True(Directory.Exists(outDir));
             Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
         }
+
+        [Fact]
+        public void ExecuteGitCommand()
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            TestApp app = this.fixture.CreateTestApp("MinimalRepoWithTests");
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
+            // When
+            int exitCode = app.ExecuteGitCommand(
+                this.output,
+                "--version");
+
+            // Then
+            Assert.Equal(0, exitCode);
+        }
     }
 }

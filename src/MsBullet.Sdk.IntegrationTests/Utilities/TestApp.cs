@@ -19,22 +19,22 @@ namespace MsBullet.Sdk.IntegrationTests
 
         public int ExecuteBuild(ITestOutputHelper output, params string[] scriptArgs)
         {
-            this.ExecuteScript(
-                output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @".\setup.cmd" : "./setup.sh",
-                Array.Empty<string>());
-
-            foreach (var repoSetup in Directory.GetFiles(this.WorkingDirectory, "setup.*"))
-            {
-                File.Delete(repoSetup);
-            }
-
             int result = this.ExecuteScript(
                 output,
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @".\build.cmd" : "./build.sh",
                 scriptArgs.Append(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-binaryLog" : "--binaryLog"));
 
             Copy(Path.Combine(this.WorkingDirectory, "artifacts", "log"), this.logOutputDir);
+
+            return result;
+        }
+
+        public int ExecuteGitCommand(ITestOutputHelper output, params string[] commandArgs)
+        {
+            int result = this.ExecuteScript(
+                output,
+                "git",
+                commandArgs.Select(commandArg => commandArg.Trim()));
 
             return result;
         }
