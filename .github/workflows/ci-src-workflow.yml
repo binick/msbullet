@@ -21,11 +21,11 @@ jobs:
         
         include:
           - os: windows-latest
-            run-build: .\build.cmd -t -integrationTest -c Release -platform {0} -pack -ci
+            run-build: .\build.cmd -t -integrationTest -c Release -platform $env:PLATFORM -pack -ci
           - os: ubuntu-latest
-            run-build: ./build.sh -t -integrationTest -c Release -platform {0} -pack -ci    
+            run-build: ./build.sh -t -integrationTest -c Release -pack -ci    
           - os: macos-latest
-            run-build: ./build.sh -t -integrationTest -c Release -platform {0} -pack -ci
+            run-build: ./build.sh -t -integrationTest -c Release -pack -ci
 
     steps:
 
@@ -40,7 +40,9 @@ jobs:
 
       # Run build and test
       - name: Build and Test
-        run: format( ${{ matrix.run-build }}, ${{ matrix.platform }} )
+        run: ${{ matrix.run-build }}
+        env:
+          PLATFORM: ${{ matrix.platform }}
 
       # Publish artifact
       - name: Upload artifact
