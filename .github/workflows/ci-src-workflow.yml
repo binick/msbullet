@@ -10,8 +10,10 @@ on:
 jobs:
 
   build:
+
     name: Build and Test on ${{ matrix.os }} (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
 
     strategy:
 
@@ -19,14 +21,15 @@ jobs:
       matrix:
         os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
         platform: ['x86', 'x64']
+        configuration: ['Debug', 'Release']
         
         include:
           - os: windows-latest
-            run-build: .\build.cmd -t -integrationTest -c Release -platform $env:PLATFORM -pack -ci
+            run-build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
           - os: ubuntu-latest
-            run-build: ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci    
+            run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci    
           - os: macos-latest
-            run-build: ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci
+            run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
 
     steps:
 
@@ -44,6 +47,14 @@ jobs:
         run: ${{ matrix.run-build }}
         env:
           PLATFORM: ${{ matrix.platform }}
+          CONFIGURATION: ${{ matrix.configuration }}
+
+      - name: Upload build logs when build goes in error
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: ${{ matrix.os }}_${{ matrix.platform }}-binlog
+          path: '**/artifacts/log/${{ matrix.configuration }}/Build.binlog
 
       # Publish artifact
       - name: Upload shippable SDK package
