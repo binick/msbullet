@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-
 using MsBullet.Sdk.IntegrationTests.Utilities;
 using Xunit.Abstractions;
 
@@ -15,10 +14,22 @@ namespace MsBullet.Sdk.IntegrationTests
         private readonly string logOutputDir;
 
         public TestApp(string workDir, string logOutputDir, string[] sourceDirectories)
-            : base(workDir, logOutputDir, sourceDirectories) => this.logOutputDir = Path.Combine(logOutputDir, Path.GetFileName(workDir));
+            : base(workDir, logOutputDir, sourceDirectories)
+        {
+            this.logOutputDir = Path.Combine(logOutputDir, Path.GetFileName(workDir));
+        }
+
+        public event EventHandler WireUp;
+
+        public event EventHandler PreBuild;
+
+        public event EventHandler PostBuild;
 
         public int ExecuteBuild(ITestOutputHelper output, params string[] scriptArgs)
         {
+            this.WireUp?.Invoke(this, EventArgs.Empty);
+            this.PreBuild?.Invoke(this, EventArgs.Empty);
+
             int result = this.ExecuteScript(
                 output,
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @".\build.cmd" : "./build.sh",
@@ -26,15 +37,14 @@ namespace MsBullet.Sdk.IntegrationTests
 
             Copy(Path.Combine(this.WorkingDirectory, "artifacts", "log"), this.logOutputDir);
 
+            this.PostBuild?.Invoke(this, EventArgs.Empty);
+
             return result;
         }
 
-        public int ExecuteGitCommand(ITestOutputHelper output, params string[] commandArgs)
+        public int UsafeExecutionScript(ITestOutputHelper output, string command, params string[] commandArgs)
         {
-            int result = this.ExecuteScript(
-                output,
-                "git",
-                commandArgs.Select(commandArg => commandArg.Trim()));
+            int result = this.ExecuteScript(output, command, commandArgs);
 
             return result;
         }

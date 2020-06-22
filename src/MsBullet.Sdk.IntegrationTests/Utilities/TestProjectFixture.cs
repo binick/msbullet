@@ -5,7 +5,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-
+using MsBullet.Sdk.IntegrationTests.Utilities;
 using Xunit;
 
 namespace MsBullet.Sdk.IntegrationTests
@@ -22,7 +22,6 @@ namespace MsBullet.Sdk.IntegrationTests
         private readonly string logOutputDir;
         private readonly string testAssets;
         private readonly string boilerplateDir;
-        private readonly string repoDir;
 
         public TestProjectFixture()
         {
@@ -30,17 +29,15 @@ namespace MsBullet.Sdk.IntegrationTests
             this.logOutputDir = this.GetType().Assembly.GetCustomAttributes<AssemblyMetadataAttribute>().Single(m => m.Key == "LogOutputDir").Value;
             this.testAssets = Path.Combine(AppContext.BaseDirectory, "testassets");
             this.boilerplateDir = Path.Combine(this.testAssets, "boilerplate");
-            this.repoDir = Path.Combine(this.testAssets, "repo");
         }
 
-        public TestApp CreateTestApp(string name)
+        public TestAppProvider ProvideTestApp(string name)
         {
             string testAppFiles = Path.Combine(this.testAssets, name);
             string instanceName = Path.GetRandomFileName();
             string tempDir = Path.Combine(Path.GetTempPath(), "MsBullet", instanceName);
-            var app = new TestApp(tempDir, this.logOutputDir, new[] { testAppFiles, this.boilerplateDir, this.repoDir });
-            this.disposables.Enqueue(app);
-            return app;
+
+            return new TestAppProvider(tempDir, this.logOutputDir, new[] { testAppFiles, this.boilerplateDir }, this.disposables);
         }
 
         public void Dispose()
