@@ -132,7 +132,9 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
 }
 
 function GetDotNetInstallScript([string] $dotnetRoot) {
-  $installScript = Join-Path $dotnetRoot "dotnet-install.ps1"
+  $installerOsExt = if ($env:OS -eq 'Windows_NT') { 'ps1' } else { 'sh' }
+
+  $installScript = Join-Path $dotnetRoot "dotnet-install.$installerOsExt"
   if (!(Test-Path $installScript)) {
     Create-Directory $dotnetRoot
     $ProgressPreference = 'SilentlyContinue' # Don't display the console progress UI - it's a huge perf hit
@@ -140,8 +142,7 @@ function GetDotNetInstallScript([string] $dotnetRoot) {
     $maxRetries = 5
     $retries = 1
 
-    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.ps1"
-
+    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.$installerOsExt"
     while ($true) {
       try {
         Write-Host "GET $uri"
