@@ -50,7 +50,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-pack" : "--pack",
+                "-pack",
                 "/p:IsPackable=true",
                 $"/p:IsShippable={isShippable}");
 
@@ -78,7 +78,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-sign" : "--sign",
+                "-sign",
                 string.Format(CultureInfo.InvariantCulture, "-projects .{0}src{0}ClassLib1{0}ClassLib1.csproj", Path.DirectorySeparatorChar));
 
             // Then
@@ -109,7 +109,7 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.Equal(0, exitCode);
 
             var version = AssemblyLoadContext.GetAssemblyName(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.1", "ClassLib1.dll")).Version;
-            Assert.Equal("0.0.0", $"{version.Major}.{version.Minor}.{version.Minor}");
+            Assert.Equal("0.1.1", $"{version.Major}.{version.Minor}.{version.Minor}");
         }
     }
 }

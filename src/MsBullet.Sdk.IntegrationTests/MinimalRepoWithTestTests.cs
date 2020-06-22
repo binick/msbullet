@@ -34,7 +34,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test");
+                "-test");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -55,8 +55,8 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
+                "-test",
+                $"-configuration {configuration}");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -84,8 +84,8 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
+                "-test",
+                $"-configuration {configuration}");
 
             // Then
             Assert.Equal(0, exitCode);

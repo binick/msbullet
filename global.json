@@ -3,6 +3,6 @@
     "dotnet": "3.1.300"
   },
   "msbuild-sdks": {
-    "MsBullet.Sdk": "0.1.0"
+    "MsBullet.Sdk": "0.2.0"
   }
 }
