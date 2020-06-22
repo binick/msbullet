@@ -232,7 +232,7 @@ function InitializeBuildTool() {
     Write-Host -Message "/global.json must specify 'tools.dotnet'."
     ExitWithExitCode 1
   }
-  $buildTool = @{ Path = Join-Path $dotnetRoot 'dotnet.exe'; Command = 'msbuild'; Tool = 'dotnet'; Framework = 'netcoreapp2.1' }
+  $buildTool = @{ Path = Join-Path $dotnetRoot 'dotnet'; Command = 'msbuild'; Tool = 'dotnet'; Framework = 'netcoreapp2.1' }
 
   return $global:_BuildTool = $buildTool
 }
