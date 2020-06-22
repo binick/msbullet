@@ -24,9 +24,9 @@ jobs:
           - os: windows-latest
             run-build: .\build.cmd -t -integrationTest -c Release -platform $env:PLATFORM -pack -ci
           - os: ubuntu-latest
-            run-build: ./build.sh -t -integrationTest -c Release -pack -ci    
+            run-build: ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci    
           - os: macos-latest
-            run-build: ./build.sh -t -integrationTest -c Release -pack -ci
+            run-build: ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci
 
     steps:
 
@@ -46,9 +46,17 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
 
       # Publish artifact
-      - name: Upload artifact
+      - name: Upload shippable SDK package
         uses: actions/upload-artifact@v2
         if: matrix.os == 'windows-latest'
         with:
           name: sdk-nupkg-${{ matrix.platform }}
           path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupkg'
+
+      # Publish artifact
+      - name: Upload shippable SDK package
+        uses: actions/upload-artifact@v2
+        if: matrix.os == 'windows-latest'
+        with:
+          name: ${{ matrix.os }}_${{ matrix.platform }}
+          path: '**/artifacts/**/*'
