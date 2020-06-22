@@ -54,7 +54,7 @@ jobs:
         if: ${{ failure() }}
         with:
           name: ${{ matrix.os }}_${{ matrix.platform }}-binlog
-          path: '**/artifacts/log/${{ matrix.configuration }}/Build.binlog
+          path: '**/artifacts/log/${{ matrix.configuration }}/Build.binlog'
 
       # Publish artifact
       - name: Upload shippable SDK package
