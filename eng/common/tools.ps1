@@ -4,18 +4,23 @@
 # CI mode - set to true on CI server for PR validation build or official build.
 [bool]$ci = if (Test-Path variable:ci) { $ci } else { $false }
 
-# Build configuration. Common values include 'Debug' and 'Release', but the repository may use other names.
-[string]$configuration = if (Test-Path variable:configuration) { $configuration } else { 'Debug' }
+# Set to true to opt out of outputting binary log while running in CI
+[bool]$excludeCIBinarylog = if (Test-Path variable:excludeCIBinarylog) { $excludeCIBinarylog } else { $false }
 
 # Set to true to output binary log from msbuild. Note that emitting binary log slows down the build.
-# Binary log must be enabled on CI.
-[bool]$binaryLog = if (Test-Path variable:binaryLog) { $binaryLog } else { $ci }
+[bool]$binaryLog = if (Test-Path variable:binaryLog) { $binaryLog } else { $ci -and !$excludeCIBinarylog }
+
+# Turns on machine preparation/clean up code that changes the machine state (e.g. kills build processes).
+[bool]$prepareMachine = if (Test-Path variable:prepareMachine) { $prepareMachine } else { $false }
 
 # True to restore toolsets and dependencies.
 [bool]$restore = if (Test-Path variable:restore) { $restore } else { $true }
 
 # Adjusts msbuild verbosity level.
 [string]$verbosity = if (Test-Path variable:verbosity) { $verbosity } else { 'minimal' }
+
+# Set to true to reuse msbuild nodes. Recommended to not reuse on CI.
+[bool]$nodeReuse = if (Test-Path variable:nodeReuse) { $nodeReuse } else { !$ci }
 
 # Configures warning treatment in msbuild.
 [bool]$warnAsError = if (Test-Path variable:warnAsError) { $warnAsError } else { $true }
@@ -127,9 +132,7 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
 }
 
 function GetDotNetInstallScript([string] $dotnetRoot) {
-  $installerOsExt = if ($env:OS -eq 'Windows_NT') { 'ps1' } else { 'sh' }
-
-  $installScript = Join-Path $dotnetRoot "dotnet-install.$installerOsExt"
+  $installScript = Join-Path $dotnetRoot "dotnet-install.ps1"
   if (!(Test-Path $installScript)) {
     Create-Directory $dotnetRoot
     $ProgressPreference = 'SilentlyContinue' # Don't display the console progress UI - it's a huge perf hit
@@ -137,7 +140,7 @@ function GetDotNetInstallScript([string] $dotnetRoot) {
     $maxRetries = 5
     $retries = 1
 
-    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.$installerOsExt"
+    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.ps1"
 
     while ($true) {
       try {
@@ -232,7 +235,13 @@ function InitializeBuildTool() {
     Write-Host -Message "/global.json must specify 'tools.dotnet'."
     ExitWithExitCode 1
   }
-  $buildTool = @{ Path = Join-Path $dotnetRoot 'dotnet'; Command = 'msbuild'; Tool = 'dotnet'; Framework = 'netcoreapp2.1' }
+
+  $buildTool = @{ 
+    Path = Join-Path $dotnetRoot $(if ($env:OS -eq 'Windows_NT') { 'dotnet.exe' } else { 'dotnet' }); 
+    Command = 'msbuild'; 
+    Tool = 'dotnet';
+    Framework = 'netcoreapp2.1' 
+  }
 
   return $global:_BuildTool = $buildTool
 }
