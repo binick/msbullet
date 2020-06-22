@@ -21,11 +21,11 @@ jobs:
         
         include:
           - os: windows-latest
-            run-build: .\build.cmd -t -integrationTest -c Release -platform $PLATFORM -pack -ci
+            run-build: .\build.cmd -t -integrationTest -c Release -platform {0} -pack -ci
           - os: ubuntu-latest
-            run-build: chmod +x ./build.sh && chmod +x ./eng/common/build.sh && chmod +x ./eng/common/tools.sh && ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci    
+            run-build: ./build.sh -t -integrationTest -c Release -platform {0} -pack -ci    
           - os: macos-latest
-            run-build: chmod +x ./build.sh && chmod +x ./eng/common/build.sh && chmod +x ./eng/common/tools.sh && ./build.sh -t -integrationTest -c Release -platform $PLATFORM -pack -ci
+            run-build: ./build.sh -t -integrationTest -c Release -platform {0} -pack -ci
 
     steps:
 
@@ -33,11 +33,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Set execution permissions for unix.
+      - name: Set execution permissions
+        run: chmod +x ./build.sh && chmod +x ./eng/common/build.sh && chmod +x ./eng/common/tools.sh
+        if: matrix.os != 'windows-latest'
+
       # Run build and test
       - name: Build and Test
-        run: ${{ matrix.run-build }}
-        env:
-          PLATFORM: ${{ matrix.platform }}
+        run: format( ${{ matrix.run-build }}, ${{ matrix.platform }} )
 
       # Publish artifact
       - name: Upload artifact
