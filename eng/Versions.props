@@ -5,6 +5,7 @@
     <MicrosoftBuildFrameworkVersion>16.5.0</MicrosoftBuildFrameworkVersion>
     <MicrosoftCodeAnalysisCommonVersion>3.5.0</MicrosoftCodeAnalysisCommonVersion>
     <MicrosoftCodeAnalysisWorkspacesCommonVersion>3.5.0</MicrosoftCodeAnalysisWorkspacesCommonVersion>
+    <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
   </PropertyGroup>
 
 </Project>
