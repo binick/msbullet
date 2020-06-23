@@ -41,7 +41,7 @@
       <_Parameter2>$(PackageVersion)</_Parameter2>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-      <_Parameter1>CharadeSdkAssemblyPath</_Parameter1>
+      <_Parameter1>MsBulletSdkAssemblyPath</_Parameter1>
       <_Parameter2>$(OutputPath)MsBullet.Sdk.dll</_Parameter2>
     </AssemblyAttribute>
     <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
@@ -112,8 +112,8 @@
   </Target>
   
   <Target Name="_DeletePackageDirectories">
-    <RemoveDir Directories="$(ArtifactsShippingPackagesDir)" Condition="Exists('$(ArtifactsShippingPackagesDir)')" />
-    <RemoveDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="Exists('$(ArtifactsNonShippingPackagesDir)')" />
+    <!-- <RemoveDir Directories="$(ArtifactsShippingPackagesDir)" Condition="Exists('$(ArtifactsShippingPackagesDir)')" />
+    <RemoveDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="Exists('$(ArtifactsNonShippingPackagesDir)')" /> -->
   </Target>
 
   <Target Name="_GeneratePackageDirectories" DependsOnTargets="_DeletePackageDirectories">
@@ -122,7 +122,7 @@
   </Target>
 
   <Target Name="_DeletePackageFromLocalFeed">
-    <RemoveDir Directories="$(NuGetPackageRoot)msbullet.sdk\1.0.0-local" Condition="Exists('$(NuGetPackageRoot)msbullet.sdk\1.0.0-local')" />
+    <!-- <RemoveDir Directories="$(NuGetPackageRoot)msbullet.sdk\1.0.0-local" Condition="Exists('$(NuGetPackageRoot)msbullet.sdk\1.0.0-local')" /> -->
   </Target>
   
 </Project>
