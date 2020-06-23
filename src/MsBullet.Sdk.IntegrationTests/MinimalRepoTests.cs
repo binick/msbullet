@@ -3,7 +3,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Xunit;
 using Xunit.Abstractions;
@@ -46,7 +45,7 @@ namespace MsBullet.Sdk.IntegrationTests
 #pragma warning disable CA2000 // Dispose objects before losing scope
             TestApp app = this.fixture.ProvideTestApp("MinimalRepo").Create(this.output);
 #pragma warning restore CA2000 // Dispose objects before losing scope
-            var expectedVersion = "1.0.0-local.g";
+            var expectedVersion = "1.0.0-local.g*";
             var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
 
             // When
@@ -58,7 +57,7 @@ namespace MsBullet.Sdk.IntegrationTests
 
             // Then
             Assert.Equal(0, exitCode);
-            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", destinationFolder, packageFileName)));
+            Assert.Single(Directory.GetFiles(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", destinationFolder), packageFileName));
         }
 
         [Fact]
