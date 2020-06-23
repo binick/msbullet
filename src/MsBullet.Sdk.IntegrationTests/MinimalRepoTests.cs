@@ -38,9 +38,9 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
-        [InlineData(false, false, true)]
-        [InlineData(true, true, false)]
-        public void MinimalRepoPackWithoutErrors(bool isShippable, bool shouldBeFoundInShippable, bool shouldBeFoundInNonShippable)
+        [InlineData(false, "NonShippable")]
+        [InlineData(true, "Shippable")]
+        public void MinimalRepoPackWithoutErrors(bool isShippable, string destinationFolder)
         {
             // Given
 #pragma warning disable CA2000 // Dispose objects before losing scope
@@ -58,8 +58,7 @@ namespace MsBullet.Sdk.IntegrationTests
 
             // Then
             Assert.Equal(0, exitCode);
-            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "NonShippable", packageFileName)).Equals(shouldBeFoundInNonShippable));
-            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "Shippable", packageFileName)).Equals(shouldBeFoundInShippable));
+            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", destinationFolder, packageFileName)));
         }
 
         [Fact]

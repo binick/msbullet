@@ -192,7 +192,9 @@ function InstallDotNet([string] $dotnetRoot,
   if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
 
   try {
-    & $installScript @installParameters
+    $flatInstallParameters = "-v $($installParameters.Version) -i '$($installParameters.InstallDir)'";
+
+    & $installScript @flatInstallParameters
   }
   catch {
     Write-Host -Message "Failed to install dotnet runtime '$runtime' from public location."
