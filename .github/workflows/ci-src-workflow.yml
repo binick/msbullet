@@ -13,6 +13,7 @@ jobs:
 
     name: Build and Test on ${{ matrix.os }} (${{ matrix.platform }}) (${{ matrix.configuration }})
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
 
     strategy:
 
@@ -25,10 +26,13 @@ jobs:
         include:
           - os: windows-latest
             run-build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+            experimental: false
           - os: ubuntu-latest
-            run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci    
+            run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci  
+            experimental: true
           - os: macos-latest
             run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+            experimental: true
 
     steps:
 

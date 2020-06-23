@@ -132,7 +132,7 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
 }
 
 function GetDotNetInstallScript([string] $dotnetRoot) {
-  $installerOsExt = if ($env:OS -eq 'Windows_NT') { 'ps1' } else { 'sh' }
+  $installerOsExt = if ($IsWindows) { 'ps1' } else { 'sh' }
 
   $installScript = Join-Path $dotnetRoot "dotnet-install.$installerOsExt"
   if (!(Test-Path $installScript)) {
@@ -182,19 +182,15 @@ function InstallDotNet([string] $dotnetRoot,
   [string] $runtimeSourceFeedKey = '') {
 
   $installScript = GetDotNetInstallScript $dotnetRoot
-  $installParameters = @{
-    Version    = $version
-    InstallDir = $dotnetRoot
-  }
 
-  if ($architecture) { $installParameters.Architecture = $architecture }
-  if ($runtime) { $installParameters.Runtime = $runtime }
-  if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
+  $installParameters = @("-Version $version", "-InstallDir $dotnetRoot")
+
+  if ($architecture) { $installParameters += "-Architecture $architecture" }
+  if ($runtime) { $installParameters += "-Runtime $runtime" }
+  if ($skipNonVersionedFiles) { $installParameters += "-SkipNonVersionedFiles $skipNonVersionedFiles" }
 
   try {
-    $flatInstallParameters = "-v $($installParameters.Version) -i $($installParameters.InstallDir)";
-
-    & $installScript $flatInstallParameters
+    & $installScript $($installParameters -join ' ')
   }
   catch {
     Write-Host -Message "Failed to install dotnet runtime '$runtime' from public location."
@@ -240,9 +236,9 @@ function InitializeBuildTool() {
   }
 
   $buildTool = @{ 
-    Path = Join-Path $dotnetRoot $(if ($env:OS -eq 'Windows_NT') { 'dotnet.exe' } else { 'dotnet' }); 
-    Command = 'msbuild'; 
-    Tool = 'dotnet';
+    Path      = Join-Path $dotnetRoot $(if ($IsWindows) { 'dotnet.exe' } else { 'dotnet' }); 
+    Command   = 'msbuild'; 
+    Tool      = 'dotnet';
     Framework = 'netcoreapp2.1' 
   }
 
