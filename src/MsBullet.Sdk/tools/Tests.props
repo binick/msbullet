@@ -34,6 +34,7 @@
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <!-- Treat test assemblies as non-shippable (do not publish or sign them). -->
     <IsShippable Condition="'$(IsShippable)' == ''">false</IsShippable>
+    <IsPackable>false</IsPackable>
 
     <TestRunnerName Condition="'$(UsingToolXUnit)' == 'true'">XUnit</TestRunnerName>
 

@@ -92,5 +92,30 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.True(Directory.Exists(outDir));
             Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
         }
+
+        [Theory]
+        [InlineData(false, false, true)]
+        [InlineData(true, true, false)]
+        public void MinimalRepoPackWithoutErrors(bool isShippable, bool shouldBeFoundInShippable, bool shouldBeFoundInNonShippable)
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            var expectedVersion = "1.0.0-local.g";
+            var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                "-pack",
+                $"/p:IsShippable={isShippable}");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "NonShippable", packageFileName)).Equals(shouldBeFoundInNonShippable));
+            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "Shippable", packageFileName)).Equals(shouldBeFoundInShippable));
+        }
     }
 }

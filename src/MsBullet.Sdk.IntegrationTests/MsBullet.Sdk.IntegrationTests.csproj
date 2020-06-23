@@ -92,19 +92,13 @@
     <PropertyGroup>
       <TestContentNerdbankGitVersioning>
 {
-  "version": "0.1.0-dev",
+  "version": "1.0.0-local",
   "publicReleaseRefSpec": [
     "^refs/heads/master$",
     "^refs/tags/v\\d+\\.\\d+"
   ],
   "nugetPackageVersion": {
     "semVer": 2
-  },
-  "cloudBuild": {
-    "buildNumber": {
-      "enabled": true,
-      "setVersionVariables": true
-    }
   }
 }
       </TestContentNerdbankGitVersioning>
@@ -112,9 +106,20 @@
     <WriteLinesToFile Lines="$(TestContentNerdbankGitVersioning)" File="$(TargetDir)testassets\boilerplate\version.json" Overwrite="true" />
   </Target>
 
-  <Target Name="GeneratePackageDirectories" BeforeTargets="BeforeBuild">
+  <Target Name="BeforeBuild" DependsOnTargets="_GeneratePackageDirectories;_DeletePackageFromLocalFeed" />
+
+  <Target Name="_DeletePackageDirectories">
+    <RemoveDir Directories="$(ArtifactsShippingPackagesDir)" Condition="Exists('$(ArtifactsShippingPackagesDir)')" />
+    <RemoveDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="Exists('$(ArtifactsNonShippingPackagesDir)')" />
+  </Target>
+
+  <Target Name="_GeneratePackageDirectories" DependsOnTargets="_DeletePackageDirectories">
     <MakeDir Directories="$(ArtifactsShippingPackagesDir)" Condition="!Exists('$(ArtifactsShippingPackagesDir)')" />
     <MakeDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="!Exists('$(ArtifactsNonShippingPackagesDir)')" />
+  </Target>
+
+  <Target Name="_DeletePackageFromLocalFeed">
+    <RemoveDir Directories="$(NuGetPackageRoot)msbullet.sdk\1.0.0-local" Condition="Exists('$(NuGetPackageRoot)msbullet.sdk\1.0.0-local')" />
   </Target>
   
 </Project>

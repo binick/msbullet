@@ -46,6 +46,8 @@ namespace MsBullet.Sdk.IntegrationTests
 #pragma warning disable CA2000 // Dispose objects before losing scope
             TestApp app = this.fixture.ProvideTestApp("MinimalRepo").Create(this.output);
 #pragma warning restore CA2000 // Dispose objects before losing scope
+            var expectedVersion = "1.0.0-local.g";
+            var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
 
             // When
             int exitCode = app.ExecuteBuild(
@@ -56,8 +58,8 @@ namespace MsBullet.Sdk.IntegrationTests
 
             // Then
             Assert.Equal(0, exitCode);
-            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "NonShippable", "ClassLib1.0.1.0-dev.nupkg")).Equals(shouldBeFoundInNonShippable));
-            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "Shippable", "ClassLib1.0.1.0-dev.nupkg")).Equals(shouldBeFoundInShippable));
+            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "NonShippable", packageFileName)).Equals(shouldBeFoundInNonShippable));
+            Assert.True(File.Exists(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", "Shippable", packageFileName)).Equals(shouldBeFoundInShippable));
         }
 
         [Fact]
@@ -109,7 +111,7 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.Equal(0, exitCode);
 
             var version = AssemblyLoadContext.GetAssemblyName(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.1", "ClassLib1.dll")).Version;
-            Assert.Equal("0.1.1", $"{version.Major}.{version.Minor}.{version.Minor}");
+            Assert.Equal("1.0.0", $"{version.Major}.{version.Minor}.{version.Minor}");
         }
     }
 }

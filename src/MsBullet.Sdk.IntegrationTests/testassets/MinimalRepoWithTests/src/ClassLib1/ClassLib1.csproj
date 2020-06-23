@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    
+    <IsPackable>true</IsPackable>
 
     <NoWarn>$(NoWarn);CA1822;SA0001;SA1633;SA1200</NoWarn>
   </PropertyGroup>

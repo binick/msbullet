@@ -73,9 +73,9 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
     $env:DOTNET_INSTALL_DIR = $env:DotNetCoreSdkDir
   }
 
-  # Find the first path on %PATH% that contains the dotnet.exe
+  # Find the first path on %PATH% that contains the dotnet.exe on Windows or dotnet on Unix
   if ($useInstalledDotNetCli -and (-not $globalJsonHasRuntimes) -and ($null -eq $env:DOTNET_INSTALL_DIR)) {
-    $dotnetCmd = Get-Command 'dotnet.exe' -ErrorAction SilentlyContinue
+    $dotnetCmd = Get-Command $(if ($env:OS -eq 'Windows_NT') { 'dotnet.exe' } else { 'dotnet' }) -ErrorAction SilentlyContinue
     if ($null -ne $dotnetCmd) {
       $env:DOTNET_INSTALL_DIR = Split-Path $dotnetCmd.Path -Parent
     }
