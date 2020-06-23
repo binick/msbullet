@@ -6,6 +6,5 @@
   <Import Project="ProjectDefaults.props" />
   <Import Project="Versions.props" />
   <Import Project="Tests.props" />
-  <Import Project="Workarounds.props"/>
 
 </Project>

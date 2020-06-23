@@ -49,25 +49,10 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
           CONFIGURATION: ${{ matrix.configuration }}
 
-      - name: Upload build logs when build goes in error
-        uses: actions/upload-artifact@v2
-        if: ${{ failure() }}
-        with:
-          name: ${{ matrix.os }}_${{ matrix.platform }}-binlog
-          path: '**/artifacts/log/${{ matrix.configuration }}/Build.binlog'
-
       # Publish artifact
       - name: Upload shippable SDK package
         uses: actions/upload-artifact@v2
-        if: matrix.os == 'windows-latest'
+        if: ${{ always() }}
         with:
-          name: sdk-nupkg-${{ matrix.platform }}
-          path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupkg'
-
-      # Publish artifact
-      - name: Upload shippable SDK package
-        uses: actions/upload-artifact@v2
-        if: matrix.os == 'windows-latest'
-        with:
-          name: ${{ matrix.os }}_${{ matrix.platform }}
+          name: ${{ matrix.os }}_${{ matrix.platform }}_${{ matrix.configuration }}
           path: '**/artifacts/**/*'
