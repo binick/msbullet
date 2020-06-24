@@ -20,4 +20,6 @@ jobs:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}
             
-            - template: publish-common-template.yml
+            - publish: ${{ system.defaultworkingdirectory }}/artifacts
+              artifacts: ${{ format('${{ artifactName }}', image, configuration, platform) }}
+          
