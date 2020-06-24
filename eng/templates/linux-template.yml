@@ -13,7 +13,7 @@ jobs:
 
             - script: docker run 
                       ${{ image }} 
-                      -v '${{ Build.SourcesDirectory }}':/msbullet
+                      -v '$(system.defaultworkingdirectory)':/msbullet
                       bash -c "cd /msbullet &&
                               ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci"
               env:
