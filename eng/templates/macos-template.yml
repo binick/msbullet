@@ -13,12 +13,11 @@ jobs:
 
             - script: docker run 
                       ${{ image }} 
-                      -v '${{ system.defaultworkingdirectory }}':/msbullet
-                      cmd /c "cd C:\msbullet &&
-                              .\build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci"
+                      -v '${{ Build.SourcesDirectory }}':/msbullet
+                      bash -c "cd /msbullet &&
+                              ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci"
               env:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}
             
-            - publish: ${{ system.defaultworkingdirectory }}/artifacts
-              artifacts: ${{ format('${{ artifactName }}', image, configuration, platform) }}
+            - template: publish-common-template.yml
