@@ -1,0 +1,2 @@
+- publish: ${{ System.DefaultWorkingDirectory }}/artifacts
+  artifacts: ${{ format('${{ artifactName }}', image, configuration, platform) }}
