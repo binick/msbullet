@@ -10,18 +10,29 @@ on:
 jobs:
 
   build:
-    name: Build and Test on ${{ matrix.os }}
+
+    name: Build and Test on ${{ matrix.os }} (${{ matrix.platform }}) (${{ matrix.configuration }})
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
 
     strategy:
 
+      fail-fast: false
       matrix:
-        os: ['windows-latest']
+        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
+        platform: ['x86', 'x64']
+        configuration: ['Debug', 'Release']
         
         include:
           - os: windows-latest
-            run-build: .\build.cmd -t -integrationTest -c Release
-
+            run-build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+            experimental: false
+          - os: ubuntu-latest
+            run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci  
+            experimental: true
+          - os: macos-latest
+            run-build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+            experimental: true
 
     steps:
 
@@ -29,14 +40,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Set execution permissions for unix.
+      - name: Set execution permissions
+        run: chmod +x ./build.sh && chmod +x ./eng/common/build.sh && chmod +x ./eng/common/tools.sh
+        if: matrix.os != 'windows-latest'
+
       # Run build and test
       - name: Build and Test
         run: ${{ matrix.run-build }}
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          CONFIGURATION: ${{ matrix.configuration }}
 
       # Publish artifact
-      - name: Upload artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v2
-        if: matrix.os == 'windows-latest'
+        if: ${{ always() }}
         with:
-          name: sdk-nupkg
-          path: '**/artifacts/packages/Release/Shippable/MsBullet.Sdk.*.nupkg'
+          name: ${{ matrix.os }}_${{ matrix.platform }}_${{ matrix.configuration }}
+          path: '**/artifacts/**/*'
