@@ -1,7 +1,7 @@
 jobs:
   - ${{ each image in parameters.images }}:
-    - ${{ each configuration in configurations }}:
-      - ${{ each platform in platforms }}:
+    - ${{ each configuration in parameters.configurations }}:
+      - ${{ each platform in parameters.platforms }}:
 
         - job:
 
