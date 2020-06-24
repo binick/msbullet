@@ -43,9 +43,15 @@ namespace MsBullet.Sdk.IntegrationTests
         {
             // Given
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            TestApp app = this.fixture.ProvideTestApp("MinimalRepo").Create(this.output);
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepo")
+                .WithPreCreate("git", "init")
+                .WithPreCreate("git", "remote", "add", "origin", "http://localhost")
+                .WithPreCreate("git", "checkout", "-b", "master")
+                .WithPreCreate("git", "commit", "--allow-empty", "-m", "Dummy happy empty commit.")
+                .Create(this.output);
+
 #pragma warning restore CA2000 // Dispose objects before losing scope
-            var expectedVersion = "1.0.0-local.g*";
+            var expectedVersion = "1.0.0-local.*";
             var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
 
             // When
