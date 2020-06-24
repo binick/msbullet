@@ -20,5 +20,5 @@ jobs:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}
             
-            - publish: ${{ system.defaultworkingdirectory }}/artifacts
+            - publish: $(system.defaultworkingdirectory)/artifacts
               artifacts: ${{ format('${{ artifactName }}', image, configuration, platform) }}
