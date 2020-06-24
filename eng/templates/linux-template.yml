@@ -1,0 +1,24 @@
+jobs:
+  - ${{ each image in parameters.images }}:
+    - ${{ each configuration in configurations }}:
+      - ${{ each platform in platforms }}:
+
+        - job:
+
+          displayName: ${{ format('${{ jobName }}', image, configuration, platform) }}
+          pool:
+            vmImage: ubuntu-latest
+
+          steps:
+
+            - script: docker run 
+                      ${{ image }} 
+                      -v '${{ system.defaultworkingdirectory }}':/msbullet
+                      cmd /c "cd C:\msbullet &&
+                              .\build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci"
+              env:
+                CONFIGURATION: ${{ configuration }}
+                PLATFORM: ${{ platform }}
+            
+            - publish: ${{ system.defaultworkingdirectory }}/artifacts
+              artifacts: ${{ format('${{ artifactName }}', image, configuration, platform) }}

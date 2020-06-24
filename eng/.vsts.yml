@@ -1,0 +1,28 @@
+name: ci-cd
+
+pool: $(image)
+
+stages:
+
+- stage: ci
+
+  variables:
+    configurations: [ 'Debug', 'Release' ]
+    platforms: [ 'x86', 'x64' ]
+    jobName: '{0} ({1}) ({2})'
+    artifactName: '{0}_{1}_{2}'
+
+  jobs:
+
+  - template: templates/linux-template.yml
+    parameters:
+      images: [ 'ubuntu:16.04', 'ubuntu:18.04' ]
+
+  - template: templates/windows-template.yml
+    parameters:
+      images: [ 'mcr.microsoft.com/windows:1903', 'mcr.microsoft.com/windows:2004' ]
+
+  - template: templates/macos-template.yml
+    parameters:
+      images: [ 'macOS-latest' ]
+    
