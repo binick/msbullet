@@ -4,18 +4,23 @@
 # CI mode - set to true on CI server for PR validation build or official build.
 [bool]$ci = if (Test-Path variable:ci) { $ci } else { $false }
 
-# Build configuration. Common values include 'Debug' and 'Release', but the repository may use other names.
-[string]$configuration = if (Test-Path variable:configuration) { $configuration } else { 'Debug' }
+# Set to true to opt out of outputting binary log while running in CI
+[bool]$excludeCIBinarylog = if (Test-Path variable:excludeCIBinarylog) { $excludeCIBinarylog } else { $false }
 
 # Set to true to output binary log from msbuild. Note that emitting binary log slows down the build.
-# Binary log must be enabled on CI.
-[bool]$binaryLog = if (Test-Path variable:binaryLog) { $binaryLog } else { $ci }
+[bool]$binaryLog = if (Test-Path variable:binaryLog) { $binaryLog } else { $ci -and !$excludeCIBinarylog }
+
+# Turns on machine preparation/clean up code that changes the machine state (e.g. kills build processes).
+[bool]$prepareMachine = if (Test-Path variable:prepareMachine) { $prepareMachine } else { $false }
 
 # True to restore toolsets and dependencies.
 [bool]$restore = if (Test-Path variable:restore) { $restore } else { $true }
 
 # Adjusts msbuild verbosity level.
 [string]$verbosity = if (Test-Path variable:verbosity) { $verbosity } else { 'minimal' }
+
+# Set to true to reuse msbuild nodes. Recommended to not reuse on CI.
+[bool]$nodeReuse = if (Test-Path variable:nodeReuse) { $nodeReuse } else { !$ci }
 
 # Configures warning treatment in msbuild.
 [bool]$warnAsError = if (Test-Path variable:warnAsError) { $warnAsError } else { $true }
@@ -25,7 +30,7 @@
 [bool]$useInstalledDotNetCli = if (Test-Path variable:useInstalledDotNetCli) { $useInstalledDotNetCli } else { $true }
 
 # Enable repos to use a particular version of the on-line dotnet-install scripts.
-#    default URL: https://dot.net/v1/dotnet-install.ps1
+#    default URL: https://dot.net/v1/dotnet-install.{ps1|sh} OS dependent
 [string]$dotnetInstallScriptVersion = if (Test-Path variable:dotnetInstallScriptVersion) { $dotnetInstallScriptVersion } else { 'v1' }
 
 # True to use global NuGet cache instead of restoring packages to repository-local directory.
@@ -68,9 +73,9 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
     $env:DOTNET_INSTALL_DIR = $env:DotNetCoreSdkDir
   }
 
-  # Find the first path on %PATH% that contains the dotnet.exe
+  # Find the first path on %PATH% that contains the dotnet.exe on Windows or dotnet on Unix
   if ($useInstalledDotNetCli -and (-not $globalJsonHasRuntimes) -and ($null -eq $env:DOTNET_INSTALL_DIR)) {
-    $dotnetCmd = Get-Command 'dotnet.exe' -ErrorAction SilentlyContinue
+    $dotnetCmd = Get-Command $(if ($env:OS -eq 'Windows_NT') { 'dotnet.exe' } else { 'dotnet' }) -ErrorAction SilentlyContinue
     if ($null -ne $dotnetCmd) {
       $env:DOTNET_INSTALL_DIR = Split-Path $dotnetCmd.Path -Parent
     }
@@ -127,7 +132,9 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
 }
 
 function GetDotNetInstallScript([string] $dotnetRoot) {
-  $installScript = Join-Path $dotnetRoot 'dotnet-install.ps1'
+  $installerOsExt = if ($env:OS -eq 'Windows_NT') { 'ps1' } else { 'sh' }
+
+  $installScript = Join-Path $dotnetRoot "dotnet-install.$installerOsExt"
   if (!(Test-Path $installScript)) {
     Create-Directory $dotnetRoot
     $ProgressPreference = 'SilentlyContinue' # Don't display the console progress UI - it's a huge perf hit
@@ -135,8 +142,7 @@ function GetDotNetInstallScript([string] $dotnetRoot) {
     $maxRetries = 5
     $retries = 1
 
-    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.ps1"
-
+    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.$installerOsExt"
     while ($true) {
       try {
         Write-Host "GET $uri"
@@ -176,17 +182,15 @@ function InstallDotNet([string] $dotnetRoot,
   [string] $runtimeSourceFeedKey = '') {
 
   $installScript = GetDotNetInstallScript $dotnetRoot
-  $installParameters = @{
-    Version    = $version
-    InstallDir = $dotnetRoot
-  }
 
-  if ($architecture) { $installParameters.Architecture = $architecture }
-  if ($runtime) { $installParameters.Runtime = $runtime }
-  if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
+  $installParameters = @("-Version $version", "-InstallDir $dotnetRoot")
+
+  if ($architecture) { $installParameters += "-Architecture $architecture" }
+  if ($runtime) { $installParameters += "-Runtime $runtime" }
+  if ($skipNonVersionedFiles) { $installParameters += "-SkipNonVersionedFiles $skipNonVersionedFiles" }
 
   try {
-    & $installScript @installParameters
+    & $installScript $($installParameters -join ' ')
   }
   catch {
     Write-Host -Message "Failed to install dotnet runtime '$runtime' from public location."
@@ -230,7 +234,13 @@ function InitializeBuildTool() {
     Write-Host -Message "/global.json must specify 'tools.dotnet'."
     ExitWithExitCode 1
   }
-  $buildTool = @{ Path = Join-Path $dotnetRoot 'dotnet.exe'; Command = 'msbuild'; Tool = 'dotnet'; Framework = 'netcoreapp2.1' }
+
+  $buildTool = @{ 
+    Path      = Join-Path $dotnetRoot $(if ($env:OS -eq 'Windows_NT') { 'dotnet.exe' } else { 'dotnet' }); 
+    Command   = 'msbuild'; 
+    Tool      = 'dotnet';
+    Framework = 'netcoreapp2.1' 
+  }
 
   return $global:_BuildTool = $buildTool
 }
@@ -323,7 +333,7 @@ function MSBuild-Core() {
 
   $buildTool = InitializeBuildTool
 
-  $cmdArgs = "$($buildTool.Command) /m /nologo /clp:Summary /v:$verbosity /nr:$nodeReuse /p:ContinuousIntegrationBuild=$ci"
+  $cmdArgs = "$($buildTool.Command) /m /nologo /clp:Summary /v:$verbosity /nr:$nodeReuse /p:ContinuousIntegrationBuild=$ci /p:PublicRelease=$ci"
 
   if ($warnAsError) {
     $cmdArgs += ' /warnaserror /p:TreatWarningsAsErrors=true'

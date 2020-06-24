@@ -9,7 +9,7 @@
   <PropertyGroup>
     <!-- Opt-out features -->
     <UsingToolXUnit Condition="'$(UsingToolXUnit)' == ''">true</UsingToolXUnit>
-    <UsingToolGitVersion Condition="'$(UsingToolGitVersion)' == ''">true</UsingToolGitVersion>
+    <UsingToolNerdbankGitVersioning Condition="'$(UsingToolNerdbankGitVersioning)' == ''">true</UsingToolNerdbankGitVersioning>
   </PropertyGroup>
   
   <!-- Libs -->
@@ -23,7 +23,7 @@
     <XUnitRunnerVisualstudioVersion Condition="'$(XUnitRunnerVisualstudioVersion)' == ''">$(XUnitVersion)</XUnitRunnerVisualstudioVersion>
     <XUnitRunnerConsoleVersion Condition="'$(XUnitRunnerConsoleVersion)' == ''">$(XUnitVersion)</XUnitRunnerConsoleVersion>
     <XUnitAbstractionsVersion Condition="'$(XUnitAbstractionsVersion)' == ''">2.0.3</XUnitAbstractionsVersion>
-    <GitVersionTaskVersion Condition="'$(GitVersionTaskVersion)' == ''">5.2.4</GitVersionTaskVersion>
+    <NerdbankGitVersioningVersion Condition="'$(NerdbankGitVersioningVersion)' == ''">3.1.91</NerdbankGitVersioningVersion>
   </PropertyGroup>
   
 </Project>

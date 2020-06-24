@@ -28,13 +28,13 @@ namespace MsBullet.Sdk.IntegrationTests
         {
             // Given
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            TestApp app = this.fixture.CreateTestApp("MinimalRepoWithTests");
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test");
+                "-test");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -47,7 +47,7 @@ namespace MsBullet.Sdk.IntegrationTests
         {
             // Given
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            TestApp app = this.fixture.CreateTestApp("MinimalRepoWithTests");
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
 #pragma warning restore CA2000 // Dispose objects before losing scope
             var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration);
             var reports = reportFormats.Select(format => $"{project}_{targetFramwork}_{architecture}.{format}");
@@ -55,8 +55,8 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
+                "-test",
+                $"-configuration {configuration}");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -76,7 +76,7 @@ namespace MsBullet.Sdk.IntegrationTests
         {
             // Given
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            TestApp app = this.fixture.CreateTestApp("MinimalRepoWithTests");
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
 #pragma warning restore CA2000 // Dispose objects before losing scope
             var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "log", configuration);
             var fileName = $"{project}_{targetFramwork}_{architecture}.{fileExtension}";
@@ -84,13 +84,37 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
+                "-test",
+                $"-configuration {configuration}");
 
             // Then
             Assert.Equal(0, exitCode);
             Assert.True(Directory.Exists(outDir));
             Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+        }
+
+        [Theory]
+        [InlineData(false, "NonShippable")]
+        [InlineData(true, "Shippable")]
+        public void MinimalRepoPackWithoutErrors(bool isShippable, string destinationFolder)
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            var expectedVersion = "1.0.0-local.g*";
+            var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                "-pack",
+                $"/p:IsShippable={isShippable}");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.Single(Directory.GetFiles(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", destinationFolder), packageFileName));
         }
     }
 }

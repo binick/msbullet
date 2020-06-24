@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
     <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 
     <NoWarn>$(NoWarn);CA1812</NoWarn>
   </PropertyGroup>
@@ -28,7 +29,6 @@
     <Content Include="$(RepoRoot)eng\common\**\*" LinkBase="testassets\boilerplate\eng\common\" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="$(RepoRoot)build.sh" LinkBase="testassets\boilerplate\" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="$(RepoRoot)build.cmd" LinkBase="testassets\boilerplate\" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="$(RepoRoot)tests\testassets\empty-git-repo\**\*" LinkBase="testassets\repo\" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +41,7 @@
       <_Parameter2>$(PackageVersion)</_Parameter2>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-      <_Parameter1>CharadeSdkAssemblyPath</_Parameter1>
+      <_Parameter1>MsBulletSdkAssemblyPath</_Parameter1>
       <_Parameter2>$(OutputPath)MsBullet.Sdk.dll</_Parameter2>
     </AssemblyAttribute>
     <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
@@ -88,18 +88,27 @@
     <WriteLinesToFile Lines="$(TestNuGetConfigContent)" File="$(TargetDir)testassets\boilerplate\NuGet.config" Overwrite="true" />
   </Target>
 
-  <Target Name="DeletePackageDirectories" BeforeTargets="InitialTargets">
-    <RemoveDir Directories="$(ArtifactsShippingPackagesDir)" Condition="Exists('$(ArtifactsShippingPackagesDir)')" />
-    <RemoveDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="Exists('$(ArtifactsNonShippingPackagesDir)')" />
+  <Target Name="GenerateTestNerdbankGitVersioning" AfterTargets="CopyFilesToOutputDirectory">
+    <PropertyGroup>
+      <TestContentNerdbankGitVersioning>
+{
+  "version": "1.0.0-local",
+  "publicReleaseRefSpec": [
+    "^refs/heads/master$",
+    "^refs/tags/v\\d+\\.\\d+"
+  ],
+  "nugetPackageVersion": {
+    "semVer": 2
+  }
+}
+      </TestContentNerdbankGitVersioning>
+    </PropertyGroup>
+    <WriteLinesToFile Lines="$(TestContentNerdbankGitVersioning)" File="$(TargetDir)testassets\boilerplate\version.json" Overwrite="true" />
   </Target>
-
-  <Target Name="GeneratePackageDirectories" AfterTargets="Build">
+  
+  <Target Name="_GeneratePackageDirectories" BeforeTargets="Build">
     <MakeDir Directories="$(ArtifactsShippingPackagesDir)" Condition="!Exists('$(ArtifactsShippingPackagesDir)')" />
     <MakeDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="!Exists('$(ArtifactsNonShippingPackagesDir)')" />
-  </Target>
-
-  <Target Name="DeletePackageFromLocalFeed" BeforeTargets="Build">
-    <RemoveDir Directories="$(NuGetPackageRoot)msbullet.sdk" Condition="Exists('$(NuGetPackageRoot)msbullet.sdk')" />
   </Target>
   
 </Project>
