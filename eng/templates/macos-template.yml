@@ -7,7 +7,7 @@ jobs:
 
           displayName: '${{ image }} (${{ configuration }}) (${{ platform }})'
           pool:
-            vmImage: $(image)
+            vmImage: ${{ image }}
 
           steps:
 

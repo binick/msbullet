@@ -7,8 +7,8 @@ stages:
 - stage: ci
 
   variables:
-    jobName: '{0} ({1}) ({2})'
-    artifactName: '{0}_{1}_{2}'
+    jobName: '${{ image }} (${{ configuration }}) (${{ platform }})'
+    artifactName: '${{ image }}_${{ configuration }}_${{ platform }}'
 
   jobs:
 
@@ -20,7 +20,7 @@ stages:
 
   - template: templates/windows-template.yml
     parameters:
-      images: [ 'mcr.microsoft.com/windows:1903', 'mcr.microsoft.com/windows:2004' ]
+      images: [ 'windows:1903', 'windows:2004' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
 
