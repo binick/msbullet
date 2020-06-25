@@ -183,11 +183,14 @@ function InstallDotNet([string] $dotnetRoot,
 
   $installScript = GetDotNetInstallScript $dotnetRoot
 
-  $installParameters = @("-Version $version", "-InstallDir $dotnetRoot")
+  $installParameters = @{
+    Version = $version
+    InstallDir = $dotnetRoot
+  }
 
-  if ($architecture) { $installParameters += "-Architecture $architecture" }
-  if ($runtime) { $installParameters += "-Runtime $runtime" }
-  if ($skipNonVersionedFiles) { $installParameters += "-SkipNonVersionedFiles $skipNonVersionedFiles" }
+  if ($architecture) { $installParameters.Architecture = $architecture }
+  if ($runtime) { $installParameters.Runtime = $runtime }
+  if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
 
   try {
     & $installScript $($installParameters -join ' ')
