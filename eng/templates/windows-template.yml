@@ -14,6 +14,7 @@ jobs:
           steps:
 
             - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+              name: build_and_test
               env:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}
