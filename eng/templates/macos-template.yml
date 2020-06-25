@@ -21,4 +21,4 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifacts: ${{ format('$(artifactName)', image, configuration, platform) }}
+              artifact: ${{ format('$(artifactName)', image, configuration, platform) }}

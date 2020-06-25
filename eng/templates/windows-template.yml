@@ -20,6 +20,6 @@ jobs:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}
             
-            - publish:  $(system.defaultworkingdirectory)/artifacts
-              artifacts: ${{ format('$(artifactName)', image, configuration, platform) }}
+            - publish: $(system.defaultworkingdirectory)/artifacts
+              artifact: ${{ format('$(artifactName)', image, configuration, platform) }}
           
