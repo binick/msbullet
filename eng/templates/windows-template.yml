@@ -20,5 +20,5 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: '${{ image }}_${{ configuration }}_${{ platform }}'
-              condition: always()
+              artifact: '${{ replace(replace(image, '/', '-'), ':', '-') }}_${{ configuration }}_${{ platform }}'
+              condition: succeededOrFailed()
