@@ -5,7 +5,7 @@ jobs:
 
         - job:
 
-          displayName: '$(image) ($(configuration)) ($(platform))'
+          displayName: '${{ image }} (${{ configuration }}) (${{ platform }})'
           pool:
             vmImage: ubuntu-latest
 
@@ -21,4 +21,4 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: '$(image)_$(configuration)_$(platform)'
+              artifact: '${{ image }}_${{ configuration }}_${{ platform }}'
