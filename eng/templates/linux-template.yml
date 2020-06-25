@@ -9,13 +9,11 @@ jobs:
           pool:
             vmImage: ubuntu-latest
 
+          container: ${{ image }} 
+
           steps:
 
-            - script: docker run 
-                      ${{ image }} 
-                      -v '$(system.defaultworkingdirectory)':/msbullet
-                      bash -c "cd /msbullet &&
-                              ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci"
+            - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
               env:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}

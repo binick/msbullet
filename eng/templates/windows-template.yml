@@ -5,21 +5,19 @@ jobs:
 
         - job:
 
-          displayName: ${{ format(variables.jobname, image, configuration, platform) }}
+          displayName: '${{ image }} (${{ configuration }}) (${{ platform }})'
           pool:
             vmImage: windows-latest
 
+          container: mcr.microsoft.com/${{ image }} 
+
           steps:
 
-            - script: docker run 
-                      mcr.microsoft.com/${{ image }} 
-                      -v '$(system.defaultworkingdirectory)':C:\msbullet
-                      cmd /c "cd C:\msbullet &&
-                              .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci"
+            - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
               env:
                 CONFIGURATION: ${{ configuration }}
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: ${{ format(variables.jobname, image, configuration, platform) }}
+              artifact: '${{ image }}_${{ configuration }}_${{ platform }}'
           
