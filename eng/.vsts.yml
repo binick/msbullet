@@ -16,7 +16,7 @@ stages:
 
   - template: templates/windows-template.yml
     parameters:
-      images: [ 'windows:1903', 'windows:2004' ]
+      images: [ 'windows:1903-amd64', 'windows:2004-amd64' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
 
