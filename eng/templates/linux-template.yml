@@ -13,8 +13,7 @@ jobs:
 
           steps:
 
-            - script: ls -a &&
-                      chmod +x ./build.sh &&
+            - script: chmod +x build.sh &&
                       chmod +x eng/common/build.sh
                       chmod +x eng/common/tools.sh
               name: set_execution_permission
@@ -27,3 +26,4 @@ jobs:
             
             - publish: $(system.defaultworkingdirectory)/artifacts
               artifact: '${{ image }}_${{ configuration }}_${{ platform }}'
+              condition: always()
