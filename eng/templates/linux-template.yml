@@ -13,7 +13,8 @@ jobs:
 
           steps:
 
-            - script: chmod +x ./build.sh &&
+            - script: ls -a &&
+                      chmod +x ./build.sh &&
                       chmod +x eng/common/build.sh
                       chmod +x eng/common/tools.sh
               name: set_execution_permission
