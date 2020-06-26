@@ -13,6 +13,12 @@ jobs:
 
           steps:
 
+            - script: $artifactPrefix = echo ${IMAGE//[[:punct:]]/-}
+                      echo "##vso[task.setvariable variable=artifactPrefix;isOutput=true]$artifactPrefix"
+              name: evaluate_artifact_name
+              env:
+                IMAGE: ${{ image }}
+
             - script: chmod +x build.sh &&
                       chmod +x eng/common/build.sh
                       chmod +x eng/common/tools.sh
@@ -25,5 +31,5 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: '${{ replace(replace(image, '/', '-'), ':', '-') }}_${{ configuration }}_${{ platform }}'
+              artifact: '$(evaluate_artifact_name.artifactName)_${{ configuration }}_${{ platform }}'
               condition: succeededOrFailed()
