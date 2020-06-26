@@ -25,5 +25,15 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: '${{ evaluate_artifact_name.prefix }}_${{ configuration }}_${{ platform }}'
+              artifact: '$[evaluate_artifact_name.prefix]_${{ configuration }}_${{ platform }}'
+              condition: succeededOrFailed()
+              
+            - task: PublishTestResults@2
+              inputs:
+                
+                testResultsFormat: xUnit
+                testResultsFiles: $(system.defaultworkingdirectory)/artifacts/TestResults/${{ configuration }}/*.xml
+                buildPlatform: ${{ platform }}
+                buildConfiguration: ${{ configuration }}
+
               condition: succeededOrFailed()
