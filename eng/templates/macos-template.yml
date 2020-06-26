@@ -16,7 +16,10 @@ jobs:
               env:
                 IMAGE: ${{ image }}
 
-            - script: chmod +x **/*.sh
+            - script: chmod +x build.sh &&
+                      cd eng/common &&
+                      chmod +x build.sh &&
+                      chmod +x tools.sh
               name: set_execution_permission
 
             - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci"
@@ -26,5 +29,11 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: '$(evaluate_artifact_name.prefix)_${{ configuration }}_${{ platform }}'
+              artifact: '${{ evaluate_artifact_name.prefix }}_${{ configuration }}_${{ platform }}'
               condition: succeededOrFailed()
+
+            - task: PublishTestResults@2
+              inputs:
+                testResultsFormat: xUnit
+                testResultsFiles: $(system.defaultworkingdirectory)/artifacts/TestResults/**/*.xml
+                buildPlatform
