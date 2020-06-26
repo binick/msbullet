@@ -11,7 +11,7 @@ stages:
 
   jobs:
 
-  ${{ if(viariables.experimental) }}
+  ${{ if(variables.experimental) }}
   - template: templates/linux-template.yml
     parameters:
       images: [ 'dotnet/core/sdk:2.1.807-bionic', 'dotnet/core/sdk:2.1.807-stretch',  ]
@@ -23,7 +23,7 @@ stages:
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
 
-  ${{ if(viariables.experimental) }}
+  ${{ if(variables.experimental) }}
   - template: templates/macos-template.yml
     parameters:
       images: [ 'macOS-latest' ]
