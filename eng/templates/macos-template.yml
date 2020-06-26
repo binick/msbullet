@@ -12,7 +12,7 @@ jobs:
           steps:
 
             - script: artifactPrefix=$(echo ${IMAGE//[[:punct:]]/-})
-                      echo "##vso[task.setvariable variable=prefix;isOutput=true]$artifactPrefix"
+                      echo "##vso[task.setvariable variable=prefix]artifactPrefix"
               name: evaluate_artifact_name
               env:
                 IMAGE: ${{ image }}
