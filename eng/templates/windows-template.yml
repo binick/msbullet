@@ -14,7 +14,7 @@ jobs:
           steps:
 
             - script: $artifactPrefix = $env:IMAGE -replace '[!"#$%&''()*+,\-.\/:;<=>?@[\]^_`{|}~]', '-'
-                      echo "##vso[task.setvariable variable=artifactPrefix;isOutput=true]$artifactPrefix"
+                      echo "##vso[task.setvariable variable=prefix;isOutput=true]$artifactPrefix"
               name: evaluate_artifact_name
               env:
                 IMAGE: ${{ image }}
@@ -26,5 +26,5 @@ jobs:
                 PLATFORM: ${{ platform }}
             
             - publish: $(system.defaultworkingdirectory)/artifacts
-              artifact: '$(evaluate_artifact_name.artifactName)_${{ configuration }}_${{ platform }}'
+              artifact: '$(evaluate_artifact_name.prefix)_${{ configuration }}_${{ platform }}'
               condition: succeededOrFailed()
