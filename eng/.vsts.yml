@@ -1,5 +1,8 @@
 name: ci-cd
 
+variables:
+  experimental: false
+
 pool: $(image)
 
 stages:
@@ -8,6 +11,7 @@ stages:
 
   jobs:
 
+  ${{ if(viariables.experimental) }}
   - template: templates/linux-template.yml
     parameters:
       images: [ 'dotnet/core/sdk:2.1.807-bionic', 'dotnet/core/sdk:2.1.807-stretch',  ]
@@ -16,10 +20,10 @@ stages:
 
   - template: templates/windows-template.yml
     parameters:
-      images: [ 'dotnet/core/sdk:2.1.807-nanoserver-1809' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
 
+  ${{ if(viariables.experimental) }}
   - template: templates/macos-template.yml
     parameters:
       images: [ 'macOS-latest' ]
