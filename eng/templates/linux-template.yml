@@ -18,9 +18,7 @@ jobs:
               env:
                 IMAGE: ${{ image }}
 
-            - script: chmod +x build.sh &&
-                      chmod +x eng/common/build.sh
-                      chmod +x eng/common/tools.sh
+            - script: chmod +x *.sh
               name: set_execution_permission
 
             - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
