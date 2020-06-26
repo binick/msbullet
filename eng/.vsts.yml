@@ -11,22 +11,8 @@ stages:
 
   jobs:
 
-  ${{ if(variables.experimental) }}
-  - template: templates/linux-template.yml
-    parameters:
-      images: [ 'dotnet/core/sdk:2.1.807-bionic', 'dotnet/core/sdk:2.1.807-stretch',  ]
-      configurations: [ 'Debug', 'Release' ]
-      platforms: [ 'x86', 'x64' ]
-
   - template: templates/windows-template.yml
     parameters:
-      configurations: [ 'Debug', 'Release' ]
-      platforms: [ 'x86', 'x64' ]
-
-  ${{ if(variables.experimental) }}
-  - template: templates/macos-template.yml
-    parameters:
-      images: [ 'macOS-latest' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
     
