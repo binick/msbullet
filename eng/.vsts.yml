@@ -1,0 +1,18 @@
+name: ci-cd
+
+variables:
+  experimental: false
+
+pool: $(image)
+
+stages:
+
+- stage: ci
+
+  jobs:
+
+  - template: templates/windows-template.yml
+    parameters:
+      configurations: [ 'Debug', 'Release' ]
+      platforms: [ 'x86', 'x64' ]
+    
