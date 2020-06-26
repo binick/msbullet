@@ -13,7 +13,7 @@ jobs:
 
           steps:
 
-            - script: Write-Host "##vso[task.setvariable variable=prefix]$($env:IMAGE -replace '[!"#$%&''()*+,\-.\/:;<=>?@[\]^_`{|}~]', '-')"
+            - script: Write-Host "##vso[task.setvariable variable=prefix]$($env:IMAGE -replace '[!""#$%&''()*+,\-.\/:;<=>?@[\]^_`{|}~]', '-')"
               name: evaluate_artifact_name
               env:
                 IMAGE: ${{ image }}
