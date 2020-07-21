@@ -35,8 +35,10 @@ function Print-Usage() {
     Write-Host "  -rebuild                Rebuild solution"
     Write-Host "  -test                   Run all unit tests in the solution (short: -t)"
     Write-Host "  -integrationTest        Run all integration tests in the solution"
+    Write-Host "  -performanceTest        Run all performance tests in the solution [WIP]"
     Write-Host "  -collect                Collect code coverage metrics for all unit tests in the solution"
-    Write-Host "  -pack                   Package build outputs into NuGet packages and Willow components"
+    Write-Host "  -pack                   Package build outputs into NuGet packages"
+    Write-Host "  -sign                   Sign build outputs [WIP]"
     Write-Host "  -clean                  Clean the solution"
     Write-Host ""
 

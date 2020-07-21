@@ -1,7 +1,5 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
-using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -34,7 +32,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                "-test");
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -55,8 +53,8 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                "-test",
-                $"-configuration {configuration}");
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -84,8 +82,8 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                "-test",
-                $"-configuration {configuration}");
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-configuration {configuration}" : $"--configuration {configuration}");
 
             // Then
             Assert.Equal(0, exitCode);
@@ -108,8 +106,8 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                "-test",
-                "-pack",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-test" : "--test",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"-pack" : $"--pack",
                 $"/p:IsShippable={isShippable}");
 
             // Then

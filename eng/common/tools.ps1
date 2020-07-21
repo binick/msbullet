@@ -4,6 +4,9 @@
 # CI mode - set to true on CI server for PR validation build or official build.
 [bool]$ci = if (Test-Path variable:ci) { $ci } else { $false }
 
+# Build configuration. Common values include 'Debug' and 'Release', but the repository may use other names.
+[string]$configuration = if (Test-Path variable:configuration) { $configuration } else { 'Debug' }
+
 # Set to true to opt out of outputting binary log while running in CI
 [bool]$excludeCIBinarylog = if (Test-Path variable:excludeCIBinarylog) { $excludeCIBinarylog } else { $false }
 
@@ -90,6 +93,8 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
   }
   else {
     $dotnetRoot = Join-Path $RepoRoot '.dotnet'
+    
+    $env:DOTNET_INSTALL_DIR = $dotnetRoot
 
     if (-not (Test-Path(Join-Path $dotnetRoot "sdk\$dotnetSdkVersion"))) {
       if ($install) {
@@ -100,8 +105,6 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
         ExitWithExitCode 1
       }
     }
-
-    $env:DOTNET_INSTALL_DIR = $dotnetRoot
   }
 
   # Creates a temporary file under the toolset dir.
@@ -132,9 +135,7 @@ function InitializeDotNetCli([bool]$install, [bool]$createSdkLocationFile) {
 }
 
 function GetDotNetInstallScript([string] $dotnetRoot) {
-  $installerOsExt = if ($env:OS -eq 'Windows_NT') { 'ps1' } else { 'sh' }
-
-  $installScript = Join-Path $dotnetRoot "dotnet-install.$installerOsExt"
+  $installScript = Join-Path $dotnetRoot "dotnet-install.ps1"
   if (!(Test-Path $installScript)) {
     Create-Directory $dotnetRoot
     $ProgressPreference = 'SilentlyContinue' # Don't display the console progress UI - it's a huge perf hit
@@ -142,7 +143,7 @@ function GetDotNetInstallScript([string] $dotnetRoot) {
     $maxRetries = 5
     $retries = 1
 
-    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.$installerOsExt"
+    $uri = "https://dot.net/$dotnetInstallScriptVersion/dotnet-install.ps1"
     while ($true) {
       try {
         Write-Host "GET $uri"

@@ -3,6 +3,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Loader;
 using Xunit;
 using Xunit.Abstractions;
@@ -51,7 +52,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                "-pack",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-pack" : "--pack",
                 "/p:IsPackable=true",
                 $"/p:IsShippable={isShippable}");
 
@@ -78,7 +79,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // When
             int exitCode = app.ExecuteBuild(
                 this.output,
-                "-sign",
+                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-sign" : "--sign",
                 string.Format(CultureInfo.InvariantCulture, "-projects .{0}src{0}ClassLib1{0}ClassLib1.csproj", Path.DirectorySeparatorChar));
 
             // Then
