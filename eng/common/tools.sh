@@ -299,10 +299,6 @@ function MSBuild {
 
     export NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS=20
     export NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS=20
-
-    local toolset_dir="${_InitializeToolset%/*}"
-    local logger_path="$toolset_dir/$_InitializeBuildToolFramework/Microsoft.DotNet.Arcade.Sdk.dll"
-    args=( "${args[@]}" "-logger:$logger_path" )
   fi
 
   MSBuild-Core ${args[@]}
