@@ -2,7 +2,7 @@ parameters:
   steps: []
 
 steps:
-- ${{ parameters.steps }}
+- ${{ steps }}
 
 - publish: $(system.defaultworkingdirectory)/artifacts
   artifact: '${{ evaluate_artifact_name.prefix }}_${{ configuration }}_${{ platform }}'

@@ -7,3 +7,8 @@ jobs:
 - ${{ each image in parameters.images }}:
   - ${{ each configuration in parameters.configurations }}:
     - ${{ each platform in parameters.platforms }}:
+      - template: job.yml
+        parameters:
+          image: ${{ parameters.image }}
+          configuration: ${{ parameters.configuration }}
+          platform: ${{ parameters.platform }}
