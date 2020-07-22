@@ -1,15 +1,10 @@
 name: ci-cd
 
-variables:
-  experimental: false
-
 pool: $(image)
 
 stages:
 
 - stage: ci
-
-  jobs:
 
   - template: templates/jobs.yml
     parameters:

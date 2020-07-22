@@ -4,11 +4,19 @@ parameters:
   platforms: []
 
 jobs:
-- ${{ each image in parameters.images }}:
-  - ${{ each configuration in parameters.configurations }}:
-    - ${{ each platform in parameters.platforms }}:
-      - template: job.yml
-        parameters:
-          image: ${{ parameters.image }}
-          configuration: ${{ parameters.configuration }}
-          platform: ${{ parameters.platform }}
+  - ${{ each image in parameters.images }}:
+    - ${{ each configuration in parameters.configurations }}:
+      - ${{ each platform in parameters.platforms }}:
+        - template: job.yml
+          parameters: 
+            # pass along parameters
+            ${{ each parameter in parameters }}:
+              ${{ if ne(parameter.key, 'jobs') }}:
+                ${{ parameter.key }}: ${{ parameter.value }}
+
+            # pass along job properties
+            ${{ each property in job }}:
+              ${{ if ne(property.key, 'job') }}:
+                ${{ property.key }}: ${{ property.value }}
+
+            name: ${{ job.job }}
