@@ -5,31 +5,32 @@ parameters:
   build: ''
   artifactPrefix: ''
 
-- job:
-  displayName: '${{ parameters.image }} (${{ parameters.configuration }}) (${{ parameters.platform }})'
-  pool:
-    vmImage: ${{ parameters.image }}
+jobs:
+  - job:
+    displayName: '${{ parameters.image }} (${{ parameters.configuration }}) (${{ parameters.platform }})'
+    pool:
+      vmImage: ${{ parameters.image }}
 
-  steps:
-    - script: ${{ artifactPrefix }} 
-      name: evaluate_artifact_name
-      env:
-        IMAGE: ${{ image }}
+    steps:
+      - script: ${{ artifactPrefix }} 
+        name: evaluate_artifact_name
+        env:
+          IMAGE: ${{ image }}
 
-    - script: ${{ parameters.build }}
-      name: build_and_test
-      env:
-        CONFIGURATION: ${{ configuration }}
-        PLATFORM: ${{ platform }}
+      - script: ${{ parameters.build }}
+        name: build_and_test
+        env:
+          CONFIGURATION: ${{ configuration }}
+          PLATFORM: ${{ platform }}
 
-    - publish: $(system.defaultworkingdirectory)/artifacts
-      artifact: '${{ evaluate_artifact_name.prefix }}_${{ parameters.configuration }}_${{ parameters.platform }}'  
-      condition: succeededOrFailed()
-    
-    - task: PublishTestResults@2
-      inputs:     
-        testResultsFormat: xUnit
-        testResultsFiles: $(system.defaultworkingdirectory)/artifacts/TestResults/${{ parameters.configuration }}/*.xml
-        buildPlatform: ${{ parameters.platform }}
-        buildConfiguration: ${{ parameters.configuration }} 
-      condition: succeededOrFailed()
+      - publish: $(system.defaultworkingdirectory)/artifacts
+        artifact: '${{ evaluate_artifact_name.prefix }}_${{ parameters.configuration }}_${{ parameters.platform }}'  
+        condition: succeededOrFailed()
+      
+      - task: PublishTestResults@2
+        inputs:     
+          testResultsFormat: xUnit
+          testResultsFiles: $(system.defaultworkingdirectory)/artifacts/TestResults/${{ parameters.configuration }}/*.xml
+          buildPlatform: ${{ parameters.platform }}
+          buildConfiguration: ${{ parameters.configuration }} 
+        condition: succeededOrFailed()
