@@ -7,26 +7,78 @@ stages:
 - stage: ci
 
   jobs:
-    - template: templates/jobs.yml
-      parameters:
-        images: [ 'windows-latest' ]
-        configurations: [ 'Debug', 'Release' ]
-        platforms: [ 'x86', 'x64' ]
-        build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
-        artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(env:IMAGE -replace '#|\+|\/|:|@|\[|\/|\]|\^|_|~', '-')" 
+  
+    - job: 'windows'
+      strategy:
+        matrix:
+          'Windows (Debug) (x86)':
+            configuration: 'Debug'
+            platform: 'x86'
+          'Windows (Debug) (x64)':
+            configuration: 'Debug'
+            platform: 'x64'
+          'Windows (Release) (x86)':
+            configuration: 'Release'
+            platform: 'x86'
+          'Windows (Release) (x64)':
+            configuration: 'Release'
+            platform: 'x64'
 
-    - template: templates/jobs.yml
-      parameters:
-        images: [ 'ubuntu-latest' ]
-        configurations: [ 'Debug', 'Release' ]
-        platforms: [ 'x86', 'x64' ]
-        build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
-        artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
+      pool: windows-latest
 
-    - template: templates/jobs.yml
-      parameters:
-        images: [ 'macos-latest' ]
-        configurations: [ 'Debug', 'Release' ]
-        platforms: [ 'x86', 'x64' ]
-        build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
-        artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
+      steps:
+        - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+          name: build_and_test
+          env:
+            CONFIGURATION: $(configuration)
+            PLATFORM: $(platform)
+
+    - job: 'ubuntu'
+      strategy:
+        matrix:
+          'Ubuntu (Debug) (x86)':
+            configuration: 'Debug'
+            platform: 'x86'
+          'Ubuntu (Debug) (x64)':
+            configuration: 'Debug'
+            platform: 'x64'
+          'Ubuntu (Release) (x86)':
+            configuration: 'Release'
+            platform: 'x86'
+          'Ubuntu (Release) (x64)':
+            configuration: 'Release'
+            platform: 'x64'
+
+      pool: 'ubuntu-latest'
+
+      steps:
+        - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+          name: build_and_test
+          env:
+            CONFIGURATION: $(configuration)
+            PLATFORM: $(platform)
+
+    - job: 'macos'
+      strategy:
+        matrix:
+          'MacOS (Debug) (x86)':
+            configuration: 'Debug'
+            platform: 'x86'
+          'MacOS (Debug) (x64)':
+            configuration: 'Debug'
+            platform: 'x64'
+          'MacOS (Release) (x86)':
+            configuration: 'Release'
+            platform: 'x86'
+          'MacOS (Release) (x64)':
+            configuration: 'Release'
+            platform: 'x64'
+
+      pool: 'macos-latest'
+
+      steps:
+        - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+          name: build_and_test
+          env:
+            CONFIGURATION: $(configuration)
+            PLATFORM: $(platform)

@@ -1,23 +1,28 @@
 parameters:
-  images: []
-  configurations: []
-  platforms: []
+  # See schema documentation in /Documentation/AzureDevOps/TemplateSchema.md
+  continueOnError: false
+
+  # Optional: Include PublishBuildArtifacts task
+  enablePublishBuildArtifacts: false
+
+  # Optional: Enable publishing using release pipelines
+  enablePublishUsingPipelines: false
+
+  # Required: A collection of jobs to run - https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=vsts&tabs=schema#job
+  jobs: []
 
 jobs:
-  - ${{ each image in parameters.images }}:
-    - ${{ each configuration in parameters.configurations }}:
-      - ${{ each platform in parameters.platforms }}:
+- ${{ each job in parameters.jobs }}:
+  - template: job.yml
+    parameters: 
+      # pass along parameters
+      ${{ each parameter in parameters }}:
+        ${{ if ne(parameter.key, 'jobs') }}:
+          ${{ parameter.key }}: ${{ parameter.value }}
 
-        - template: job.yml
-          parameters: 
-            # pass along parameters
-            ${{ each parameter in parameters }}:
-              ${{ if ne(parameter.key, 'jobs') }}:
-                ${{ parameter.key }}: ${{ parameter.value }}
-            
-            # pass along job properties
-            ${{ each property in job }}:
-              ${{ if ne(property.key, 'job') }}:
-                ${{ property.key }}: ${{ property.value }}
+      # pass along job properties
+      ${{ each property in job }}:
+        ${{ if ne(property.key, 'job') }}:
+          ${{ property.key }}: ${{ property.value }}
 
-            name: ${{ job.job }}
+      name: ${{ job.job }}
