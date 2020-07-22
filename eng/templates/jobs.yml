@@ -14,11 +14,3 @@ jobs:
             ${{ each parameter in parameters }}:
               ${{ if ne(parameter.key, 'jobs') }}:
                 ${{ parameter.key }}: ${{ parameter.value }}
-            
-
-            # pass along job properties
-            ${{ each property in job }}:
-              ${{ if ne(property.key, 'job') }}:
-                ${{ property.key }}: ${{ property.value }}
-
-            name: ${{ job.job }}
