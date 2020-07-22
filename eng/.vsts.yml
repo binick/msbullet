@@ -13,6 +13,18 @@ stages:
 
   - template: templates/windows-template.yml
     parameters:
+      images: [ 'windows-latest' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
-    
+
+  - template: templates/linux-template.yml
+    parameters:
+      images: [ 'ubuntu-latest' ]
+      configurations: [ 'Debug', 'Release' ]
+      platforms: [ 'x86', 'x64' ]
+
+  - template: templates/linux-template.yml
+    parameters:
+      images: [ 'macos-latest' ]
+      configurations: [ 'Debug', 'Release' ]
+      platforms: [ 'x86', 'x64' ]

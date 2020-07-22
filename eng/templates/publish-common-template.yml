@@ -1,2 +1,14 @@
-- publish: ${{ system.defaultworkingdirectory }}/artifacts
-  artifacts: ${{ format('${{ artifactName }}', image, configuration, platform) }}
+- publish: $(system.defaultworkingdirectory)/artifacts
+  artifact: '${{ system }}_${{ configuration }}_${{ platform }}'
+
+  condition: succeededOrFailed()
+
+- task: PublishTestResults@2
+  inputs:
+    
+    testResultsFormat: xUnit
+    testResultsFiles: $(system.defaultworkingdirectory)/artifacts/TestResults/${{ configuration }}/*.xml
+    buildPlatform: ${{ platform }}
+    buildConfiguration: ${{ configuration }}
+
+  condition: succeededOrFailed()
