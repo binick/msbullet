@@ -1,0 +1,9 @@
+parameters:
+  images: []
+  configurations: []
+  platforms: []
+
+jobs:
+- ${{ each image in parameters.images }}:
+  - ${{ each configuration in parameters.configurations }}:
+    - ${{ each platform in parameters.platforms }}:
