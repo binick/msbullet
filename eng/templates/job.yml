@@ -2,14 +2,35 @@ parameters:
   image: ''
   configuration: ''
   platform: ''
-  steps: []
+  build: ''
+  artifactPrefix: ''
 
 - job:
 
-  displayName: '${{ image }} (${{ configuration }}) (${{ platform }})'
+  displayName: '${{ parameters.image }} (${{ parameters.configuration }}) (${{ parameters.platform }})'
   pool:
-    vmImage: ${{ image }}
+    vmImage: ${{ parameters.image }}
 
   steps:
-    - ${{ each step in parameters.steps }}:
-      - ${{ step }}
+    - script: ${{ artifactPrefix }} 
+      name: evaluate_artifact_name
+      env:
+        IMAGE: ${{ image }}
+
+    - script: ${{ parameters.build }}
+      name: build_and_test
+      env:
+        CONFIGURATION: ${{ configuration }}
+        PLATFORM: ${{ platform }}
+
+    - publish: $(system.defaultworkingdirectory)/artifacts
+      artifact: '${{ evaluate_artifact_name.prefix }}_${{ parameters.configuration }}_${{ parameters.platform }}'  
+      condition: succeededOrFailed()
+    
+    - task: PublishTestResults@2
+      inputs:     
+        testResultsFormat: xUnit
+        testResultsFiles: $(system.defaultworkingdirectory)/artifacts/TestResults/${{ parameters.configuration }}/*.xml
+        buildPlatform: ${{ parameters.platform }}
+        buildConfiguration: ${{ parameters.configuration }} 
+      condition: succeededOrFailed()

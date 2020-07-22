@@ -16,63 +16,21 @@ stages:
       images: [ 'windows-latest' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
-
-      steps:
-        - script: echo "##vso[task.setvariable variable=prefix]$(env:IMAGE -replace '#|\+|\/|:|@|\[|\/|\]|\^|_|~', '-')" 
-          name: evaluate_artifact_name
-          env:
-            IMAGE: $[ image ]
-
-        - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
-          name: build_and_test
-          env:
-            CONFIGURATION: ${{ configuration }}
-            PLATFORM: ${{ platform }}
+      build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+      artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(env:IMAGE -replace '#|\+|\/|:|@|\[|\/|\]|\^|_|~', '-')" 
 
   - template: templates/jobs.yml
     parameters:
       images: [ 'ubuntu-latest' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
-
-      steps:
-      - script: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
-        name: evaluate_artifact_name
-        env:
-          IMAGE: $[ image ]
-
-      - script: chmod +x build.sh &&
-              cd eng/common &&
-              chmod +x build.sh &&
-              chmod +x tools.sh
-        name: set_execution_permission
-
-      - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
-        name: build_and_test
-        env:
-          CONFIGURATION: ${{ configuration }}
-          PLATFORM: ${{ platform }}
+      build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+      artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
 
   - template: templates/jobs.yml
     parameters:
       images: [ 'macos-latest' ]
       configurations: [ 'Debug', 'Release' ]
       platforms: [ 'x86', 'x64' ]
-
-      steps:
-      - script: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
-        name: evaluate_artifact_name
-        env:
-          IMAGE: $[ image ]
-
-      - script: chmod +x build.sh &&
-              cd eng/common &&
-              chmod +x build.sh &&
-              chmod +x tools.sh
-        name: set_execution_permission
-
-      - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
-        name: build_and_test
-        env:
-          CONFIGURATION: ${{ configuration }}
-          PLATFORM: ${{ platform }}
+      build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+      artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
