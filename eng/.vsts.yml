@@ -1,7 +1,5 @@
 name: ci-cd
 
-pool: $(image)
-
 stages:
 
 - stage: ci
@@ -24,7 +22,8 @@ stages:
             configuration: 'Release'
             platform: 'x64'
 
-      pool: windows-latest
+      pool:
+        vmImage: windows-latest
 
       steps:
         - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
@@ -49,7 +48,8 @@ stages:
             configuration: 'Release'
             platform: 'x64'
 
-      pool: 'ubuntu-latest'
+      pool:
+        vmImage: 'ubuntu-latest'
 
       steps:
         - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
@@ -74,7 +74,8 @@ stages:
             configuration: 'Release'
             platform: 'x64'
 
-      pool: 'macos-latest'
+      pool:
+        vmImage: 'macos-latest'
 
       steps:
         - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
