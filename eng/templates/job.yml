@@ -5,8 +5,7 @@ parameters:
   build: ''
   artifactPrefix: ''
 
-- job: '${{ parameters.image }}_${{ parameters.configuration }}_${{ parameters.platform }}'
-
+- job:
   displayName: '${{ parameters.image }} (${{ parameters.configuration }}) (${{ parameters.platform }})'
   pool:
     vmImage: ${{ parameters.image }}

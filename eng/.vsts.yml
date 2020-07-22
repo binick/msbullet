@@ -6,26 +6,27 @@ stages:
 
 - stage: ci
 
-  - template: templates/jobs.yml
-    parameters:
-      images: [ 'windows-latest' ]
-      configurations: [ 'Debug', 'Release' ]
-      platforms: [ 'x86', 'x64' ]
-      build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
-      artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(env:IMAGE -replace '#|\+|\/|:|@|\[|\/|\]|\^|_|~', '-')" 
+  jobs:
+    - template: templates/jobs.yml
+      parameters:
+        images: [ 'windows-latest' ]
+        configurations: [ 'Debug', 'Release' ]
+        platforms: [ 'x86', 'x64' ]
+        build: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+        artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(env:IMAGE -replace '#|\+|\/|:|@|\[|\/|\]|\^|_|~', '-')" 
 
-  - template: templates/jobs.yml
-    parameters:
-      images: [ 'ubuntu-latest' ]
-      configurations: [ 'Debug', 'Release' ]
-      platforms: [ 'x86', 'x64' ]
-      build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
-      artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
+    - template: templates/jobs.yml
+      parameters:
+        images: [ 'ubuntu-latest' ]
+        configurations: [ 'Debug', 'Release' ]
+        platforms: [ 'x86', 'x64' ]
+        build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+        artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
 
-  - template: templates/jobs.yml
-    parameters:
-      images: [ 'macos-latest' ]
-      configurations: [ 'Debug', 'Release' ]
-      platforms: [ 'x86', 'x64' ]
-      build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
-      artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"
+    - template: templates/jobs.yml
+      parameters:
+        images: [ 'macos-latest' ]
+        configurations: [ 'Debug', 'Release' ]
+        platforms: [ 'x86', 'x64' ]
+        build: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+        artifactPrefix: echo "##vso[task.setvariable variable=prefix]$(echo ${IMAGE//[[:punct:]]/-})"

@@ -7,12 +7,14 @@ jobs:
   - ${{ each image in parameters.images }}:
     - ${{ each configuration in parameters.configurations }}:
       - ${{ each platform in parameters.platforms }}:
+
         - template: job.yml
           parameters: 
             # pass along parameters
             ${{ each parameter in parameters }}:
               ${{ if ne(parameter.key, 'jobs') }}:
                 ${{ parameter.key }}: ${{ parameter.value }}
+            
 
             # pass along job properties
             ${{ each property in job }}:
