@@ -6,102 +6,106 @@ stages:
 
   jobs:
   
-    - job: 'Windows'
-      strategy:
-        matrix:
-          '(Debug) (x86)':
-            configuration: 'Debug'
-            platform: 'x86'
-          '(Debug) (x64)':
-            configuration: 'Debug'
-            platform: 'x64'
-          '(Release) (x86)':
-            configuration: 'Release'
-            platform: 'x86'
-          '(Release) (x64)':
-            configuration: 'Release'
-            platform: 'x64'
+    - template: templates/jobs.yml
+      parameters:
+        name: 'Windows'
+        strategy:
+          matrix:
+            '(Debug) (x86)':
+              configuration: 'Debug'
+              platform: 'x86'
+            '(Debug) (x64)':
+              configuration: 'Debug'
+              platform: 'x64'
+            '(Release) (x86)':
+              configuration: 'Release'
+              platform: 'x86'
+            '(Release) (x64)':
+              configuration: 'Release'
+              platform: 'x64'
 
-      artifacts:
-        publish: true
-          artifacts: true
-          logs: true
-          manifests: true
-          
-      enablePublishBuildArtifacts: true
-      enablePublishUsingPipelines: true
-      enablePublishTestResults: true
+        artifacts:
+          publish: true
+            artifacts: true
+            logs: true
+            manifests: true
+            
+        enablePublishUsingPipelines: true
+        enablePublishTestResults: true
 
-      pool:
-        vmImage: windows-latest
+        pool:
+          vmImage: windows-latest
 
-      steps:
-        - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
-          name: build_and_test
-          env:
-            CONFIGURATION: $(configuration)
-            PLATFORM: $(platform)
+        steps:
+          - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+            name: build_and_test
+            env:
+              CONFIGURATION: $(configuration)
+              PLATFORM: $(platform)
 
-    - job: 'Ubuntu'
-      strategy:
-        matrix:
-          '(Debug) (x86)':
-            configuration: 'Debug'
-            platform: 'x86'
-          '(Debug) (x64)':
-            configuration: 'Debug'
-            platform: 'x64'
-          '(Release) (x86)':
-            configuration: 'Release'
-            platform: 'x86'
-          '(Release) (x64)':
-            configuration: 'Release'
-            platform: 'x64'
+    - template: templates/jobs.yml
+      parameters:
+        name: 'Ubuntu'
+        strategy:
+          matrix:
+            '(Debug) (x86)':
+              configuration: 'Debug'
+              platform: 'x86'
+            '(Debug) (x64)':
+              configuration: 'Debug'
+              platform: 'x64'
+            '(Release) (x86)':
+              configuration: 'Release'
+              platform: 'x86'
+            '(Release) (x64)':
+              configuration: 'Release'
+              platform: 'x64'
 
-      pool:
-        vmImage: 'ubuntu-latest'
+        pool:
+          vmImage: 'ubuntu-latest'
 
-      steps:
-        - script: chmod +x build.sh &&
-                  cd eng/common &&
-                  chmod +x build.sh &&
-                  chmod +x tools.sh
-          name: set_execution_permission
+        steps:
+          - script: chmod +x build.sh &&
+                    cd eng/common &&
+                    chmod +x build.sh &&
+                    chmod +x tools.sh
+            name: set_execution_permission
 
-        - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
-          name: build_and_test
-          env:
-            CONFIGURATION: $(configuration)
-            PLATFORM: $(platform)
+          - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
+            name: build_and_test
+            env:
+              CONFIGURATION: $(configuration)
+              PLATFORM: $(platform)
+    - template: templates/jobs.yml
+      parameters:
+        name: 'MacOS'
+        strategy:
+          matrix:
+            '(Debug) (x86)':
+              configuration: 'Debug'
+              platform: 'x86'
+            '(Debug) (x64)':
+              configuration: 'Debug'
+              platform: 'x64'
+            '(Release) (x86)':
+              configuration: 'Release'
+              platform: 'x86'
+            '(Release) (x64)':
+              configuration: 'Release'
+              platform: 'x64'
 
-    - job: 'MacOS'
-      strategy:
-        matrix:
-          '(Debug) (x86)':
-            configuration: 'Debug'
-            platform: 'x86'
-          '(Debug) (x64)':
-            configuration: 'Debug'
-            platform: 'x64'
-          '(Release) (x86)':
-            configuration: 'Release'
-            platform: 'x86'
-          '(Release) (x64)':
-            configuration: 'Release'
-            platform: 'x64'
+        pool:
+          vmImage: 'macos-latest'
 
-      pool:
-        vmImage: 'macos-latest'
+        steps:
+          - script: chmod +x build.sh &&
+                    cd eng/common &&
+                    chmod +x build.sh &&
+                    chmod +x tools.sh
+            name: set_execution_permission
 
-      steps:
-        - script: chmod +x build.sh &&
-                  cd eng/common &&
-                  chmod +x build.sh &&
-                  chmod +x tools.sh
-          name: set_execution_permission
-
-        - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
-          name: build_and_test
-          env:
-            CONFIGURATION: $(configuration)
-            PLATFORM: $(platform)
+          - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
+            name: build_and_test
+            env:
+              CONFIGURATION: $(configuration)
+              PLATFORM: $(platform)
