@@ -92,6 +92,10 @@ while [[ $# > 0 ]]; do
       verbosity=$2
       shift
       ;;
+    -platform)
+      platform=$2
+      shift
+      ;;
     -binarylog|-bl)
       binary_log=true
       ;;
@@ -149,16 +153,43 @@ function Build {
     bl="/bl:\"$log_dir/Build.binlog\""
   fi
 
+  local platformArgs=""
+  if [[ $platform != "" ]]; then
+    platformArgs+="/p:Platform=$platform"
+  fi
+  if [[ $configuration != "" ]]; then
+    platformArgs+="/p:Configuration=$configuration"
+  fi
+
+  local targets=()
+  if [[ $restore == true ]]; then
+    targets+="Restore"
+  fi
+  if [[ $build == true ]]; then
+    targets+="Build"
+  fi
+  if [[ $rebuild == true ]]; then
+    targets+="Rebuild"
+  fi
+  if [[ $test == true ]]; then
+    targets+="Test"
+  fi
+  if [[ $integrationTest == true ]]; then
+    targets+="IntegrationTest"
+  fi
+  if [[ $collect == true ]]; then
+    targets+="CollectCoverage"
+  fi
+  if [[ $pack == true ]]; then
+    targets+="Pack"
+  fi
+
+  targetArgs=$(IFS=/t: ; echo "${targets[*]}")
+
   MSBuild \
     $bl \
-    /p:Configuration=$configuration \
-    /p:RepoRoot="$repo_root" \
-    /p:Restore=$restore \
-    /p:Build=$build \
-    /p:Rebuild=$rebuild \
-    /p:Test=$test \
-    /p:Pack=$pack \
-    /p:IntegrationTest=$integration_test \
+    $platformArgs \
+    $targetArgs \
     $properties
 
   ExitWithExitCode 0

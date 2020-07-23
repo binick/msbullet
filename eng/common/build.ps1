@@ -56,7 +56,9 @@ function Print-Usage() {
 
 function Build {
     $bl = if ($binaryLog) { '/bl:' + (Join-Path $LogDir 'Build.binlog') } else { '' }
-    $platformArg = if ($platform) { "/p:Platform=$platform" } else { '' }
+    
+    $platformArgs = if ($platform) { "/p:Platform=$platform" } else { '' }
+    $platformArgs += if ($configuration) { "/p:Configuration=$configuration" } else { '' }
 
     $targets = @()
     if ($restore) { $targets += 'Restore' }
@@ -67,18 +69,14 @@ function Build {
     if ($collect) { $targets += 'CollectCoverage' }
     if ($pack) { $targets += 'Pack' }
 
-    if ($targets.Count -ne 0) {
-        [string[]] $targetsArgs = $properties
-        
+    if ($targets.Count -ne 0) {  
         $targetsArgs += $targets.ForEach( { "/t:$_" } )
-
-        $properties = $targetsArgs
     }
 
     MSBuild `
         $bl `
-        $platformArg `
-        /p:Configuration=$configuration `
+        $platformArgs `
+        $targetsArgs `
         @properties
 }
 
