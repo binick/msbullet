@@ -114,7 +114,7 @@ stages:
 
 - stage: publish
   displayName: Publish
-  condition: $[if and(eq(variables['Build.Repository.Provider'], 'GitHub'), eq(variables['Build.SourceBranchName'], 'master'))]
+  condition: and(eq(variables['Build.Repository.Provider'], 'GitHub'), eq(variables['Build.SourceBranchName'], 'master'))
   jobs:
   
   - template: templates/jobs.yml
