@@ -35,26 +35,14 @@ stages:
               platform: 'x64'
 
         steps:
-          
+
           - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
             name: build_and_test
             env:
               CONFIGURATION: $(configuration)
               PLATFORM: $(platform)
 
-  - template: templates/jobs.yml
-    parameters:
-      artifacts:
-        publish:
-          artifacts: true
-          logs: true
-          manifests: true       
-      enablePublishUsingPipelines: true
-      enablePublishTestResults: true
-      
-      jobs:
-        
-      - job: 'Ubuntu'
+      - job: 'Linux'
         pool:
           vmImage: ubuntu-latest
         strategy:
@@ -86,18 +74,6 @@ stages:
               CONFIGURATION: $(configuration)
               PLATFORM: $(platform)
              
-    - template: templates/jobs.yml
-      parameters:
-        artifacts:
-          publish:
-            artifacts: true
-            logs: true
-            manifests: true       
-        enablePublishUsingPipelines: true
-        enablePublishTestResults: true
-        
-        jobs:
-          
         - job: 'MacOS'
           pool:
             vmImage: macos-latest
