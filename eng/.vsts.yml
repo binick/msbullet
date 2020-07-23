@@ -3,6 +3,7 @@ trigger:
 
 stages:
 - stage: agent
+  displayName: 'Agent Setup'
 
   jobs:
 
@@ -16,7 +17,7 @@ stages:
           vmImage: windows-latest
 
         steps:
-          - script: Write-Host "##vso[task.setvariable variable=_PublicRelease](((cat -Raw .\version.json | ConvertFrom-Json).publicReleaseRefSpec | %{ $branch -match $_ }) -contains $true)"
+          - pwsh: Write-Host "##vso[task.setvariable variable=_PublicRelease](((cat -Raw .\version.json | ConvertFrom-Json).publicReleaseRefSpec | %{ $branch -match $_ }) -contains $true)"
             name: build
 
 - stage: build
