@@ -22,6 +22,16 @@ stages:
             configuration: 'Release'
             platform: 'x64'
 
+      artifacts:
+        publish: true
+          artifacts: true
+          logs: true
+          manifests: true
+          
+      enablePublishBuildArtifacts: true
+      enablePublishUsingPipelines: true
+      enablePublishTestResults: true
+
       pool:
         vmImage: windows-latest
 
