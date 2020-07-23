@@ -111,3 +111,30 @@ stages:
             env:
               CONFIGURATION: $(_BuildConfig)
               PLATFORM: $(_BuildPlatform)
+
+- stage: publish
+  displayName: Publish
+  condition: ${{ if and(eq(Build.Repository.Provider, 'GitHub'), eq(Build.SourceBranchName, 'master')) }}
+  jobs:
+  
+  - template: templates/jobs.yml
+    parameters:
+      artifacts:
+        download:
+          name: Artifacts_$(Agent.OS)_Release_x64
+
+      jobs:
+
+      - job: NuGet
+
+        pool:
+          vmImage: windows-latest
+
+        steps:
+
+        - script: nuget push foo.nupkg -apikey $env:APIKEY -src https://api.nuget.org/v3/index.json
+          name: build_and_test
+          env:
+            APIKEY: $(NuGet.ApiKey)
+
+
