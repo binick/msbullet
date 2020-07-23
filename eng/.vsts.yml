@@ -24,27 +24,25 @@ stages:
         strategy:
           matrix:
             '(Debug) (x86)':
-              configuration: 'Debug'
-              platform: 'x86'
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x86'
             '(Debug) (x64)':
-              configuration: 'Debug'
-              platform: 'x64'
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x64'
             '(Release) (x86)':
-              configuration: 'Release'
-              platform: 'x86'
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x86'
             '(Release) (x64)':
-              configuration: 'Release'
-              platform: 'x64'
-        
-        _BuildConfig: $(configuration)
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x64'
 
         steps:
 
           - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
             name: build_and_test
             env:
-              CONFIGURATION: $(configuration)
-              PLATFORM: $(platform)
+              CONFIGURATION: $(_BuildConfig)
+              PLATFORM: $(_BuildPlatform)
 
       - job: 'Linux'
 
@@ -54,19 +52,17 @@ stages:
         strategy:
           matrix:
             '(Debug) (x86)':
-              configuration: 'Debug'
-              platform: 'x86'
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x86'
             '(Debug) (x64)':
-              configuration: 'Debug'
-              platform: 'x64'
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x64'
             '(Release) (x86)':
-              configuration: 'Release'
-              platform: 'x86'
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x86'
             '(Release) (x64)':
-              configuration: 'Release'
-              platform: 'x64'
-
-        _BuildConfig: $(configuration)
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x64'
                 
         steps:
 
@@ -79,8 +75,8 @@ stages:
           - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
             name: build_and_test
             env:
-              CONFIGURATION: $(configuration)
-              PLATFORM: $(platform)
+              CONFIGURATION: $(_BuildConfig)
+              PLATFORM: $(_BuildPlatform)
              
       - job: 'MacOS'
 
@@ -90,19 +86,17 @@ stages:
         strategy:
           matrix:
             '(Debug) (x86)':
-              configuration: 'Debug'
-              platform: 'x86'
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x86'
             '(Debug) (x64)':
-              configuration: 'Debug'
-              platform: 'x64'
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x64'
             '(Release) (x86)':
-              configuration: 'Release'
-              platform: 'x86'
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x86'
             '(Release) (x64)':
-              configuration: 'Release'
-              platform: 'x64'
-
-        _BuildConfig: $(configuration)
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x64'
 
         steps:
 
@@ -115,5 +109,5 @@ stages:
           - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
             name: build_and_test
             env:
-              CONFIGURATION: $(configuration)
-              PLATFORM: $(platform)
+              CONFIGURATION: $(_BuildConfig)
+              PLATFORM: $(_BuildPlatform)

@@ -97,7 +97,7 @@ jobs:
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: current
-        artifactName: ${{ coalesce(parameters.artifacts.download.name, 'Artifacts_$(Agent.OS)_$(_BuildConfig)') }}
+        artifactName: ${{ coalesce(parameters.artifacts.download.name, 'Artifacts_$(Agent.OS)_$(_BuildConfig)_$(_BuildPlatform)') }}
         targetPath: ${{ coalesce(parameters.artifacts.download.path, 'artifacts') }}
         itemPattern: ${{ coalesce(parameters.artifacts.download.pattern, '**') }}
 
@@ -132,12 +132,12 @@ jobs:
         inputs:
           PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
           PublishLocation: Container
-          ArtifactName: ${{ coalesce(parameters.artifacts.publish.artifacts.name , 'Artifacts_$(Agent.Os)_$(_BuildConfig)') }}
+          ArtifactName: ${{ coalesce(parameters.artifacts.publish.artifacts.name , 'Artifacts_$(Agent.Os)_$(_BuildConfig)_$(_BuildPlatform)') }}
         continueOnError: true
         condition: always()
     - ${{ if or(eq(parameters.artifacts.publish.logs, 'true'), ne(parameters.artifacts.publish.logs, '')) }}:
       - publish: artifacts/log
-        artifact: ${{ coalesce(parameters.artifacts.publish.logs.name, 'Logs_Build_$(Agent.Os)_$(_BuildConfig)') }}
+        artifact: ${{ coalesce(parameters.artifacts.publish.logs.name, 'Logs_Build_$(Agent.Os)_$(_BuildConfig)_$(_BuildPlatform)') }}
         displayName: Publish logs
         continueOnError: true
         condition: always()
