@@ -17,7 +17,7 @@ stages:
       jobs:
         
       - job: 'Windows'
-      
+
         pool:
           vmImage: windows-latest
 
@@ -35,6 +35,8 @@ stages:
             '(Release) (x64)':
               configuration: 'Release'
               platform: 'x64'
+        
+        _BuildConfig: $(configuration)
 
         steps:
 
@@ -63,6 +65,8 @@ stages:
             '(Release) (x64)':
               configuration: 'Release'
               platform: 'x64'
+
+        _BuildConfig: $(configuration)
                 
         steps:
 
@@ -97,6 +101,8 @@ stages:
             '(Release) (x64)':
               configuration: 'Release'
               platform: 'x64'
+
+        _BuildConfig: $(configuration)
 
         steps:
 
