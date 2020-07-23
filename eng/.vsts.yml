@@ -1,15 +1,29 @@
 trigger:
 - master
 
-pr:
-- master
-
 stages:
+- stage: agent
+
+  jobs:
+
+  - template: templates/jobs.yml
+    parameters:
+      
+      jobs:
+      - job: setup
+
+        pool:
+          vmImage: windows-latest
+
+        steps:
+          - script: Write-Host "##vso[task.setvariable variable=_PublicRelease](((cat -Raw .\version.json | ConvertFrom-Json).publicReleaseRefSpec | %{ $branch -match $_ }) -contains $true)"
+            name: build
 
 - stage: build
   displayName: Build
+
   jobs:
-  
+
   - template: templates/jobs.yml
     parameters:
       artifacts:
@@ -120,7 +134,7 @@ stages:
 
 - stage: publish
   displayName: Publish
-  condition: and(eq(variables['Build.Repository.Provider'], 'GitHub'), eq(variables['Build.SourceBranchName'], 'master'))
+  condition: stageDependencies.agent.setup.outputs['build._PublicRelease']
   jobs:
   
   - template: templates/jobs.yml
