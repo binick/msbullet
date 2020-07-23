@@ -91,7 +91,7 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.Equal(0, exitCode);
 
             var domain = AppDomain.CreateDomain(nameof(this.MinimalRepoSignsWithoutErrors));
-            domain.Load(File.ReadAllBytes(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.1", "ClassLib1.dll")));
+            domain.Load(File.ReadAllBytes(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.0", "ClassLib1.dll")));
             Assert.NotEmpty(domain.GetAssemblies()[0].GetName().GetPublicKeyToken());
             AppDomain.Unload(domain);
 #pragma warning restore CS0162 // Unreachable code detected
@@ -114,7 +114,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // Then
             Assert.Equal(0, exitCode);
 
-            var version = AssemblyLoadContext.GetAssemblyName(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.1", "ClassLib1.dll")).Version;
+            var version = AssemblyLoadContext.GetAssemblyName(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.0", "ClassLib1.dll")).Version;
             Assert.Equal("1.0.0", $"{version.Major}.{version.Minor}.{version.Minor}");
         }
     }
