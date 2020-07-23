@@ -35,8 +35,10 @@ function Print-Usage() {
     Write-Host "  -rebuild                Rebuild solution"
     Write-Host "  -test                   Run all unit tests in the solution (short: -t)"
     Write-Host "  -integrationTest        Run all integration tests in the solution"
+    Write-Host "  -performanceTest        Run all performance tests in the solution [WIP]"
     Write-Host "  -collect                Collect code coverage metrics for all unit tests in the solution"
-    Write-Host "  -pack                   Package build outputs into NuGet packages and Willow components"
+    Write-Host "  -pack                   Package build outputs into NuGet packages"
+    Write-Host "  -sign                   Sign build outputs [WIP]"
     Write-Host "  -clean                  Clean the solution"
     Write-Host ""
 
@@ -54,7 +56,10 @@ function Print-Usage() {
 
 function Build {
     $bl = if ($binaryLog) { '/bl:' + (Join-Path $LogDir 'Build.binlog') } else { '' }
-    $platformArg = if ($platform) { "/p:Platform=$platform" } else { '' }
+    
+    $parametersArgs = @()
+    if ($platform) { $parametersArgs += "/p:Platform=$platform" }
+    if ($configuration) { $parametersArgs += "/p:Configuration=$configuration" }
 
     $targets = @()
     if ($restore) { $targets += 'Restore' }
@@ -64,19 +69,16 @@ function Build {
     if ($integrationTest) { $targets += 'IntegrationTest' }
     if ($collect) { $targets += 'CollectCoverage' }
     if ($pack) { $targets += 'Pack' }
-
-    if ($targets.Count -ne 0) {
-        [string[]] $targetsArgs = $properties
-        
+    
+    $targetsArgs = @()
+    if ($targets.Count -ne 0) {  
         $targetsArgs += $targets.ForEach( { "/t:$_" } )
-
-        $properties = $targetsArgs
     }
 
     MSBuild `
         $bl `
-        $platformArg `
-        /p:Configuration=$configuration `
+        @parametersArgs `
+        @targetsArgs `
         @properties
 }
 

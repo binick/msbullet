@@ -1,18 +1,146 @@
-name: ci-cd
+trigger:
+- master
 
-variables:
-  experimental: false
-
-pool: $(image)
+pr:
+- master
 
 stages:
 
-- stage: ci
-
+- stage: build
+  displayName: Build
   jobs:
-
-  - template: templates/windows-template.yml
+  
+  - template: templates/jobs.yml
     parameters:
-      configurations: [ 'Debug', 'Release' ]
-      platforms: [ 'x86', 'x64' ]
-    
+      artifacts:
+        publish:
+          artifacts: true
+          logs: true
+          manifests: true       
+      enablePublishUsingPipelines: true
+      enablePublishTestResults: true
+      
+      jobs:
+        
+      - job: 'Windows'
+
+        pool:
+          vmImage: windows-latest
+
+        strategy:
+          matrix:
+            '(Debug) (x86)':
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x86'
+            '(Debug) (x64)':
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x64'
+            '(Release) (x86)':
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x86'
+            '(Release) (x64)':
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x64'
+
+        steps:
+
+          - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+            name: build_and_test
+            env:
+              CONFIGURATION: $(_BuildConfig)
+              PLATFORM: $(_BuildPlatform)
+
+      - job: 'Linux'
+
+        pool:
+          vmImage: ubuntu-latest
+
+        strategy:
+          matrix:
+            '(Debug) (x86)':
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x86'
+            '(Debug) (x64)':
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x64'
+            '(Release) (x86)':
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x86'
+            '(Release) (x64)':
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x64'
+                
+        steps:
+
+          - script: chmod +x build.sh &&
+                    cd eng/common &&
+                    chmod +x build.sh &&
+                    chmod +x tools.sh
+            name: set_execution_permission
+
+          - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
+            name: build_and_test
+            env:
+              CONFIGURATION: $(_BuildConfig)
+              PLATFORM: $(_BuildPlatform)
+             
+      - job: 'MacOS'
+
+        pool:
+          vmImage: macos-latest
+
+        strategy:
+          matrix:
+            '(Debug) (x86)':
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x86'
+            '(Debug) (x64)':
+              _BuildConfig: 'Debug'
+              _BuildPlatform: 'x64'
+            '(Release) (x86)':
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x86'
+            '(Release) (x64)':
+              _BuildConfig: 'Release'
+              _BuildPlatform: 'x64'
+
+        steps:
+
+          - script: chmod +x build.sh &&
+                    cd eng/common &&
+                    chmod +x build.sh &&
+                    chmod +x tools.sh
+            name: set_execution_permission
+
+          - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
+            name: build_and_test
+            env:
+              CONFIGURATION: $(_BuildConfig)
+              PLATFORM: $(_BuildPlatform)
+
+- stage: publish
+  displayName: Publish
+  condition: and(eq(variables['Build.Repository.Provider'], 'GitHub'), eq(variables['Build.SourceBranchName'], 'master'))
+  jobs:
+  
+  - template: templates/jobs.yml
+    parameters:
+      artifacts:
+        download:
+          name: Artifacts_$(Agent.OS)_Release_x64
+
+      jobs:
+
+      - job: NuGet
+
+        pool:
+          vmImage: windows-latest
+
+        steps:
+
+        - script: nuget push foo.nupkg -apikey $env:APIKEY -src https://api.nuget.org/v3/index.json
+          name: build_and_test
+          env:
+            APIKEY: $(NuGet.ApiKey)
+
+
