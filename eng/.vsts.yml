@@ -114,7 +114,7 @@ stages:
 
 - stage: publish
   displayName: Publish
-  condition: ${{ if and(eq(Build.Repository.Provider, 'GitHub'), eq(Build.SourceBranchName, 'master')) }}
+  condition: if and(eq(Build.Repository.Provider, 'GitHub'), eq(Build.SourceBranchName, 'master'))
   jobs:
   
   - template: templates/jobs.yml
