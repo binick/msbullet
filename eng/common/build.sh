@@ -154,13 +154,19 @@ function Build {
     bl="/bl:\"$log_dir/Build.binlog\""
   fi
 
-  local platformArgs=""
+  local parameters=()
   if [[ "$platform" != "" ]]; then
-    platformArgs+="/p:Platform=$platform"
+    parameters+=("/p:Platform=$platform")
   fi
   if [[ "$configuration" != "" ]]; then
-    platformArgs+="/p:Configuration=$configuration"
+    parameters+=("/p:Configuration=$configuration")
   fi
+
+  parameterArgs=''
+  for parameter in "${parameters[@]}"
+  do
+    parameterArgs+="$parameter "
+  done
 
   local targets=()
   if [[ "$restore" == true ]]; then
@@ -193,7 +199,7 @@ function Build {
 
   MSBuild \
     $bl \
-    $platformArgs \
+    $parameterArgs \
     $targetArgs \
     $properties
 
