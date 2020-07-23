@@ -60,6 +60,7 @@ integration_test=false
 pack=false
 ci=false
 clean=false
+collect=false
 
 warn_as_error=true
 node_reuse=true
@@ -71,6 +72,7 @@ projects=''
 configuration='Debug'
 prepare_machine=false
 verbosity='minimal'
+platform=''
 
 properties=''
 
@@ -147,44 +149,47 @@ fi
 . "$scriptroot/tools.sh"
 
 function Build {
-
   local bl=""
   if [[ "$binary_log" == true ]]; then
     bl="/bl:\"$log_dir/Build.binlog\""
   fi
 
   local platformArgs=""
-  if [[ $platform != "" ]]; then
+  if [[ "$platform" != "" ]]; then
     platformArgs+="/p:Platform=$platform"
   fi
-  if [[ $configuration != "" ]]; then
+  if [[ "$configuration" != "" ]]; then
     platformArgs+="/p:Configuration=$configuration"
   fi
 
   local targets=()
-  if [[ $restore == true ]]; then
-    targets+="Restore"
+  if [[ "$restore" == true ]]; then
+    targets+=("Restore")
   fi
-  if [[ $build == true ]]; then
-    targets+="Build"
+  if [[ "$build" == true ]]; then
+    targets+=("Build")
   fi
-  if [[ $rebuild == true ]]; then
-    targets+="Rebuild"
+  if [[ "$rebuild" == true ]]; then
+    targets+=("Rebuild")
   fi
-  if [[ $test == true ]]; then
-    targets+="Test"
+  if [[ "$test" == true ]]; then
+    targets+=("Test")
   fi
-  if [[ $integrationTest == true ]]; then
-    targets+="IntegrationTest"
+  if [[ "$integration_test" == true ]]; then
+    targets+=("IntegrationTest")
   fi
-  if [[ $collect == true ]]; then
-    targets+="CollectCoverage"
+  if [[ "$collect" == true ]]; then
+    targets+=("CollectCoverage")
   fi
-  if [[ $pack == true ]]; then
-    targets+="Pack"
+  if [[ "$pack" == true ]]; then
+    targets+=("Pack")
   fi
 
-  targetArgs=$(IFS=/t: ; echo "${targets[*]}")
+  targetArgs=''
+  for target in "${targets[@]}"
+  do
+    targetArgs+="/t:$target "
+  done
 
   MSBuild \
     $bl \
