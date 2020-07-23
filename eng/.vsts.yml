@@ -25,7 +25,7 @@ stages:
               platform: 'x64'
 
         artifacts:
-          publish: true
+          publish:
             artifacts: true
             logs: true
             manifests: true
@@ -61,6 +61,15 @@ stages:
               configuration: 'Release'
               platform: 'x64'
 
+        artifacts:
+          publish:
+            artifacts: true
+            logs: true
+            manifests: true
+            
+        enablePublishUsingPipelines: true
+        enablePublishTestResults: true
+
         pool:
           vmImage: 'ubuntu-latest'
 
@@ -93,6 +102,15 @@ stages:
             '(Release) (x64)':
               configuration: 'Release'
               platform: 'x64'
+              
+        artifacts:
+          publish:
+            artifacts: true
+            logs: true
+            manifests: true
+            
+        enablePublishUsingPipelines: true
+        enablePublishTestResults: true
 
         pool:
           vmImage: 'macos-latest'
