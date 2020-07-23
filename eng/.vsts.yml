@@ -1,14 +1,24 @@
-name: ci-cd
-
 stages:
 
-- stage: ci
-
+- stage: build
+  displayName: Build
   jobs:
   
-    - template: templates/jobs.yml
-      parameters:
-        name: 'Windows'
+  - template: templates/jobs.yml
+    parameters:
+      artifacts:
+        publish:
+          artifacts: true
+          logs: true
+          manifests: true       
+      enablePublishUsingPipelines: true
+      enablePublishTestResults: true
+      
+      jobs:
+        
+      - job: 'Windows'
+        pool:
+          vmImage: windows-latest
         strategy:
           matrix:
             '(Debug) (x86)':
@@ -24,28 +34,29 @@ stages:
               configuration: 'Release'
               platform: 'x64'
 
-        artifacts:
-          publish:
-            artifacts: true
-            logs: true
-            manifests: true
-            
-        enablePublishUsingPipelines: true
-        enablePublishTestResults: true
-
-        pool:
-          vmImage: windows-latest
-
         steps:
+          
           - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
             name: build_and_test
             env:
               CONFIGURATION: $(configuration)
               PLATFORM: $(platform)
 
-    - template: templates/jobs.yml
-      parameters:
-        name: 'Ubuntu'
+  - template: templates/jobs.yml
+    parameters:
+      artifacts:
+        publish:
+          artifacts: true
+          logs: true
+          manifests: true       
+      enablePublishUsingPipelines: true
+      enablePublishTestResults: true
+      
+      jobs:
+        
+      - job: 'Ubuntu'
+        pool:
+          vmImage: ubuntu-latest
         strategy:
           matrix:
             '(Debug) (x86)':
@@ -60,20 +71,9 @@ stages:
             '(Release) (x64)':
               configuration: 'Release'
               platform: 'x64'
-
-        artifacts:
-          publish:
-            artifacts: true
-            logs: true
-            manifests: true
-            
-        enablePublishUsingPipelines: true
-        enablePublishTestResults: true
-
-        pool:
-          vmImage: 'ubuntu-latest'
-
+                
         steps:
+
           - script: chmod +x build.sh &&
                     cd eng/common &&
                     chmod +x build.sh &&
@@ -85,45 +85,47 @@ stages:
             env:
               CONFIGURATION: $(configuration)
               PLATFORM: $(platform)
+             
     - template: templates/jobs.yml
       parameters:
-        name: 'MacOS'
-        strategy:
-          matrix:
-            '(Debug) (x86)':
-              configuration: 'Debug'
-              platform: 'x86'
-            '(Debug) (x64)':
-              configuration: 'Debug'
-              platform: 'x64'
-            '(Release) (x86)':
-              configuration: 'Release'
-              platform: 'x86'
-            '(Release) (x64)':
-              configuration: 'Release'
-              platform: 'x64'
-              
         artifacts:
           publish:
             artifacts: true
             logs: true
-            manifests: true
-            
+            manifests: true       
         enablePublishUsingPipelines: true
         enablePublishTestResults: true
+        
+        jobs:
+          
+        - job: 'MacOS'
+          pool:
+            vmImage: macos-latest
+          strategy:
+            matrix:
+              '(Debug) (x86)':
+                configuration: 'Debug'
+                platform: 'x86'
+              '(Debug) (x64)':
+                configuration: 'Debug'
+                platform: 'x64'
+              '(Release) (x86)':
+                configuration: 'Release'
+                platform: 'x86'
+              '(Release) (x64)':
+                configuration: 'Release'
+                platform: 'x64'
 
-        pool:
-          vmImage: 'macos-latest'
+          steps:
 
-        steps:
-          - script: chmod +x build.sh &&
-                    cd eng/common &&
-                    chmod +x build.sh &&
-                    chmod +x tools.sh
-            name: set_execution_permission
+            - script: chmod +x build.sh &&
+                      cd eng/common &&
+                      chmod +x build.sh &&
+                      chmod +x tools.sh
+              name: set_execution_permission
 
-          - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
-            name: build_and_test
-            env:
-              CONFIGURATION: $(configuration)
-              PLATFORM: $(platform)
+            - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
+              name: build_and_test
+              env:
+                CONFIGURATION: $(configuration)
+                PLATFORM: $(platform)
