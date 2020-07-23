@@ -58,7 +58,7 @@ stages:
                   chmod +x tools.sh
           name: set_execution_permission
 
-        - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+        - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
           name: build_and_test
           env:
             CONFIGURATION: $(configuration)
@@ -90,7 +90,7 @@ stages:
                   chmod +x tools.sh
           name: set_execution_permission
 
-        - script: ./build.sh -t -integrationTest -c $CONFIGURATION -platform $PLATFORM -pack -ci
+        - script: ./build.sh -t --integrationTest -c $CONFIGURATION --platform $PLATFORM --pack --ci
           name: build_and_test
           env:
             CONFIGURATION: $(configuration)
