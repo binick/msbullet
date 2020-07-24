@@ -17,7 +17,7 @@ stages:
           vmImage: windows-latest
 
         steps:
-          - pwsh: ./eng/setup.ps1
+          - pwsh: ./eng/setup.ps1 -RepoRoot $(Build.Repository.LocalPath)
             name: publish
 
 - stage: build
