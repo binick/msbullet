@@ -1,15 +1,30 @@
 trigger:
 - master
 
-pr:
-- master
-
 stages:
+- stage: setupFor
+  displayName: 'Agent Setup'
+
+  jobs:
+
+  - template: templates/jobs.yml
+    parameters:
+      
+      jobs:
+      - job: stage
+
+        pool:
+          vmImage: windows-latest
+
+        steps:
+          - pwsh: ./eng/setup.ps1 -RepoRoot $(Build.Repository.LocalPath)
+            name: publish
 
 - stage: build
   displayName: Build
+
   jobs:
-  
+
   - template: templates/jobs.yml
     parameters:
       artifacts:
@@ -120,7 +135,7 @@ stages:
 
 - stage: publish
   displayName: Publish
-  condition: and(eq(variables['Build.Repository.Provider'], 'GitHub'), eq(variables['Build.SourceBranchName'], 'master'))
+  condition: stageDependencies.setupFor.stage.outputs['publish._PublicRelease']
   jobs:
   
   - template: templates/jobs.yml

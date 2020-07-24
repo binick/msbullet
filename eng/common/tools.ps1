@@ -334,7 +334,7 @@ function MSBuild-Core() {
 
   $buildTool = InitializeBuildTool
 
-  $cmdArgs = "$($buildTool.Command) /m /nologo /clp:Summary /v:$verbosity /nr:$nodeReuse /p:ContinuousIntegrationBuild=$ci /p:PublicRelease=$ci"
+  $cmdArgs = "$($buildTool.Command) /m /nologo /clp:Summary /v:$verbosity /nr:$nodeReuse /p:ContinuousIntegrationBuild=$ci"
 
   if ($warnAsError) {
     $cmdArgs += ' /warnaserror /p:TreatWarningsAsErrors=true'
