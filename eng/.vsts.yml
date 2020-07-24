@@ -2,7 +2,7 @@ trigger:
 - master
 
 stages:
-- stage: agent
+- stage: setupFor
   displayName: 'Agent Setup'
 
   jobs:
@@ -11,14 +11,14 @@ stages:
     parameters:
       
       jobs:
-      - job: setup
+      - job: stage
 
         pool:
           vmImage: windows-latest
 
         steps:
-          - pwsh: Write-Host "##vso[task.setvariable variable=_PublicRelease](((cat -Raw .\version.json | ConvertFrom-Json).publicReleaseRefSpec | %{ $branch -match $_ }) -contains $true)"
-            name: build
+          - pwsh: ./eng/setup.ps1
+            name: publish
 
 - stage: build
   displayName: Build
@@ -135,7 +135,7 @@ stages:
 
 - stage: publish
   displayName: Publish
-  condition: stageDependencies.agent.setup.outputs['build._PublicRelease']
+  condition: stageDependencies.setupFor.stage.outputs['publish._PublicRelease']
   jobs:
   
   - template: templates/jobs.yml
