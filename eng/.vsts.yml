@@ -13,7 +13,7 @@ stages:
 
       jobs:
 
-      - job: variables
+      - job: common
 
         pool:
           vmImage: windows-latest
@@ -146,7 +146,7 @@ stages:
 
   - template: templates/jobs.yml
     parameters:
-      condition: eq(stageDependencies.pipeline.variables.outputs['variables._PublicRelease'], 'true')
+      condition: eq(stageDependencies.pipeline.common.outputs['variables._PublicRelease'], 'true')
       artifacts:
         download:
           name: Artifacts_$(Agent.OS)_Release_x64
