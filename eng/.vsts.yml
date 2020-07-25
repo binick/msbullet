@@ -2,23 +2,25 @@ trigger:
 - master
 
 stages:
-- stage: setupFor
-  displayName: 'Agent Setup'
+
+- stage: pipeline
+  displayName: Setup pipeline
 
   jobs:
 
   - template: templates/jobs.yml
     parameters:
-      
+
       jobs:
-      - job: stage
+
+      - job: common
 
         pool:
           vmImage: windows-latest
 
         steps:
-          - pwsh: ./eng/setup.ps1 -RepoRoot $(Build.Repository.LocalPath)
-            name: publish
+          - pwsh: ./eng/common-variables.ps1 -RepoRoot $(Build.Repository.LocalPath) -SourceBranch $(Build.SourceBranch)
+            name: variables
 
 - stage: build
   displayName: Build
@@ -135,11 +137,16 @@ stages:
 
 - stage: publish
   displayName: Publish
-  condition: stageDependencies.setupFor.stage.outputs['publish._PublicRelease']
+
+  dependsOn:
+  - pipeline
+  - build
+    
   jobs:
-  
+
   - template: templates/jobs.yml
     parameters:
+      condition: eq(stageDependencies.pipeline.common.outputs['variables._PublicRelease'], 'true')
       artifacts:
         download:
           name: Artifacts_$(Agent.OS)_Release_x64
@@ -157,5 +164,3 @@ stages:
           name: build_and_test
           env:
             APIKEY: $(NuGet.ApiKey)
-
-
