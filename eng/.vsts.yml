@@ -160,7 +160,7 @@ stages:
 
         steps:
 
-        - script: nuget push foo.nupkg -apikey $env:APIKEY -src https://api.nuget.org/v3/index.json
-          name: build_and_test
+        - script: nuget push artifacts/**/MsBullet.Sdk.*.nupkg -apikey $env:APIKEY -src https://api.nuget.org/v3/index.json
+          name: sdk
           env:
             APIKEY: $(NuGet.ApiKey)
