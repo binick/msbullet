@@ -163,7 +163,7 @@ stages:
         - task: NuGetAuthenticate@0
           name: nuget-authenticate
           inputs:
-            nuGetServiceConnections: nuget-connection
+            nuGetServiceConnections: nuget_service_connection
 
         - task: NuGetCommand@2
           name: sdk
