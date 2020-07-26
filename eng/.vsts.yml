@@ -160,7 +160,14 @@ stages:
 
         steps:
 
-        - script: nuget push artifacts/**/MsBullet.Sdk.*.nupkg -ApiKey $env:NUGET_APIKEY -src https://api.nuget.org/v3/index.json
+        - task: NuGetAuthenticate@0
+          name: nuget_authenticate
+          inputs:
+            nuGetServiceConnections: nuget-connection
+
+        - task: NuGetCommand@2
           name: sdk
-          env:
-            NUGET_APIKEY: $(NuGet.ApiKey)
+          inputs:
+            command: push
+            nuGetFeedType: external
+            packagesToPush: artifacts/**/MsBullet.Sdk.*.nupkg
