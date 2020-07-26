@@ -160,14 +160,10 @@ stages:
 
         steps:
 
-        - task: NuGetAuthenticate@0
-          name: nuget_authenticate
-          inputs:
-            nuGetServiceConnections: nuget-connection
-
         - task: NuGetCommand@2
           name: sdk
           inputs:
             command: push
             nuGetFeedType: external
             packagesToPush: artifacts/**/MsBullet.Sdk.*.nupkg
+            publishFeedCredentials: nuget-connection
