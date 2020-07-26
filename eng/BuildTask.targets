@@ -9,6 +9,7 @@
   <PropertyGroup>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <!--
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <None Include="$(RepoRoot)LICENSE.TXT" PackagePath="$(PackageLicenseFile)" Pack="true"/>
+    <None Include="$(RepoRoot)assets/icon.png" PackagePath="$(PackageIcon)" Pack="true"/>
   </ItemGroup>
 
   <ItemGroup>
