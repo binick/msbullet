@@ -1,4 +1,4 @@
-# MsBullet Sdk conventions.
+# Recommended conventions.
 
 ### File Naming.
 
