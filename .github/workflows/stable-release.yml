@@ -1,0 +1,37 @@
+name: publish stable version
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Bump version
+        required: true
+      commit:
+        description: From (branch, tag or SHA)
+        default: master
+        required: false
+
+jobs:
+  bump-version:
+    name: Bump Package Version
+    runs-on: windows-2019
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.commit }}
+          submodules: true
+          fetch-depth: 0
+
+      - name: Update version.json
+        run: ./eng/bump-version.ps1 ${{ github.event.inputs.version }}
+
+      - name: Generate tag
+        run: git tag ${{ github.event.inputs.version }}
+      
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          tags: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
