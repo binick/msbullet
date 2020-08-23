@@ -1,14 +1,8 @@
 name: github pages
 
 on:
-<<<<<<< HEAD
   pull_request:
     types: [ closed ]
-=======
-  push:
-    branches:
-      - main
->>>>>>> master
 
 jobs:
   deploy:
