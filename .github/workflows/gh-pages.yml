@@ -7,23 +7,19 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-18.04
+    container:
+      image: klakegg/hugo:0.74.3-alpine
+      volumes:
+        - /docs:/src
+
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: '0.74.3'
-          extended: true
-
-      - name: "Move to docs directory"
-        run: cd docs
-
       - name: Build
-        run: docker run --rm -it --mount type=bind,source="$(pwd)",target=/src klakegg/hugo:0.74.3
+        run: hugo --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
