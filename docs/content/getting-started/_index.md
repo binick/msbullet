@@ -1,4 +1,7 @@
-# Getting started.
+---
+title: Getting started
+weight: 2
+---
 
 You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild) in three steps:
 

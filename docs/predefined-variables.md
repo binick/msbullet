@@ -1,1 +1,0 @@
-# Prefedined variables.

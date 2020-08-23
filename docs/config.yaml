@@ -1,0 +1,11 @@
+theme: hugo-theme-learn
+
+params:
+  editUrl: https://github.com/binick/msbullet/docs
+  themeVariant: green
+
+menu:
+  shortcuts:
+    - name: "<i class='fab fa-github'></i> Github repo"
+      idntifier: ds
+      url: https://github.com/binick/msbullet

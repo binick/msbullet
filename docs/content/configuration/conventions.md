@@ -1,3 +1,8 @@
+---
+title: Conventions
+weight: 6
+---
+
 # Recommended conventions.
 
 ### File Naming.
