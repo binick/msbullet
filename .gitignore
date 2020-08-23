@@ -15,7 +15,6 @@ syntax: glob
 launchSettings.json
 
 # Build results
-
 artifacts/
 artifacts_stage_1/
 [Dd]ebug/
@@ -28,6 +27,7 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 msbuild.binlog
+docs/resources/_gen
 
 # Visual Studio 2015
 .vs/
@@ -124,10 +124,8 @@ Session.vim
 config.ps1
 **/IISApplications
 
-
 # Node.js modules
 node_modules/
 
 # Python Compile Outputs
-
 *.pyc

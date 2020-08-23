@@ -61,6 +61,9 @@ stages:
 
         steps:
 
+          - checkout: self
+            submodules: recursive
+
           - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
             name: build_and_test
             env:
@@ -88,6 +91,9 @@ stages:
               _BuildPlatform: 'x64'
                 
         steps:
+
+          - checkout: self
+            submodules: recursive
 
           - script: chmod +x build.sh &&
                     cd eng/common &&
@@ -122,6 +128,9 @@ stages:
               _BuildPlatform: 'x64'
 
         steps:
+
+          - checkout: self
+            submodules: recursive
 
           - script: chmod +x build.sh &&
                     cd eng/common &&

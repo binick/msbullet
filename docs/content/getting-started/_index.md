@@ -1,14 +1,11 @@
-![Logo](assets/icon.png)
-
-# MsBullet SDK 
-
-The project is inspired to [Arcade](https://github.com/dotnet/arcade) and your intent is that to avoid the tedious configuration of tools related to development cycle such as testing, versioning and other best practices.
-
-## How to use
+---
+title: Getting started
+weight: 2
+---
 
 You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild) in three steps:
 
-1. Add [`global.json`](global.json) or copy this on root of your repo:
+1. Add [`global.json`](global.json) or copy this on `root` of your repo:
 
 ``` json
 {
@@ -46,9 +43,9 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us
 
 The steps below are optionally, but recommended.
 
-1. Copy to `/eng/common/build.ps1` and this contents [build.ps1](eng/common/build.ps1)
-2. Copy to `/eng/common/build.sh` and this contents [build.sh](eng/common/build.sh)
+1. Copy to `/eng/common/build.ps1` this contents [build.ps1](eng/common/build.ps1)
+2. Copy to `/eng/common/build.sh` this contents [build.sh](eng/common/build.sh)
 3. Copy to `/eng/common/tools.ps1` this contents [tools.ps1](eng/common/tools.ps1)
 4. Copy to `/eng/common/tools.sh` this contents [tools.sh](eng/common/tools.sh)
-5. Copy to `build.cmd` content [build.cmd](build.cmd)
-6. Copy to `build.sh` content [build.sh](build.sh)
+5. Copy to `build.cmd` this content [build.cmd](build.cmd)
+6. Copy to `build.sh` this content [build.sh](build.sh)
