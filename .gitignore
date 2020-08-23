@@ -27,7 +27,6 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 msbuild.binlog
-docs/resources/_gen
 
 # Visual Studio 2015
 .vs/

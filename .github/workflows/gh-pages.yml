@@ -23,7 +23,7 @@ jobs:
         run: cd docs
 
       - name: Build
-        run: hugo --minify
+        run: docker run --rm -it --mount type=bind,source="$(pwd)",target=/src klakegg/hugo:0.74.3
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
