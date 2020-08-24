@@ -23,9 +23,15 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Temporarily disable "include administrators" branch protection
+        uses: benjefferies/branch-protection-bot@master
+        if: always()
+        with:
+          access-token: ${{ secrets.AUTOBOT_TOKEN }}
+            
       - name: Update version.json
-        run: ./eng/bump-version.ps1 ${{ github.event.inputs.version }}
-
+        run: ./eng/bump-version.ps1 -v ${{ github.event.inputs.version }}
+      
       - name: Generate tag
         run: git tag ${{ github.event.inputs.version }}
       
@@ -34,4 +40,23 @@ jobs:
         with:
           tags: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Update version.json
+        run: ./eng/bump-version.ps1 -v "${{ github.event.inputs.version }}-beta.{height}" -f
+        
+      - name: Commit version upgrade
+        run: git add version.json && git commit -m "[Bot] Bump version after stable release."
+               
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          tags: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Enable "include administrators" branch protection
+        uses: benjefferies/branch-protection-bot@master
+        if: always()
+        with:
+          access-token: ${{ secrets.AUTOBOT_TOKEN }}
+          owner: binick
+          repo: msbullet
