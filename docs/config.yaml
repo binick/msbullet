@@ -8,4 +8,4 @@ menu:
   shortcuts:
     - name: "<i class='fab fa-github'></i> Github repo"
       idntifier: ds
-      url: https://binick.github.io/msbullet/
+      url: https://github.com/binick/msbullet
