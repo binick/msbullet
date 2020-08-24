@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
         
       - name: Build
-        run: docker run -v "$(pwd)/docs":/src klakegg/hugo:0.74.3 --minifyy
+        run: docker run -v "$(pwd)/docs":/src klakegg/hugo:0.74.3 --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
