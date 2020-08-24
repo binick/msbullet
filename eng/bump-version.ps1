@@ -1,7 +1,7 @@
 [CmdletBinding(PositionalBinding = $false)]
 Param(
     [string][Alias('v')] $version,
-    [bool][Alias('f')] $force = $false
+    [switch][Alias('f')] $force = $false
 )
     
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
@@ -26,11 +26,11 @@ function Set-Version($version) {
         ExitWithExitCode 1
     }
         
-    return $(Set-RawVersion "$($semVer.Major).$($semVer.Minor).$($semVer.Patch)")
+    Set-RawVersion "$($semVer.Major).$($semVer.Minor).$($semVer.Patch)"
 }
 
 function Set-RawVersion($version) {
-    return $($VersionJson.version = $version)
+    $VersionJson.version = $version
 }
 
 function Get-CurrentVersion() {
@@ -48,12 +48,10 @@ function Normilize-NerdBankVersion ($rawVersion) {
 $VersionJson = Get-Content -Raw -Path $VersionJsonPath | ConvertFrom-Json
 
 if (!$force) {
-    $FreshVersionJson = Set-Version $version
+    Set-Version $version
 }
 else {
-    $FreshVersionJson = Set-RawVersion $version
+    Set-RawVersion $version
 }
 
-$FreshVersionJson | ConvertTo-Json | Set-Content -Path $VersionJsonPath
-
-ExitWithExitCode 0
+$VersionJson | ConvertTo-Json | Set-Content -Path $VersionJsonPath
