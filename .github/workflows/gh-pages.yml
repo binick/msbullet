@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-18.04
     container:
-      image: klakegg/hugo:0.74.3-alpine
+      image: klakegg/hugo:0.74.3-ext-alpine
       volumes:
         - /docs:/src
 
