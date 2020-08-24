@@ -55,3 +55,5 @@ else {
 }
 
 $VersionJson | ConvertTo-Json | Set-Content -Path $VersionJsonPath
+
+ExitWithExitCode 0
