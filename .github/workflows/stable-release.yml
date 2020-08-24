@@ -30,7 +30,7 @@ jobs:
           access-token: ${{ secrets.AUTOBOT_TOKEN }}
             
       - name: Bump to target version
-        run: chmod +x /src/eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}'"
+        run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}'"
       
       - name: Generate tag
         run: git tag ${{ github.event.inputs.version }}
@@ -42,7 +42,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Restore pre-release version based on target version
-        run: chmod +x /src/eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}-beta.{height}' -f"
+        run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}-beta.{height}' -f"
         
       - name: Commit version upgrade
         run: git add version.json && git commit -m "[Bot] Bump version after stable release."
