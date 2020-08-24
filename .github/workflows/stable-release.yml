@@ -42,7 +42,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Update version.json
-        run: docker run mcr.microsoft.com/powershell:lts-alpine-3.10 ./eng/bump-version.ps1 -v "${{ github.event.inputs.version }}-beta.{height}" -f
+        run: docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '10.2.2-beta.{height}' -f"
         
       - name: Commit version upgrade
         run: git add version.json && git commit -m "[Bot] Bump version after stable release."
