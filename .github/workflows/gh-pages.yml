@@ -13,12 +13,9 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-
+        
       - name: Build
-        uses: docker://klakegg/hugo:0.74.3-alpine
-        with:
-          entrypoint: hugo --minify
-          args: --mount type=bind,source="$(pwd)/docs",target=/src
+        run: docker run -v "$(pwd)/docs":/src klakegg/hugo:0.74.3 --minifyy
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
