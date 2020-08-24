@@ -14,9 +14,9 @@ on:
 jobs:
   bump-version:
     name: Bump Package Version
-    runs-on: windows-2019
-    steps:
+    runs-on: ubuntu-18.04
 
+    steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.inputs.commit }}
@@ -42,7 +42,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Update version.json
-        run: ./eng/bump-version.ps1 -v "${{ github.event.inputs.version }}-beta.{height}" -f
+        run: docker run mcr.microsoft.com/powershell:lts-alpine-3.10 ./eng/bump-version.ps1 -v "${{ github.event.inputs.version }}-beta.{height}" -f
         
       - name: Commit version upgrade
         run: git add version.json && git commit -m "[Bot] Bump version after stable release."
