@@ -7,22 +7,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-18.04
-    container:
-      image: klakegg/hugo:0.74.3-ext-alpine
-      volumes:
-        - /docs:/src
 
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
           fetch-depth: 0
-
+        
       - name: Build
-        run: hugo --minify
+        run: docker run -v "$(pwd)/docs":/src klakegg/hugo:0.74.3 --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./docs/public
