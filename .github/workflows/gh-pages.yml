@@ -7,10 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-18.04
-    container:
-      image: klakegg/hugo:0.74.3-ext-alpine
-      volumes:
-        - /docs:/src
 
     steps:
       - uses: actions/checkout@v2
@@ -19,8 +15,10 @@ jobs:
           fetch-depth: 0
 
       - name: Build
-        run: hugo --minify
-        working-directory: /__w/msbullet/msbullet
+        uses: docker://klakegg/hugo:0.74.3-alpine
+        with:
+          entrypoint: hugo --minify
+          args: --mount type=bind,source="$(pwd)/docs",target=/src
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
