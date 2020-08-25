@@ -32,7 +32,8 @@ jobs:
         uses: benjefferies/branch-protection-bot@master
         with:
           access-token: ${{ secrets.AUTOBOT_TOKEN }}
-            
+          enforce_admins: false
+
       - name: Bump to target version
         run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}'"
       
@@ -41,7 +42,7 @@ jobs:
           git add version.json && git commit -m "[Bot] Bump version for stable release (${{ github.event.inputs.version }})."
 
       - name: Generate tag
-        run: git tag ${{ github.event.inputs.version }}
+        run: git tag v${{ github.event.inputs.version }}
       
       - name: Push
         uses: ad-m/github-push-action@master
@@ -66,3 +67,4 @@ jobs:
         if: always()
         with:
           access-token: ${{ secrets.AUTOBOT_TOKEN }}
+          enforce_admins: true
