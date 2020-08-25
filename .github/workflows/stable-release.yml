@@ -23,15 +23,23 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Setup git requirements
+        run: |
+          git config --local user.email "${{ secrets.AUTOBOT_EMAIL }}"
+          git config --local user.name "${{ secrets.AUTOBOT_NAME }}"
+
       - name: Temporarily disable "include administrators" branch protection
         uses: benjefferies/branch-protection-bot@master
-        if: always()
         with:
           access-token: ${{ secrets.AUTOBOT_TOKEN }}
             
       - name: Bump to target version
         run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}'"
       
+      - name: Commit stable version
+        run: |
+          git add version.json && git commit -m "[Bot] Bump version for stable release (${{ github.event.inputs.version }})."
+
       - name: Generate tag
         run: git tag ${{ github.event.inputs.version }}
       
@@ -39,21 +47,18 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           tags: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.AUTOBOT_TOKEN }}
         
       - name: Restore pre-release version based on target version
         run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}-beta.{height}' -f"
         
-      - name: Commit version upgrade
+      - name: Commit pre-release version
         run: |
-          git config --global user.email "${{ secrets.AUTOBOT_EMAIL }}"
-          git config --global user.name "${{ secrets.AUTOBOT_NAME }}"
-          git add version.json && git commit -m "[Bot] Bump version after stable release."
+          git add version.json && git commit -m "[Bot] Bump version after stable release (${{ github.event.inputs.version }})."
                
       - name: Push
         uses: ad-m/github-push-action@master
         with:
-          tags: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Enable "include administrators" branch protection
@@ -61,5 +66,3 @@ jobs:
         if: always()
         with:
           access-token: ${{ secrets.AUTOBOT_TOKEN }}
-          owner: binick
-          repo: msbullet
