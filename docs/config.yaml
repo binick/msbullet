@@ -1,4 +1,8 @@
 theme: hugo-theme-learn
+baseURL: https://binick.github.io/msbullet
+enableGitInfo: true
+enableInlineShortcodes: true
+enableRobotsTXT: true
 
 params:
   editUrl: https://github.com/binick/msbullet/docs
