@@ -4,8 +4,8 @@ Param(
     [switch][Alias('f')] $force = $false
 )
     
-if ($version -notmatch '^v\d+\.\d+') {
-    Write-Host "Version must respect this sintax 'v{major}.{minor}' or 'v{major}.{minor}.{patch}'"
+if ($version -notmatch '^\d+.\d+.\d+') {
+    Write-Host "Version must respect this sintax '{major}.{minor}' or '{major}.{minor}.{patch}'"
     ExitWithExitCode 1
 }
 
