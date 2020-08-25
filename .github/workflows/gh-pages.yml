@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
         
       - name: Build
-        run: docker run -w /src/docs --mount type=bind,source="$(pwd)",target=/src klakegg/hugo:0.74.3-ext --minify --baseURL https://binick.github.io/msbullet/
+        run: docker run -w /src/docs --mount type=bind,source="$(pwd)",target=/src klakegg/hugo:0.74.3-ext --minify
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
