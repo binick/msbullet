@@ -4,6 +4,11 @@ Param(
     [switch][Alias('f')] $force = $false
 )
     
+if ($version -notmatch '^v\d+\.\d+') {
+    Write-Host "Version must respect this sintax 'v{major}.{minor}' or 'v{major}.{minor}.{patch}'"
+    ExitWithExitCode 1
+}
+
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
 $VersionJsonPath = Join-Path $RepoRoot 'version.json'
 
