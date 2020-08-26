@@ -6,10 +6,6 @@ on:
       version:
         description: Bump version
         required: true
-      commit:
-        description: From (branch, tag or SHA)
-        default: master
-        required: false
 
 jobs:
   bump-version:
@@ -19,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.commit }}
+          ref: master
           submodules: true
           fetch-depth: 0
 
@@ -28,43 +24,57 @@ jobs:
           git config --local user.email "${{ secrets.AUTOBOT_EMAIL }}"
           git config --local user.name "${{ secrets.AUTOBOT_NAME }}"
 
-      - name: Temporarily disable "include administrators" branch protection
-        uses: benjefferies/branch-protection-bot@master
-        with:
-          access-token: ${{ secrets.AUTOBOT_TOKEN }}
-          enforce_admins: false
+      - name: Temporarily disable branch protection
+        run: |
+          hub api \
+          -X PUT \
+          -H "Accept: application/vnd.github.luke-cage-preview+json" \
+          /repos/${{ github.repository }}/branches/master/protection \
+          --input .\.github\workflows\disable-restrictions.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set execution policy to bump-version.ps1 
+        run: chmod +x ./eng/bump-version.ps1
 
       - name: Bump to target version
-        run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}'"
+        run: |
+          docker run \
+          --mount type=bind,src="$(pwd)",dst=/src \
+          mcr.microsoft.com/powershell:lts-alpine-3.10 \
+          pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}'"
       
       - name: Commit stable version
         run: |
-          git add version.json && git commit -m "[Bot] Bump version for stable release (${{ github.event.inputs.version }})."
-
-      - name: Generate tag
-        run: git tag v${{ github.event.inputs.version }}
-      
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          tags: true
-          github_token: ${{ secrets.AUTOBOT_TOKEN }}
+          git add version.json \
+          && git commit -m "[Bot] Bump version for stable release (${{ github.event.inputs.version }})." \
+          && git tag v${{ github.event.inputs.version }} \
+          && hub push
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
       - name: Restore pre-release version based on target version
-        run: chmod +x ./eng/bump-version.ps1 && docker run --mount type=bind,src="$(pwd)",dst=/src mcr.microsoft.com/powershell:lts-alpine-3.10 pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}-beta.{height}' -f"
+        run: |
+          docker run \
+          --mount type=bind,src="$(pwd)",dst=/src \
+          mcr.microsoft.com/powershell:lts-alpine-3.10 \
+          pwsh -Command "./src/eng/bump-version.ps1 -v '${{ github.event.inputs.version }}-beta.{height}' -f"
         
       - name: Commit pre-release version
         run: |
-          git add version.json && git commit -m "[Bot] Bump version after stable release (${{ github.event.inputs.version }})."
-               
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git add version.json \
+          && git commit -m "[Bot] Bump version after stable release (${{ github.event.inputs.version }})." \
+          && hub push
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
 
-      - name: Enable "include administrators" branch protection
-        uses: benjefferies/branch-protection-bot@master
+      - name: Enable branch protection
+        run: |
+          hub api \
+          -X PUT \
+          -H "Accept: application/vnd.github.luke-cage-preview+json" \
+          /repos/${{ github.repository }}/branches/master/protection \
+          --input .\.github\workflows\enable-restrictions.json
         if: always()
-        with:
-          access-token: ${{ secrets.AUTOBOT_TOKEN }}
-          enforce_admins: true
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
