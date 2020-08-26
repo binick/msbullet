@@ -49,7 +49,7 @@ jobs:
           git add version.json \
           && git commit -m "[Bot] Bump version for stable release (${{ github.event.inputs.version }})." \
           && git tag v${{ github.event.inputs.version }} \
-          && hub push
+          && hub push --tags
         env: 
           GITHUB_TOKEN: ${{ secrets.AUTOBOT_TOKEN }}
         
