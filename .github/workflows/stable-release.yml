@@ -30,7 +30,7 @@ jobs:
           -X PUT \
           -H "Accept: application/vnd.github.luke-cage-preview+json" \
           /repos/${{ github.repository }}/branches/master/protection \
-          --input disable-restrictions.json
+          --input ${{ github.workspace }}/disable-restrictions.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -74,7 +74,7 @@ jobs:
           -X PUT \
           -H "Accept: application/vnd.github.luke-cage-preview+json" \
           /repos/${{ github.repository }}/branches/master/protection \
-          --input enable-restrictions.json
+          --input ${{ github.workspace }}/enable-restrictions.json
         if: always()
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
