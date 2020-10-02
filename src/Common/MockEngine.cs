@@ -8,7 +8,7 @@ using Microsoft.Build.Framework;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace MsBullet.Sdk.IntegrationTests.Utilities
+namespace MsBullet.Sdk.Tests.Utilities
 {
     internal class MockEngine : IBuildEngine5
     {

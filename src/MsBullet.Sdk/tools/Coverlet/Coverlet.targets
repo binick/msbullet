@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <ItemGroup>
+    <PackageReference Include="MsBullet.Build.Tasks.Coverlet" Version="$(MsBulletBuildTasksCoverletVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+  </ItemGroup>
+
+</Project>

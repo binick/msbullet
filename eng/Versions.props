@@ -3,9 +3,20 @@
 
   <PropertyGroup>
     <MicrosoftBuildFrameworkVersion>16.5.0</MicrosoftBuildFrameworkVersion>
+    <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildFrameworkVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <MicrosoftCodeAnalysisCommonVersion>3.5.0</MicrosoftCodeAnalysisCommonVersion>
     <MicrosoftCodeAnalysisWorkspacesCommonVersion>3.5.0</MicrosoftCodeAnalysisWorkspacesCommonVersion>
     <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
+    
+    <MonoCecilVersion>0.11.2</MonoCecilVersion>
+    <NewtonsoftJsonVersion>12.0.3</NewtonsoftJsonVersion>
+    <SystemReflectionMetadataVersion>1.8.1</SystemReflectionMetadataVersion>
+
+    <MicrosoftExtenionsGlobalVersion>3.1.7</MicrosoftExtenionsGlobalVersion>
+    <MicrosoftExtensionsDependencyInjectionVersion>$(MicrosoftExtenionsGlobalVersion)</MicrosoftExtensionsDependencyInjectionVersion>
+    <MicrosoftExtensionsDependencyInjectionAbstracionsVersion>$(MicrosoftExtenionsGlobalVersion)</MicrosoftExtensionsDependencyInjectionAbstracionsVersion>
+    <MicrosoftExtensionsFileSystemGlobbingVersion>$(MicrosoftExtenionsGlobalVersion)</MicrosoftExtensionsFileSystemGlobbingVersion>
+    <MicrosoftExtensionsDependencyModelVersion>3.1.6</MicrosoftExtensionsDependencyModelVersion>
   </PropertyGroup>
 
 </Project>

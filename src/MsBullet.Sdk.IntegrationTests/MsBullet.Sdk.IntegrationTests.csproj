@@ -44,6 +44,14 @@
       <_Parameter1>MsBulletSdkAssemblyPath</_Parameter1>
       <_Parameter2>$(OutputPath)MsBullet.Sdk.dll</_Parameter2>
     </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>MsBulletSdkPackagePath</_Parameter1>
+      <_Parameter2>$(ArtifactsPackagesDir)</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>MsBulletSdkPackagePrefix</_Parameter1>
+      <_Parameter2>MsBullet.Sdk</_Parameter2>
+    </AssemblyAttribute>
     <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
       <_Parameter1>LogOutputDir</_Parameter1>
@@ -69,7 +77,7 @@
 
   <Target Name="GenerateTestNuGetConfig" AfterTargets="CopyFilesToOutputDirectory">
     <PropertyGroup>
-      <TestNuGetConfigContent>
+      <NuGetConfigContent>
 <![CDATA[
 <configuration>
   <packageSources>
@@ -83,27 +91,23 @@
   </disabledPackageSources>
 </configuration>
 ]]>
-      </TestNuGetConfigContent>
+      </NuGetConfigContent>
     </PropertyGroup>
-    <WriteLinesToFile Lines="$(TestNuGetConfigContent)" File="$(TargetDir)testassets\boilerplate\NuGet.config" Overwrite="true" />
+    <WriteLinesToFile Lines="$(NuGetConfigContent)" File="$(TargetDir)testassets\boilerplate\NuGet.config" Overwrite="true" />
   </Target>
 
   <Target Name="GenerateTestNerdbankGitVersioning" AfterTargets="CopyFilesToOutputDirectory">
     <PropertyGroup>
-      <TestContentNerdbankGitVersioning>
+      <NerdbankGitVersioningContent>
 {
-  "version": "1.0.0-local.{height}",
-  "publicReleaseRefSpec": [
-    "^refs/heads/master$",
-    "^refs/tags/v\\d+\\.\\d+"
-  ],
+  "version": "1.0.0-dev",
   "nugetPackageVersion": {
     "semVer": 2
   }
 }
-      </TestContentNerdbankGitVersioning>
+      </NerdbankGitVersioningContent>
     </PropertyGroup>
-    <WriteLinesToFile Lines="$(TestContentNerdbankGitVersioning)" File="$(TargetDir)testassets\boilerplate\version.json" Overwrite="true" />
+    <WriteLinesToFile Lines="$(NerdbankGitVersioningContent)" File="$(TargetDir)testassets\boilerplate\version.json" Overwrite="true" />
   </Target>
   
   <Target Name="_GeneratePackageDirectories" BeforeTargets="Build">

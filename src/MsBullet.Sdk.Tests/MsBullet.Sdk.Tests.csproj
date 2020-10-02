@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
     <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
 
-    <NoWarn>$(NoWarn);CA1812</NoWarn>
+    <NoWarn>$(NoWarn);CA1812;VSTHRD200</NoWarn>
     <CollectCoverageOnTest>true</CollectCoverageOnTest>
   </PropertyGroup>
 
@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Build.Framework" Version="$(MicrosoftBuildFrameworkVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisCommonVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisWorkspacesCommonVersion)" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="$(MicrosoftBuildUtilitiesCoreVersion)" />
   </ItemGroup>
 
   <ItemGroup>

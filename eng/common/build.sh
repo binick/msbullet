@@ -24,7 +24,6 @@ usage()
   echo "  --test                     Run all unit tests in the solution (short: -t)"
   echo "  --integrationTest          Run all integration tests in the solution"
   echo "  --performanceTest          Run all performance tests in the solution [WIP]"
-  echo "  --collect                  Collect code coverage metrics for all unit tests in the solution"
   echo "  --pack                     Package build outputs into NuGet packages"
   echo "  --sign                     Sign build outputs [WIP]"
   echo "  --clean                    Clean the solution"
@@ -60,7 +59,6 @@ integration_test=false
 pack=false
 ci=false
 clean=false
-collect=false
 
 warn_as_error=true
 node_reuse=true
@@ -183,9 +181,6 @@ function Build {
   fi
   if [[ "$integration_test" == true ]]; then
     targets+=("IntegrationTest")
-  fi
-  if [[ "$collect" == true ]]; then
-    targets+=("CollectCoverage")
   fi
   if [[ "$pack" == true ]]; then
     targets+=("Pack")

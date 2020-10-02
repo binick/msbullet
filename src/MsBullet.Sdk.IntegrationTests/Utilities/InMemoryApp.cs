@@ -10,8 +10,8 @@ namespace MsBullet.Sdk.IntegrationTests
 {
     public class InMemoryApp : TestApp
     {
-        public InMemoryApp(string workDir, string logOutputDir, string[] sourceDirectories)
-            : base(workDir, logOutputDir, sourceDirectories)
+        public InMemoryApp(string workDir, string sdkVersion, string logOutputDir, string[] sourceDirectories)
+            : base(workDir, sdkVersion, logOutputDir, sourceDirectories)
         {
         }
 

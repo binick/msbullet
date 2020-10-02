@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Xunit.Abstractions;
 
 namespace MsBullet.Sdk.IntegrationTests.Utilities
@@ -13,15 +14,17 @@ namespace MsBullet.Sdk.IntegrationTests.Utilities
         private readonly ConcurrentQueue<IDisposable> disposables;
 
         private readonly string workDir;
+        private readonly string sdkVersion;
         private readonly string logOutputDir;
         private readonly string[] sourceDirectories;
         private readonly ICollection<KeyValuePair<string, string[]>> preCreateCommands;
         private readonly ICollection<KeyValuePair<string, string[]>> preBuildCommands;
         private readonly ICollection<KeyValuePair<string, string[]>> postBuildCommands;
 
-        public TestAppProvider(string workDir, string logOutputDir, string[] sourceDirectories, ConcurrentQueue<IDisposable> disposables)
+        public TestAppProvider(string workDir, string sdkVersion, string logOutputDir, string[] sourceDirectories, ConcurrentQueue<IDisposable> disposables)
         {
             this.workDir = workDir;
+            this.sdkVersion = sdkVersion;
             this.logOutputDir = logOutputDir;
             this.sourceDirectories = sourceDirectories;
 
@@ -55,7 +58,7 @@ namespace MsBullet.Sdk.IntegrationTests.Utilities
 
         public TestApp Create(ITestOutputHelper output)
         {
-            var app = new TestApp(this.workDir, this.logOutputDir, this.sourceDirectories);
+            var app = new TestApp(this.workDir, this.sdkVersion, this.logOutputDir, this.sourceDirectories);
             this.disposables.Enqueue(app);
 
             app.WireUp += (s, e) => Execute(output, (TestApp)s, this.preCreateCommands);

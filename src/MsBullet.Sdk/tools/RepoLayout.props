@@ -53,8 +53,8 @@
     <ArtifactsLogDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'log', '$(Configuration)'))</ArtifactsLogDir>
     <ArtifactsTmpDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'tmp', '$(Configuration)'))</ArtifactsTmpDir>
     <ArtifactsTestResultsDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'TestResults', '$(Configuration)'))</ArtifactsTestResultsDir>
-    <ArtifactsReportDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsTestResultsDir)', 'Reports'))</ArtifactsReportDir>
-    <ArtifactsCoverageDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsTestResultsDir)', 'Coverage'))</ArtifactsCoverageDir>
+    <ArtifactsCoverageReportsDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'CoverageReports', '$(Configuration)'))</ArtifactsCoverageReportsDir>
+    <ArtifactsCoverageResultsDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'CoverageResults', '$(Configuration)'))</ArtifactsCoverageResultsDir>
     <ArtifactsSymStoreDirectory>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'SymStore', '$(Configuration)'))</ArtifactsSymStoreDirectory>
     <ArtifactsPackagesDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsDir)', 'packages', '$(Configuration)'))</ArtifactsPackagesDir>
     <ArtifactsShippingPackagesDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsPackagesDir)', 'Shippable'))</ArtifactsShippingPackagesDir>

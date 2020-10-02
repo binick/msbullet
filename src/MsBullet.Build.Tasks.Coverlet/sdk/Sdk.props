@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\build\MsBullet.Build.Tasks.Coverlet.props" Condition="Exists('$(MSBuildThisFileDirectory)..\build\MsBullet.Build.Tasks.Coverlet.props')" />
+</Project>

@@ -36,7 +36,6 @@ function Print-Usage() {
     Write-Host "  -test                   Run all unit tests in the solution (short: -t)"
     Write-Host "  -integrationTest        Run all integration tests in the solution"
     Write-Host "  -performanceTest        Run all performance tests in the solution [WIP]"
-    Write-Host "  -collect                Collect code coverage metrics for all unit tests in the solution"
     Write-Host "  -pack                   Package build outputs into NuGet packages"
     Write-Host "  -sign                   Sign build outputs [WIP]"
     Write-Host "  -clean                  Clean the solution"
@@ -67,7 +66,6 @@ function Build {
     if ($rebuild) { $targets += 'Rebuild' }
     if ($test) { $targets += 'Test' }
     if ($integrationTest) { $targets += 'IntegrationTest' }
-    if ($collect) { $targets += 'CollectCoverage' }
     if ($pack) { $targets += 'Pack' }
     
     $targetsArgs = @()

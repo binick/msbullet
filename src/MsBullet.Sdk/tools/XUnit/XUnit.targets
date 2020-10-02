@@ -2,10 +2,10 @@
 <Project>
 
   <ItemGroup>
-    <PackageReference Include="xunit" Version="$(XUnitVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true"/>
-    <PackageReference Include="xunit.abstractions" Version="$(XUnitAbstractionsVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualStudioVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true"/>
-    <PackageReference Include="xunit.runner.console" Version="$(XUnitRunnerConsoleVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true"/>
+    <PackageReference Include="xunit" Version="$(XUnitVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+    <PackageReference Include="xunit.abstractions" Version="$(XUnitAbstractionsVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualStudioVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+    <PackageReference Include="xunit.runner.console" Version="$(XUnitRunnerConsoleVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
   </ItemGroup>
 
   <ItemGroup>

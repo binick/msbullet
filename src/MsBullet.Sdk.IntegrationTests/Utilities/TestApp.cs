@@ -12,10 +12,12 @@ namespace MsBullet.Sdk.IntegrationTests
     public class TestApp : Sandbox
     {
         private readonly string logOutputDir;
+        private readonly string sdkVersion;
 
-        public TestApp(string workDir, string logOutputDir, string[] sourceDirectories)
+        public TestApp(string workDir, string sdkVersion, string logOutputDir, string[] sourceDirectories)
             : base(workDir, logOutputDir, sourceDirectories)
         {
+            this.sdkVersion = sdkVersion;
             this.logOutputDir = Path.Combine(logOutputDir, Path.GetFileName(workDir));
         }
 
@@ -33,7 +35,9 @@ namespace MsBullet.Sdk.IntegrationTests
             int result = this.ExecuteScript(
                 output,
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @".\build.cmd" : "./build.sh",
-                scriptArgs.Append(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-binaryLog" : "--binaryLog"));
+                scriptArgs
+                    .Append($"/p:_MsBulletSdkVersion={this.sdkVersion}")
+                    .Append(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "-binaryLog" : "--binaryLog"));
 
             Copy(Path.Combine(this.WorkingDirectory, "artifacts", "log"), this.logOutputDir);
 

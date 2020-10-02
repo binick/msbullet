@@ -1,3 +1,6 @@
 [submodule "docs/themes/hugo-theme-learn"]
 	path = docs/themes/hugo-theme-learn
 	url = https://github.com/matcornic/hugo-theme-learn.git
+[submodule "lib/coverlet"]
+	path = lib/coverlet
+	url = https://github.com/coverlet-coverage/coverlet.git

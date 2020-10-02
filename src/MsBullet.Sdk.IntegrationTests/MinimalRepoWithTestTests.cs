@@ -70,6 +70,36 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
+        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp2.1", "x64", "json", "cobertura")]
+        [InlineData("Release", "ClassLib1.Tests", "netcoreapp2.1", "x64", "json", "cobertura")]
+        public void MinimalRepoRunTestsShoudProduceDefaultCoverageResults(string configuration, string project, string targetFramwork, string architecture, params string[] formats)
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "CoverageResults", configuration);
+            var reports = formats.Select(format => $"{project}_{targetFramwork}_{architecture}.{format}");
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                $"-configuration {configuration}");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.True(Directory.Exists(outDir));
+
+            var outDirPahts = Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path));
+
+            foreach (var report in reports)
+            {
+                Assert.Contains(report, outDirPahts);
+            }
+        }
+
+        [Theory]
         [InlineData("Debug", "ClassLib1.Tests", "netcoreapp2.1", "x64", "log")]
         [InlineData("Release", "ClassLib1.Tests", "netcoreapp2.1", "x64", "log")]
         public void MinimalRepoRunTestsShoudProduceLogResults(string configuration, string project, string targetFramwork, string architecture, string fileExtension)

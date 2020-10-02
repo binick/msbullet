@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks Condition="'$(DotNetBuildFromSource)' == 'true'">netcoreapp2.1</TargetFrameworks>
+    
+    <IsPackable>false</IsPackable>
+    
+    <!-- Disable all warning -->
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="$(MonoCecilVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+    <PackageReference Include="System.Reflection.Metadata" Version="$(SystemReflectionMetadataVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="$(MicrosoftExtensionsFileSystemGlobbingVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsDependencyInjectionVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsDependencyInjectionAbstracionsVersion)" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <_CoverletSubmoduleRoot>..\..\lib\coverlet</_CoverletSubmoduleRoot>
+    <_CoverletCorePath>$(_CoverletSubmoduleRoot)\src\coverlet.core</_CoverletCorePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(_CoverletCorePath)\**\*.cs" LinkBase="Core" Exclude="$(_CoverletCorePath)\**\AssemblyInfo.cs;$(_CoverletCorePath)\obj\**\*;$(_CoverletCorePath)\bin\**\*" />
+  </ItemGroup>
+
+  <!--
+    <ItemGroup>
+      <InternalsVisibleTo Include="MsBullet.Build.Tasks.Coverlet" />
+      <InternalsVisibleTo Include="MsBullet.Build.Tasks.Coverlet.Tests" />
+    </ItemGroup>
+  -->
+
+  <!-- 
+    Workaround to set internal visibility to other assmebly.
+    Solution above is the ideal.
+  -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>MsBullet.Build.Tasks.Coverlet</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>MsBullet.Build.Tasks.Coverlet.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+</Project>

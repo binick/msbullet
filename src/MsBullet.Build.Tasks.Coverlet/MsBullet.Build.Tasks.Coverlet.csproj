@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks Condition="'$(DotNetBuildFromSource)' == 'true'">netcoreapp2.1</TargetFrameworks>
+    
+    <IsPackable>true</IsPackable>
+    <IsShippable>true</IsShippable>
+
+    <UseSemver>true</UseSemver>
+    <PackageType>MSBuildSdk</PackageType>
+
+    <Description>This package provides support for collect coverage through Coverlet.</Description>
+
+    <!-- Generate package during Build, rather than Pack, so that it can be used during Test. -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MsBullet.Lib.Coverlet\MsBullet.Lib.Coverlet.csproj" PrivateAssets="all" />
+  </ItemGroup>
+ 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="$(MicrosoftBuildUtilitiesCoreVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!--
+    <ItemGroup>
+      <InternalsVisibleTo Include="MsBullet.Build.Tasks.Coverlet.Tests" />
+    </ItemGroup>
+  -->
+
+  <!-- 
+    Workaround to set internal visibility to other assmebly.
+    Solution above is the ideal.
+  -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>MsBullet.Build.Tasks.Coverlet.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <Target Name="PackBuildOutputs" DependsOnTargets="ResolveProjectReferences;SatelliteDllsProjectOutputGroup;DebugSymbolsProjectOutputGroup;SatelliteDllsProjectOutputGroupDependencies;ResolveAssemblyReferences">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="build\" />
+      <TfmSpecificPackageFile Include="$(DepsFilePath)" PackagePath="build\" />
+      <TfmSpecificPackageFile Include="@(DebugSymbolsProjectOutputGroupOutput)" PackagePath="build\" />
+      <TfmSpecificPackageFile Include="%(_ResolvedProjectReferencePaths.Identity)" PackagePath="build\" />
+      <TfmSpecificPackageFile Include="@(ReferenceCopyLocalPaths)" Exclude="@(_ResolvedProjectReferencePaths)" PackagePath="build\%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+    </ItemGroup>
+  </Target>
+
+  <Import Project="$(RepoRoot)eng\BuildTask.targets" />
+  
+</Project>

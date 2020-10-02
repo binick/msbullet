@@ -15,18 +15,29 @@ namespace MsBullet.Sdk.IntegrationTests
     {
         private static readonly string[] packagesToClear =
         {
-            "MsBullet",
+            "MsBullet.Sdk",
+            "MsBullet.Build.Tasks.Coverlet"
         };
 
         private readonly ConcurrentQueue<IDisposable> disposables = new ConcurrentQueue<IDisposable>();
         private readonly string logOutputDir;
         private readonly string testAssets;
         private readonly string boilerplateDir;
+        private readonly string sdkVersion;
 
         public TestProjectFixture()
         {
             this.ClearPackages();
-            this.logOutputDir = this.GetType().Assembly.GetCustomAttributes<AssemblyMetadataAttribute>().Single(m => m.Key == "LogOutputDir").Value;
+            var assemblyAttributes = this.GetType().Assembly.GetCustomAttributes<AssemblyMetadataAttribute>();
+            var sdkPackagePath = assemblyAttributes.Single(m => m.Key == "MsBulletSdkPackagePath").Value;
+            var sdkPackagePrefix = assemblyAttributes.Single(m => m.Key == "MsBulletSdkPackagePrefix").Value;
+
+            this.logOutputDir = assemblyAttributes.Single(m => m.Key == "LogOutputDir").Value;
+            this.sdkVersion = Path.GetFileNameWithoutExtension(Directory.GetFiles(sdkPackagePath, $"{sdkPackagePrefix}.*.nupkg", SearchOption.AllDirectories).Single())
+                .Replace(sdkPackagePrefix, string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Replace("nupkg", string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Trim('.');
+
             this.testAssets = Path.Combine(AppContext.BaseDirectory, "testassets");
             this.boilerplateDir = Path.Combine(this.testAssets, "boilerplate");
         }
@@ -37,7 +48,7 @@ namespace MsBullet.Sdk.IntegrationTests
             string instanceName = Path.GetRandomFileName();
             string tempDir = Path.Combine(Path.GetTempPath(), "MsBullet", instanceName);
 
-            return new TestAppProvider(tempDir, this.logOutputDir, new[] { testAppFiles, this.boilerplateDir }, this.disposables);
+            return new TestAppProvider(tempDir, this.sdkVersion, this.logOutputDir, new[] { testAppFiles, this.boilerplateDir }, this.disposables);
         }
 
         public void Dispose()

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <_InstrumenterStatePath Condition="'$(_InstrumenterStatePath)' == ''">$([MSBuild]::NormalizeDirectory('$(ArtifactsTmpDir)', '$(MSBuildProjectName)'))</_InstrumenterStatePath>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <Include Condition="'$(Include)' == ''"></Include>
+    <IncludeDirectory Condition="'$(IncludeDirectory)' == ''"></IncludeDirectory>
+    <Exclude Condition="'$(Exclude)' == ''"></Exclude>
+    <ExcludeByFile Condition="'$(ExcludeByFile)' == ''"></ExcludeByFile>
+    <ExcludeByAttribute Condition="'$(ExcludeByAttribute)' == ''"></ExcludeByAttribute>
+    <IncludeTestAssembly Condition="'$(IncludeTestAssembly)' == ''">false</IncludeTestAssembly>
+    <SingleHit Condition="'$(SingleHit)' == ''">false</SingleHit>
+    <MergeWith Condition="'$(MergeWith)' == ''"></MergeWith>
+    <UseSourceLink Condition="'$(UseSourceLink)' == ''">false</UseSourceLink>
+    <CoverageOutputFormat Condition="'$(CoverageOutputFormat)' == ''">json</CoverageOutputFormat>
+    <CoverageOutputPath Condition="'$(CoverageOutputPath)' == ''">$([MSBuild]::EnsureTrailingSlash('$(MSBuildProjectDirectory)'))</CoverageOutputPath>
+    <Threshold Condition="'$(Threshold)' == ''">0</Threshold>
+    <ThresholdType Condition="'$(ThresholdType)' == ''">line;branch;method</ThresholdType>
+    <ThresholdStat Condition="'$(ThresholdStat)' == ''">minimum</ThresholdStat>
+    <InstrumenterStatePath Condition="$(InstrumenterStatePath) == ''">$(_InstrumenterStatePath)</InstrumenterStatePath>
+  </PropertyGroup>
+
+</Project>

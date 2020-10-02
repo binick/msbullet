@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="GenerateCoverageReport" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <_MsBullerBuildTasksCoverletTaskDir>$(MSBuildThisFileDirectory)../tools/net472/</_MsBullerBuildTasksCoverletTaskDir>
+    <_MsBullerBuildTasksCoverletTaskDir Condition="'$(MSBuildRuntimeType)' == 'Core'">$(MSBuildThisFileDirectory)../tools/netcoreapp2.1/</_MsBullerBuildTasksCoverletTaskDir>
+  </PropertyGroup>
+  
+  <UsingTask TaskName="CoverletInstrumentationTask" AssemblyFile="$(_MsBullerBuildTasksCoverletTaskDir)MsBullet.Build.Tasks.Coverlet.dll"/>
+  <UsingTask TaskName="CoverletGenerateReportTask" AssemblyFile="$(_MsBullerBuildTasksCoverletTaskDir)MsBullet.Build.Tasks.Coverlet.dll"/>
+
+  <Target Name="ReferencedPathMaps" BeforeTargets="CoreCompile" DependsOnTargets="ResolveProjectReferences" >
+    <MSBuild Projects="@(AnnotatedProjects->'%(FullPath)')"
+             Targets="CoverletGetPathMap"
+             Properties="TargetFramework=%(AnnotatedProjects.NearestTargetFramework)"
+             SkipNonexistentTargets="true">
+      <Output TaskParameter="TargetOutputs"
+              ItemName="_LocalTopLevelSourceRoot" />
+    </MSBuild>
+    <ItemGroup>
+      <_Project Include="@(_LocalTopLevelSourceRoot->'%(MSBuildSourceProjectFile)')" OriginalPath="%(Identity)" />
+      <_Mapping Include="@(_Project->'%(Identity)|%(OriginalPath)=%(MappedPath)')" />
+    </ItemGroup>
+    <PropertyGroup>
+      <_SourceRootMappingFilePath>$([MSBuild]::EnsureTrailingSlash('$(OutputPath)'))CoverletSourceRootsMapping</_SourceRootMappingFilePath>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(_SourceRootMappingFilePath)" Lines="@(_Mapping)"
+                      Overwrite="true" Encoding="Unicode"
+                      Condition="'@(_Mapping)'!=''"
+                      WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <FileWrites Include="$(_SourceRootMappingFilePath)" Condition="'@(_Mapping)'!=''" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="InstrumentModules">
+    <CoverletInstrumentationTask
+      Path="$(TargetPath)"
+      Include="$(Include)"
+      IncludeDirectory="$(IncludeDirectory)"
+      Exclude="$(Exclude)"
+      ExcludeByFile="$(ExcludeByFile)"
+      ExcludeByAttribute="$(ExcludeByAttribute)"
+      IncludeTestAssembly="$(IncludeTestAssembly)"
+      SingleHit="$(SingleHit)"
+      MergeWith="$(MergeWith)"
+      UseSourceLink="$(UseSourceLink)"
+      SkipAutoProps="$(SkipAutoProps)"
+      InstrumenterStatePath="$(InstrumenterStatePath)" >
+      <Output TaskParameter="InstrumenterState" PropertyName="InstrumenterState"/>
+    </CoverletInstrumentationTask>
+  </Target>
+
+  <Target Name="InstrumentModulesNoBuild"
+    BeforeTargets="Test;IntegrationTest"
+    DependsOnTargets="InstrumentModules" />
+
+  <Target Name="GenerateCoverageResult">
+    <PropertyGroup>
+      <_MultiTargetFrameworksCurrentTFM Condition="'$(TargetFrameworks)' != ''" >$(TargetFramework)</_MultiTargetFrameworksCurrentTFM>
+    </PropertyGroup>
+    <CoverletGenerateReportTask
+      Output="$(CoverageOutputPath)"
+      OutputFormat="$(CoverageOutputFormat)"
+      Threshold="$(Threshold)"
+      ThresholdType="$(ThresholdType)"
+      ThresholdStat="$(ThresholdStat)"
+      InstrumenterState="$(InstrumenterState)"
+      MultiTargetFrameworksCurrentTFM="$(_MultiTargetFrameworksCurrentTFM)" />
+  </Target>
+
+  <Target Name="GenerateCoverageResultAfterVSTest"
+    AfterTargets="VSTest"
+    DependsOnTargets="GenerateCoverageResult" />
+
+  <Target Name="GenerateCoverageResultAfterTest"
+    AfterTargets="Test"
+    DependsOnTargets="GenerateCoverageResult" />
+
+</Project>
