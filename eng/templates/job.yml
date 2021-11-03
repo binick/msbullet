@@ -14,7 +14,7 @@ parameters:
   workspace: ''
 
 # Job base template specific parameters
-  # See schema documentation - https://github.com/dotnet/arcade/blob/master/Documentation/AzureDevOps/TemplateSchema.md
+  # See schema documentation - https://github.com/dotnet/arcade/blob/main/Documentation/AzureDevOps/TemplateSchema.md
   artifacts: ''
   enablePublishBuildArtifacts: false
   enablePublishBuildAssets: false

@@ -94,7 +94,7 @@
 {
   "version": "1.0.0-local.{height}",
   "publicReleaseRefSpec": [
-    "^refs/heads/master$",
+    "^refs/heads/main",
     "^refs/tags/v\\d+\\.\\d+"
   ],
   "nugetPackageVersion": {
