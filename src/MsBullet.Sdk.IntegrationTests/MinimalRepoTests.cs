@@ -46,7 +46,7 @@ namespace MsBullet.Sdk.IntegrationTests
             TestApp app = this.fixture.ProvideTestApp("MinimalRepo")
                 .WithPreCreate("git", "init")
                 .WithPreCreate("git", "remote", "add", "origin", "http://localhost")
-                .WithPreCreate("git", "checkout", "-b", "master")
+                .WithPreCreate("git", "checkout", "-b", "main")
                 .WithPreCreate("git", "commit", "--allow-empty", "-m", "Dummy happy empty commit.")
                 .Create(this.output);
 
