@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using MsBullet.Sdk.IntegrationTests.Utilities;
 using Xunit.Abstractions;
 
 namespace MsBullet.Sdk.IntegrationTests

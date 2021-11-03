@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Compile Include="..\Common\MockEngine.cs" Link="TestUtilities\MockEngine.cs" />
-    <Compile Include="..\Common\Sandbox.cs" Link="TestUtilities\Sandbox.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +43,7 @@
       <_Parameter1>MsBulletSdkAssemblyPath</_Parameter1>
       <_Parameter2>$(OutputPath)MsBullet.Sdk.dll</_Parameter2>
     </AssemblyAttribute>
-    <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
+    <!-- Captures the logs from functional test. Useful for debugging test failures when developing MsBullet SDK features. -->
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
       <_Parameter1>LogOutputDir</_Parameter1>
       <_Parameter2>$(ArtifactsLogDir)tests\</_Parameter2>

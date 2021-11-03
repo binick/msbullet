@@ -9,7 +9,7 @@ using System.Threading;
 
 using Xunit.Abstractions;
 
-namespace MsBullet.Sdk.IntegrationTests.Utilities
+namespace MsBullet.Sdk.IntegrationTests
 {
     public class Sandbox : IDisposable
     {
