@@ -41,8 +41,8 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
-        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp2.1", "x64", "html", "xml")]
-        [InlineData("Release", "ClassLib1.Tests", "netcoreapp2.1", "x64", "html", "xml")]
+        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp3.1", "x64", "html", "xml")]
+        [InlineData("Release", "ClassLib1.Tests", "netcoreapp3.1", "x64", "html", "xml")]
         public void MinimalRepoRunTestsShoudProduceTestsResults(string configuration, string project, string targetFramwork, string architecture, params string[] reportFormats)
         {
             // Given
@@ -70,8 +70,8 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
-        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp2.1", "x64", "log")]
-        [InlineData("Release", "ClassLib1.Tests", "netcoreapp2.1", "x64", "log")]
+        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp3.1", "x64", "log")]
+        [InlineData("Release", "ClassLib1.Tests", "netcoreapp3.1", "x64", "log")]
         public void MinimalRepoRunTestsShoudProduceLogResults(string configuration, string project, string targetFramwork, string architecture, string fileExtension)
         {
             // Given

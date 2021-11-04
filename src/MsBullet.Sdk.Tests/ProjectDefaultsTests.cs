@@ -1,7 +1,10 @@
+// See the LICENSE.TXT file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
@@ -22,76 +25,44 @@ namespace MsBullet.Sdk.Tests
             this.fixture = fixture;
         }
 
-        public static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> ShouldIsATestProjectWhen => new TheoryData<IDictionary<string, string>, IDictionary<string, bool>>
+        public static TheoryData<IDictionary<string, string>> ProjectTypeDiscriminatorData => new TheoryData<IDictionary<string, string>>
         {
             {
                 new Dictionary<string, string>
                 {
-                    { "IsUnitTestProject", "true" }
-                },
-                new Dictionary<string, bool>
+                    { "IsUnitTestProject", "false" },
+                    { "IsIntegrationTestProject", "false" },
+                    { "IsPerformanceTestProject", "false" }
+                }
+            },
+            {
+                new Dictionary<string, string>
                 {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", true },
-                    { "IsIntegrationTestProject", false },
-                    { "IsPerformanceTestProject", false },
+                    { "IsUnitTestProject", "true" }
                 }
             },
             {
                 new Dictionary<string, string>
                 {
                     { "IsIntegrationTestProject", "true" }
-                },
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", false },
-                    { "IsIntegrationTestProject", true },
-                    { "IsPerformanceTestProject", false },
-                }
-            },
-            {
-                new Dictionary<string, string>
-                {
-                    { "IsUnitTestProject", "true" }
-                },
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", true },
-                    { "IsIntegrationTestProject", false },
-                    { "IsPerformanceTestProject", false },
                 }
             },
             {
                 new Dictionary<string, string>
                 {
                     { "IsPerformanceTestProject", "true" }
-                },
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", false },
-                    { "IsIntegrationTestProject", false },
-                    { "IsPerformanceTestProject", true },
                 }
             }
         };
 
+        public static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> TestProjectExpectedData => InternalTestProjectExpectedData();
+
+        public static TheoryData<IDictionary<string, string>, IDictionary<string, string>> PackageReferenceVersionExpectedData => InternalPackageReferenceVersionExpectedData();
+
         [Theory]
-        [MemberData(nameof(ShouldIsATestProjectWhen))]
-        public void ShouldBeATestProjectWhenSet(IDictionary<string, string> globalProperties, IDictionary<string, bool> expectedProperties)
+        [MemberData(nameof(TestProjectExpectedData))]
+        public void ShouldBeATestProjectWhenSet(IDictionary<string, string> globalProperties, [NotNull] IDictionary<string, bool> expectedProperties)
         {
-            if (globalProperties is null)
-            {
-                throw new ArgumentNullException(nameof(globalProperties));
-            }
-
-            if (expectedProperties is null)
-            {
-                throw new ArgumentNullException(nameof(expectedProperties));
-            }
-
             var project = this.fixture.ProvideProject(this.output, globalProperties);
 
             using (new AssertionScope())
@@ -115,6 +86,35 @@ namespace MsBullet.Sdk.Tests
                 .Split(Path.DirectorySeparatorChar)
                 .Should()
                 .EndWith("artifacts");
+        }
+
+        [Theory]
+        [InlineData("AnyCPU", "Debug")]
+        [InlineData("AnyCPU", "Release")]
+        [InlineData("x86", "Debug")]
+        [InlineData("x86", "Release")]
+        [InlineData("x64", "Debug")]
+        [InlineData("x64", "Release")]
+        public void ShouldPlaceOutputBinariesIntoArtifactsBinaryDirectoryName(string platform, string configuration)
+        {
+            var expectedPathParts = platform is "AnyCPU"
+                ? new[] { configuration }
+                : new[] { platform, configuration };
+
+            var project = this.fixture.ProvideProject(this.output, "MultiTargets", new Dictionary<string, string>
+            {
+                { "Platform", platform },
+                { "Configuration", configuration }
+            });
+
+            project.ShouldCountainProperty("OutputPath").EvaluatedValue
+                .Trim(Path.DirectorySeparatorChar)
+                .Split(Path.DirectorySeparatorChar)
+                .Except(project.ShouldCountainProperty("BaseOutputPath").EvaluatedValue
+                    .Trim(Path.DirectorySeparatorChar)
+                    .Split(Path.DirectorySeparatorChar))
+                .Should()
+                .ContainInOrder(expectedPathParts);
         }
 
         [Fact]
@@ -165,12 +165,210 @@ namespace MsBullet.Sdk.Tests
                 { "IsTestProject", "true" }
             });
 
-            foreach (var item in project
-                .ShouldContainItem("Service"))
+            foreach (var item in project.ShouldContainItem("Service"))
             {
-                item
-                    .ShouldEvaluatedEquivalentTo("{82a7f48d-3b50-4b1e-b82e-3ada8210c358}");
+                item.ShouldEvaluatedEquivalentTo("{82a7f48d-3b50-4b1e-b82e-3ada8210c358}");
             }
+        }
+
+        [Fact]
+        public void ShouldHasAValorizedEngeeneringDirectoryName()
+        {
+            var project = this.fixture.ProvideProject(this.output);
+
+            project.ShouldCountainProperty("RepositoryEngineeringDir").EvaluatedValue
+                .Trim(Path.DirectorySeparatorChar)
+                .Split(Path.DirectorySeparatorChar)
+                .Should()
+                .EndWith("eng");
+        }
+
+        [Fact]
+        public void ShouldUseStyleCopConfigurationFileFromEngineeringDirectory()
+        {
+            var project = this.fixture.ProvideProject(this.output);
+
+            var repoEngDirProperty = new DirectoryInfo(project.ShouldCountainProperty("RepositoryEngineeringDir").EvaluatedValue);
+
+            var styleCopConfigProperty = new FileInfo(project.ShouldCountainProperty("StyleCopConfig").EvaluatedValue);
+
+            styleCopConfigProperty.Directory.FullName
+                .Trim(Path.DirectorySeparatorChar)
+                .Should()
+                .BeEquivalentTo(repoEngDirProperty.FullName.Trim(Path.DirectorySeparatorChar));
+
+            styleCopConfigProperty.Name
+                .Should()
+                .BeEquivalentTo("stylecop.json");
+        }
+
+        [Fact]
+        public void ShouldRespectStyleCopConfigProperty()
+        {
+            var properties = new Dictionary<string, string>
+            {
+                { "StyleCopConfig", @"$(RepoRoot)\stylecop.json" }
+            };
+
+            var project = this.fixture.ProvideProject(this.output, properties);
+
+            project.ShouldCountainProperty("StyleCopConfig").UnevaluatedValue
+                .Should()
+                .BeEquivalentTo(properties["StyleCopConfig"]);
+        }
+
+        [Theory]
+        [MemberData(nameof(PackageReferenceVersionExpectedData))]
+        public void ShouldHasOnlyPackageReferenceWithHighestAcceptableStableVersion(IDictionary<string, string> globalProperties, [NotNull] IDictionary<string, string> expectedPackageVersions)
+        {
+            var project = this.fixture.ProvideProject(this.output, globalProperties);
+
+            using (new AssertionScope())
+            {
+                var items = project.ShouldContainItem("PackageReference");
+
+                foreach (var item in items.ExceptBy(expectedPackageVersions.Select(p => p.Key), i => i.EvaluatedInclude))
+                {
+                    item.ShouldContainMetadata("Version").EvaluatedValue
+                        .Should()
+                        .MatchRegex(@"\d*.[*]");
+                }
+
+                foreach (var item in items.IntersectBy(expectedPackageVersions.Select(p => p.Key), i => i.EvaluatedInclude))
+                {
+                    item.ShouldContainMetadata("Version").EvaluatedValue
+                        .Should()
+                        .Be(expectedPackageVersions[item.EvaluatedInclude]);
+                }
+            }
+        }
+
+        [Fact]
+        public void ShouldHasOnlyImplicitlyDefinedPackageReference()
+        {
+            var project = this.fixture.ProvideProject(this.output);
+
+            using (new AssertionScope())
+            {
+                foreach (var item in project.ShouldContainItem("PackageReference"))
+                {
+                    item.ShouldContainMetadata("IsImplicitlyDefined")
+                        .ShouldEvaluatedEquivalentTo(true);
+                }
+            }
+        }
+
+        [Fact]
+        public void ShouldHasOnlyPackageReferenceWithPrivateAssets()
+        {
+            var project = this.fixture.ProvideProject(this.output);
+
+            using (new AssertionScope())
+            {
+                foreach (var item in project.ShouldContainItem("PackageReference"))
+                {
+                    item.ShouldContainMetadata("PrivateAssets")
+                        .ShouldEvaluatedEquivalentTo("all");
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData("MicrosoftCodeAnalysisFxCopAnalyzersVersion", "1.0.0")]
+        [InlineData("MicrosoftVisualStudioThreadingAnalyzersVersion", "1.0.0")]
+        [InlineData("StyleCopAnalyzersVersion", "1.0.0")]
+        [InlineData("MicrosoftNETTestSdkVersion", "1.0.0")]
+        [InlineData("XUnitAssertVersion", "1.0.0")]
+        [InlineData("XUnitRunnerVisualstudioVersion", "1.0.0")]
+        [InlineData("XUnitRunnerConsoleVersion", "1.0.0")]
+        [InlineData("XUnitAbstractionsVersion", "1.0.0")]
+        [InlineData("NerdbankGitVersioningVersion", "1.0.0")]
+        public void ShouldRespectPackageReferenceVersion(string packageVersionProperty, string expectedVersion)
+        {
+            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>
+            {
+                { packageVersionProperty, expectedVersion }
+            });
+
+            project.ShouldCountainProperty(packageVersionProperty).UnevaluatedValue
+                .Should()
+                .BeEquivalentTo(expectedVersion);
+        }
+
+        private static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> InternalTestProjectExpectedData()
+        {
+            var expectedProperties = new Dictionary<string, bool>[]
+            {
+                new Dictionary<string, bool>
+                {
+                    { "IsTestProject", false },
+                    { "IsUnitTestProject", false },
+                    { "IsIntegrationTestProject", false },
+                    { "IsPerformanceTestProject", false },
+                },
+                new Dictionary<string, bool>
+                {
+                    { "IsTestProject", true },
+                    { "IsUnitTestProject", true },
+                    { "IsIntegrationTestProject", false },
+                    { "IsPerformanceTestProject", false },
+                },
+                new Dictionary<string, bool>
+                {
+                    { "IsTestProject", true },
+                    { "IsUnitTestProject", false },
+                    { "IsIntegrationTestProject", true },
+                    { "IsPerformanceTestProject", false },
+                },
+                new Dictionary<string, bool>
+                {
+                    { "IsTestProject", true },
+                    { "IsUnitTestProject", false },
+                    { "IsIntegrationTestProject", false },
+                    { "IsPerformanceTestProject", true },
+                }
+            };
+
+            var set = new TheoryData<IDictionary<string, string>, IDictionary<string, bool>>();
+            var counter = 0;
+            foreach (var data in ProjectTypeDiscriminatorData)
+            {
+                set.Add((IDictionary<string, string>)data[0], expectedProperties[counter++]);
+            }
+
+            return set;
+        }
+
+        private static TheoryData<IDictionary<string, string>, IDictionary<string, string>> InternalPackageReferenceVersionExpectedData()
+        {
+            var expectedPackageVersions = new Dictionary<string, string>[]
+            {
+                new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    { "xunit.runner.console", "2.4.1" },
+                    { "xunit.runner.visualstudio", "2.4.3" }
+                },
+                new Dictionary<string, string>
+                {
+                    { "xunit.runner.console", "2.4.1" },
+                    { "xunit.runner.visualstudio", "2.4.3" }
+                },
+                new Dictionary<string, string>
+                {
+                    { "xunit.runner.console", "2.4.1" },
+                    { "xunit.runner.visualstudio", "2.4.3" }
+                }
+            };
+
+            var set = new TheoryData<IDictionary<string, string>, IDictionary<string, string>>();
+            var counter = 0;
+            foreach (var data in ProjectTypeDiscriminatorData)
+            {
+                set.Add((IDictionary<string, string>)data[0], expectedPackageVersions[counter++]);
+            }
+
+            return set;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace MsBullet.Sdk.IntegrationTests
     {
         private static readonly string[] packagesToClear =
         {
-            "MsBullet",
+            "MsBullet.Sdk",
         };
 
         private readonly ConcurrentQueue<IDisposable> disposables = new ConcurrentQueue<IDisposable>();

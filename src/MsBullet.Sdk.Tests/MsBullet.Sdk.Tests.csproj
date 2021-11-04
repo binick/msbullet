@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
     <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
 
@@ -23,67 +23,29 @@
 
   <ItemGroup>
     <Compile Include="..\Common\MockEngine.cs" Link="TestUtilities\MockEngine.cs" />
+    <Compile Include="..\Common\Sandbox.cs" Link="TestUtilities\Sandbox.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\MsBullet.Sdk\sdk\**\*" LinkBase="Sdk\sdk\" CopyToOutputDirectory="PreserveNewest" Visible="false" />
-    <Content Include="..\MsBullet.Sdk\tools\**\*" LinkBase="Sdk\tools\" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <Content Include="testassets\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\MsBullet.Sdk\sdk\**\*" LinkBase="testassets\boilerplate\sdk\sdk\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\MsBullet.Sdk\tools\**\*" LinkBase="testassets\boilerplate\sdk\tools\" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <Target Name="GenerateTestProject" AfterTargets="CopyFilesToOutputDirectory">
+  <Target Name="GenerateTestGlobalJson" AfterTargets="CopyFilesToOutputDirectory">
     <PropertyGroup>
-      <ProjectContent>
-<![CDATA[
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
-</Project>]]>
-      </ProjectContent>
+      <GlobalJsonContent>
+{
+  "tools": {
+    "dotnet": "$(NETCoreSdkVersion)"
+  },
+  "msbuild-sdks": {
+    "MsBullet.Sdk": "$(PackageVersion)"
+  }
+}
+      </GlobalJsonContent>
     </PropertyGroup>
-    <WriteLinesToFile Lines="$(ProjectContent)" File="$(TargetDir)testassets\boilerplate\ClassLib1.csproj" Overwrite="true" />
-  </Target>
-
-  <Target Name="GenerateTestProjectUnitTest" AfterTargets="CopyFilesToOutputDirectory">
-    <PropertyGroup>
-      <UnitTestProjectContent>
-        <![CDATA[
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
-</Project>]]>
-      </UnitTestProjectContent>
-    </PropertyGroup>
-    <WriteLinesToFile Lines="$(ProjectContent)" File="$(TargetDir)testassets\boilerplate\ClassLib1.Tests.csproj" Overwrite="true" />
-  </Target>
-
-  <Target Name="GenerateTestProjectIntegrationTest" AfterTargets="CopyFilesToOutputDirectory">
-    <PropertyGroup>
-      <IntegrationTestProjectContent>
-        <![CDATA[
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
-</Project>]]>
-      </IntegrationTestProjectContent>
-    </PropertyGroup>
-    <WriteLinesToFile Lines="$(ProjectContent)" File="$(TargetDir)testassets\boilerplate\ClassLib1.IntegrationTests.csproj" Overwrite="true" />
-  </Target>
-
-  <Target Name="GenerateTestProjectPerformanceTest" AfterTargets="CopyFilesToOutputDirectory">
-    <PropertyGroup>
-      <PerformanceTestProjectContent>
-        <![CDATA[
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
-</Project>]]>
-      </PerformanceTestProjectContent>
-    </PropertyGroup>
-    <WriteLinesToFile Lines="$(ProjectContent)" File="$(TargetDir)testassets\boilerplate\ClassLib1.PerformanceTests.csproj" Overwrite="true" />
+    <WriteLinesToFile Lines="$(GlobalJsonContent)" File="$(TargetDir)testassets\boilerplate\global.json" Overwrite="true" />
   </Target>
 
 </Project>

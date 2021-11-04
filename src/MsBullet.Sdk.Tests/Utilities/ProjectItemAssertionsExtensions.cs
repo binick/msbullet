@@ -1,6 +1,5 @@
-using System;
-using System.Globalization;
-using System.IO;
+// See the LICENSE.TXT file in the project root for full license information.
+
 using FluentAssertions;
 
 namespace Microsoft.Build.Evaluation
@@ -9,20 +8,20 @@ namespace Microsoft.Build.Evaluation
     {
         public static ProjectItem ShouldEvaluatedEquivalentTo<T>(this ProjectItem item, T value, string because = "", params object[] becauseArgs)
         {
-            InternalShouldEvaluatedEquivalentTo(item.EvaluatedInclude, value, because, becauseArgs);
+            item.EvaluatedInclude
+                .BeEquivalentTo(value, because, becauseArgs);
 
             return item;
         }
 
-        private static void InternalShouldEvaluatedEquivalentTo<T>(string value, T expectedValue, string because = "", params object[] becauseArgs)
+        public static ProjectMetadata ShouldContainMetadata(this ProjectItem item, string name, string because = "", params object[] becauseArgs)
         {
-            value
+            return item.GetMetadata(name)
                 .Should()
-                .NotBeNull(because, becauseArgs);
-
-            Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture)
-                .Should()
-                .BeEquivalentTo(expectedValue, because, becauseArgs);
+                .NotBeNull(because, becauseArgs)
+                .And
+                .Subject
+                .As<ProjectMetadata>();
         }
     }
 }

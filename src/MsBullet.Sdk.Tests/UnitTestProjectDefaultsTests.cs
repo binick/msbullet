@@ -1,5 +1,8 @@
+// See the LICENSE.TXT file in the project root for full license information.
+
 using System.IO;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
 using Xunit;
 using Xunit.Abstractions;

@@ -5,7 +5,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
 using Microsoft.Build.Locator;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,13 +17,12 @@ namespace MsBullet.Sdk.Tests
         private readonly ConcurrentQueue<IDisposable> disposables = new ConcurrentQueue<IDisposable>();
         private readonly string testAssets;
         private readonly string boilerplateDir;
-        private readonly VisualStudioInstance vsInstance;
 
         public TestProjectFixture()
         {
             this.testAssets = Path.Combine(AppContext.BaseDirectory, "testassets");
             this.boilerplateDir = Path.Combine(this.testAssets, "boilerplate");
-            this.vsInstance = MSBuildLocator.RegisterDefaults();
+            _ = MSBuildLocator.RegisterDefaults();
         }
 
         public Project ProvideProject(ITestOutputHelper output, IDictionary<string, string> globalProperties = null)
@@ -34,7 +32,17 @@ namespace MsBullet.Sdk.Tests
                 throw new ArgumentNullException(nameof(output));
             }
 
-            return this.GetProject(new XUnitLogger(output), "ClassLib1", globalProperties);
+            return this.InternalProvideProject(output, "ClassLib1", globalProperties ?? new Dictionary<string, string>());
+        }
+
+        public Project ProvideProject(ITestOutputHelper output, string projectName, IDictionary<string, string> globalProperties = null)
+        {
+            if (output is null)
+            {
+                throw new ArgumentNullException(nameof(output));
+            }
+
+            return this.InternalProvideProject(output, projectName, globalProperties ?? new Dictionary<string, string>());
         }
 
         public Project ProvideUnitTestProject(ITestOutputHelper output, IDictionary<string, string> globalProperties = null)
@@ -44,7 +52,7 @@ namespace MsBullet.Sdk.Tests
                 throw new ArgumentNullException(nameof(output));
             }
 
-            return this.GetProject(new XUnitLogger(output), "ClassLib1.Tests", globalProperties);
+            return this.InternalProvideProject(output, "ClassLib1.Tests", globalProperties ?? new Dictionary<string, string>());
         }
 
         public Project ProvideIntegrationTestProject(ITestOutputHelper output, IDictionary<string, string> globalProperties = null)
@@ -54,7 +62,7 @@ namespace MsBullet.Sdk.Tests
                 throw new ArgumentNullException(nameof(output));
             }
 
-            return this.GetProject(new XUnitLogger(output), "ClassLib1.IntegrationTests", globalProperties);
+            return this.InternalProvideProject(output, "ClassLib1.IntegrationTests", globalProperties ?? new Dictionary<string, string>());
         }
 
         public Project ProvidePerformanceTestProject(ITestOutputHelper output, IDictionary<string, string> globalProperties = null)
@@ -64,7 +72,7 @@ namespace MsBullet.Sdk.Tests
                 throw new ArgumentNullException(nameof(output));
             }
 
-            return this.GetProject(new XUnitLogger(output), "ClassLib1.PerformanceTests", globalProperties);
+            return this.InternalProvideProject(output, "ClassLib1.PerformanceTests", globalProperties ?? new Dictionary<string, string>());
         }
 
         public void Dispose()
@@ -87,16 +95,19 @@ namespace MsBullet.Sdk.Tests
             }
         }
 
-        private Project GetProject(ILogger logger, string projectName, IDictionary<string, string> globalProperties)
+        private Project InternalProvideProject(ITestOutputHelper output, string projectName, IDictionary<string, string> globalProperties)
         {
+            string testAppFiles = Path.Combine(this.testAssets, projectName);
+            string instanceName = Path.GetRandomFileName();
+            string tempDir = Path.Combine(Path.GetTempPath(), "MsBullet", instanceName);
+
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            var collection = new ProjectCollection(globalProperties ?? new Dictionary<string, string>());
+            var testApp = new TestApp(tempDir, new[] { testAppFiles, this.boilerplateDir }, output, globalProperties ?? new Dictionary<string, string>());
 #pragma warning restore CA2000 // Dispose objects before losing scope
-            this.disposables.Enqueue(collection);
 
-            collection.RegisterLoggers(new[] { logger });
+            this.disposables.Enqueue(testApp);
 
-            return collection.LoadProject(Path.Combine(this.boilerplateDir, $"{projectName}.csproj"));
+            return testApp.Project;
         }
     }
 }

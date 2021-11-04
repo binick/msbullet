@@ -1,3 +1,5 @@
+// See the LICENSE.TXT file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
@@ -10,7 +12,7 @@ namespace Microsoft.Build.Evaluation
         {
             return project.GetProperty(name)
                 .Should()
-                .NotBeNull()
+                .NotBeNull(because, becauseArgs)
                 .And
                 .Subject
                 .As<ProjectProperty>();
@@ -20,7 +22,7 @@ namespace Microsoft.Build.Evaluation
         {
             return project.GetItems(itemType)
                 .Should()
-                .NotBeNull()
+                .NotBeNull(because, becauseArgs)
                 .And
                 .Subject
                 .As<IEnumerable<ProjectItem>>();

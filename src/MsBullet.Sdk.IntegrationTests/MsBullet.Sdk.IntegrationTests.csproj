@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
     <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Compile Include="..\Common\MockEngine.cs" Link="TestUtilities\MockEngine.cs" />
+    <Compile Include="..\Common\Sandbox.cs" Link="TestUtilities\Sandbox.cs" />
   </ItemGroup>
 
   <ItemGroup>
