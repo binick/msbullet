@@ -61,7 +61,8 @@ namespace MsBullet.Sdk.Tests
 
         [Theory]
         [MemberData(nameof(TestProjectExpectedData))]
-        public void ShouldBeATestProjectWhenSet(IDictionary<string, string> globalProperties, [NotNull] IDictionary<string, bool> expectedProperties)
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Test data must be valorized.")]
+        public void ShouldBeATestProjectWhenSet(IDictionary<string, string> globalProperties, IDictionary<string, bool> expectedProperties)
         {
             var project = this.fixture.ProvideProject(this.output, globalProperties);
 
@@ -219,6 +220,7 @@ namespace MsBullet.Sdk.Tests
 
         [Theory]
         [MemberData(nameof(PackageReferenceVersionExpectedData))]
+        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Test data must be valorized.")]
         public void ShouldHasOnlyPackageReferenceWithHighestAcceptableStableVersion(IDictionary<string, string> globalProperties, [NotNull] IDictionary<string, string> expectedPackageVersions)
         {
             var project = this.fixture.ProvideProject(this.output, globalProperties);

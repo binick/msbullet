@@ -183,15 +183,17 @@ function InstallDotNet([string] $dotnetRoot,
   [string] $runtimeSourceFeedKey = '') {
 
   $installScript = GetDotNetInstallScript $dotnetRoot
+  $installParameters = @{
+    Version = $version
+    InstallDir = $dotnetRoot
+  }
 
-  $installParameters = @("-Version $version", "-InstallDir $dotnetRoot")
-
-  if ($architecture) { $installParameters += "-Architecture $architecture" }
-  if ($runtime) { $installParameters += "-Runtime $runtime" }
-  if ($skipNonVersionedFiles) { $installParameters += "-SkipNonVersionedFiles $skipNonVersionedFiles" }
+  if ($architecture) { $installParameters.Architecture = $architecture }
+  if ($runtime) { $installParameters.Runtime = $runtime }
+  if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
 
   try {
-    & $installScript $($installParameters -join ' ')
+    & $installScript @installParameters
   }
   catch {
     Write-Host -Message "Failed to install dotnet runtime '$runtime' from public location."
