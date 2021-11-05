@@ -2,7 +2,6 @@
 
 using System.IO;
 using FluentAssertions;
-using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
 using Xunit;
 using Xunit.Abstractions;
@@ -21,10 +20,17 @@ namespace MsBullet.Sdk.Tests
             this.fixture = fixture;
         }
 
-        [Fact]
-        public void ShouldHasAValorizedArtifactDirectoryName()
+        public static TheoryData<string> UnitTestProjectWhenEnds => new TheoryData<string>
         {
-            var project = this.fixture.ProvideUnitTestProject(this.output);
+            "ClassLib1.Tests",
+            "ClassLib1.UnitTests"
+        };
+
+        [Theory]
+        [MemberData(nameof(UnitTestProjectWhenEnds))]
+        public void ShouldHasAValorizedArtifactDirectoryName(string projectName)
+        {
+            var project = this.fixture.ProvideProject(this.output, projectName);
 
             project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue
                 .Trim(Path.DirectorySeparatorChar)
@@ -33,40 +39,44 @@ namespace MsBullet.Sdk.Tests
                 .EndWith("artifacts");
         }
 
-        [Fact]
-        public void ShouldBeATestProject()
+        [Theory]
+        [MemberData(nameof(UnitTestProjectWhenEnds))]
+        public void ShouldBeATestProject(string projectName)
         {
-            var project = this.fixture.ProvideUnitTestProject(this.output);
+            var project = this.fixture.ProvideProject(this.output, projectName);
 
             project
                 .ShouldCountainProperty("IsTestProject")
                 .ShouldEvaluatedEquivalentTo(true);
         }
 
-        [Fact]
-        public void ShouldBeAUnitTestProject()
+        [Theory]
+        [MemberData(nameof(UnitTestProjectWhenEnds))]
+        public void ShouldBeAUnitTestProject(string projectName)
         {
-            var project = this.fixture.ProvideUnitTestProject(this.output);
+            var project = this.fixture.ProvideProject(this.output, projectName);
 
             project
                 .ShouldCountainProperty("IsUnitTestProject")
                 .ShouldEvaluatedEquivalentTo(true);
         }
 
-        [Fact]
-        public void ShouldNotBeAnIntegrationTestProject()
+        [Theory]
+        [MemberData(nameof(UnitTestProjectWhenEnds))]
+        public void ShouldNotBeAnIntegrationTestProject(string projectName)
         {
-            var project = this.fixture.ProvideUnitTestProject(this.output);
+            var project = this.fixture.ProvideProject(this.output, projectName);
 
             project
                 .ShouldCountainProperty("IsIntegrationTestProject")
                 .ShouldEvaluatedEquivalentTo(false);
         }
 
-        [Fact]
-        public void ShouldNotBeAPerformancenTestProject()
+        [Theory]
+        [MemberData(nameof(UnitTestProjectWhenEnds))]
+        public void ShouldNotBeAPerformancenTestProject(string projectName)
         {
-            var project = this.fixture.ProvideUnitTestProject(this.output);
+            var project = this.fixture.ProvideProject(this.output, projectName);
 
             project
                 .ShouldCountainProperty("IsPerformanceTestProject")
