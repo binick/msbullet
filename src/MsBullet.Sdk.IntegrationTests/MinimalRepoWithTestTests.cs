@@ -1,11 +1,7 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
-using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-
 using Xunit;
 using Xunit.Abstractions;
 
@@ -41,8 +37,8 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
-        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp3.1", "x64", "html", "xml")]
-        [InlineData("Release", "ClassLib1.Tests", "netcoreapp3.1", "x64", "html", "xml")]
+        [InlineData("Debug", "ClassLib1.Tests", "net6.0", "x64", "html", "xml")]
+        [InlineData("Release", "ClassLib1.Tests", "net6.0", "x64", "html", "xml")]
         public void MinimalRepoRunTestsShoudProduceTestsResults(string configuration, string project, string targetFramwork, string architecture, params string[] reportFormats)
         {
             // Given
@@ -70,8 +66,8 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
-        [InlineData("Debug", "ClassLib1.Tests", "netcoreapp3.1", "x64", "log")]
-        [InlineData("Release", "ClassLib1.Tests", "netcoreapp3.1", "x64", "log")]
+        [InlineData("Debug", "ClassLib1.Tests", "net6.0", "x64", "log")]
+        [InlineData("Release", "ClassLib1.Tests", "net6.0", "x64", "log")]
         public void MinimalRepoRunTestsShoudProduceLogResults(string configuration, string project, string targetFramwork, string architecture, string fileExtension)
         {
             // Given
@@ -99,14 +95,12 @@ namespace MsBullet.Sdk.IntegrationTests
         public void MinimalRepoPackWithoutErrors(bool isShippable, string destinationFolder)
         {
             // Given
-#pragma warning disable CA2000 // Dispose objects before losing scope
             TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests")
                 .WithPreCreate("git", "init")
                 .WithPreCreate("git", "remote", "add", "origin", "http://localhost")
                 .WithPreCreate("git", "checkout", "-b", "main")
                 .WithPreCreate("git", "commit", "--allow-empty", "-m", "Dummy happy empty commit.")
                 .Create(this.output);
-#pragma warning restore CA2000 // Dispose objects before losing scope
             var expectedVersion = "1.0.0-local.*";
             var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
 
