@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Well-known properties </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Well-known properties ">
+    <meta name="generator" content="docfx 2.56.7.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="well-known-properties">Well-known properties.</h1>
+
+<p>MsBullet SDK provides some properties for internal use and you can used it to your build logic.</p>
+<p>For all other mentioned variables that are not present into the table above you can find more info at the <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-reserved-and-well-known-properties">official documentation</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Variables</th>
+<th>Description</th>
+<th>Default value</th>
+<th style="text-align: center;">Overridable</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuration</td>
+<td>Specify the current project configuration.</td>
+<td><code>Debug</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>Platform</td>
+<td>Specify the current project platform.</td>
+<td><code>AnyCPU</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>PlatformName</td>
+<td>Specify the current project platform name.</td>
+<td><code>$(Platform)</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>RepoRoot</td>
+<td>Identifying the root of repository.</td>
+<td>N/A</td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>ArtifactsDir</td>
+<td>Specify the root where build system outputs are placed.</td>
+<td><code>$(RepoRoot)/artifacts/</code></td>
+<td style="text-align: center;">❌</td>
+<td></td>
+</tr>
+<tr>
+<td>OutDirName</td>
+<td>Used to specified the end folder of path where artifacts are placed</td>
+<td><code>$(MSBuildProjectName)</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>BaseOutputPath</td>
+<td>Identifying folder where binary artifacts are placed</td>
+<td><code>$(ArtifactsBinDir)/$(MSBuildProjectName)/</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>OutputPath</td>
+<td>Identifying folder where artifacts are placed</td>
+<td>When <code>$(PlatformName)</code> is equal to <code>AnyCPU</code> <code>$(BaseOutputPath)/$(Configuration)/</code>, otherwise <code>$(BaseOutputPath)/$(PlatformName)/$(Configuration)/</code></td>
+<td style="text-align: center;">❌</td>
+<td></td>
+</tr>
+<tr>
+<td>BaseIntermediateOutputPath</td>
+<td>Identifying folder where <a href="https://en.wikipedia.org/wiki/Common_Intermediate_Language">CIL</a> artifats are placed</td>
+<td><code>$(ArtifactsObjDir)/$(MSBuildProjectName)/</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>IntermediateOutputPath</td>
+<td>Identifying folder where artifacts are placed</td>
+<td>When <code>$(PlatformName)</code> is equal to <code>AnyCPU</code> <code>$(BaseIntermediateOutputPath)/$(Configuration)/</code>, otherwise <code>$(BaseIntermediateOutputPath)/$(PlatformName)/$(Configuration)/</code></td>
+<td style="text-align: center;">❌</td>
+<td></td>
+</tr>
+<tr>
+<td>UsingToolXUnit</td>
+<td>Used to opt-out built-in features.<br>By default we use <a href="https://xunit.github.io/">xUnit</a> as test framework, that're represents the standart de-facto.</td>
+<td>true</td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>UsingToolNerdbankGitVersioning</td>
+<td>Used to opt-out built-in features.<br>By default we use <a href="https://github.com/dotnet/Nerdbank.GitVersioning">Nerdbank.GitVersioning</a> as semantic versioning tool.</td>
+<td>true</td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>StyleCopConfig</td>
+<td>Used to customize the default rules of <a href="https://github.com/DotNetAnalyzers/StyleCopAnalyzers">StyleCopAnalyzers</a> through the <a href="https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/Configuration.md"><code>stylecop.json</code></a>.</td>
+<td><code>$(RepoRoot)/eng/stylecop.json</code></td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>IsUnitTestProject</td>
+<td>Identifying unit test project.<br> A project is identified as unit test project when your's name end with:<br><ul><li><code>.Tests</code></li><li><code>.UnitTests</code></li></ul></td>
+<td>false</td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>IsIntegrationTestProject</td>
+<td>Identifying integration test project.<br> A project is identified as integration test project when your's name end with: <code>.IntegrationTests</code></td>
+<td>false</td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>IsPerformanceTestProject</td>
+<td>Identifying performance test project.<br> A project is identified as performance test project when your's name end with: <code>.PerformanceTests</code></td>
+<td>false</td>
+<td style="text-align: center;">✔</td>
+<td></td>
+</tr>
+<tr>
+<td>IsTestProject</td>
+<td>Identifying test project.<br>A project is identified as test project when it has one of that properties as true:<br><ul><li><code>IsUnitTestProject</code></li><li><code>IsIntegrationTestProject</code></li><li><code>IsPerformanceTestProject</code></li></ul></td>
+<td>N/A</td>
+<td style="text-align: center;">❌</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/binick/msbullet/blob/fix/gh-pages-workflow/docs/content/configuration/predefined-variables.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
