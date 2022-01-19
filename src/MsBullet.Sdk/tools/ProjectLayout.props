@@ -4,6 +4,8 @@
   <Import Project="RepoLayout.props"/>
 
   <PropertyGroup>
+    <StyleCopConfig Condition="'$(StyleCopConfig)' == ''">$(RepoRoot)eng/stylecop.json</StyleCopConfig>
+
     <OutDirName Condition="'$(OutDirName)' == ''">$(MSBuildProjectName)</OutDirName>
 
     <BaseOutputPath Condition="'$(BaseOutputPath)' == ''">$([System.IO.Path]::GetFullPath('$(ArtifactsBinDir)$(OutDirName)\'))</BaseOutputPath>
@@ -14,5 +16,9 @@
     <IntermediateOutputPath Condition="'$(PlatformName)' == 'AnyCPU'">$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
     <IntermediateOutputPath Condition="'$(PlatformName)' != 'AnyCPU'">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(StyleCopConfig)" Link="stylecop.json" Condition="Exists('$(StyleCopConfig)')" />
+  </ItemGroup>
 
 </Project>

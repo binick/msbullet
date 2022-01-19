@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
     <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
 
@@ -14,9 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="$(MicrosoftBuildFrameworkVersion)" />
+    <PackageReference Include="FluentAssertions" Version="6.2.0" />
+    <PackageReference Include="Microsoft.Build" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="$(MicrosoftCodeAnalysisCommonVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisWorkspacesCommonVersion)" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +27,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\MsBullet.Sdk\tools\**\*" LinkBase="sdktools\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="testassets\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\MsBullet.Sdk\sdk\**\*" LinkBase="testassets\boilerplate\sdk\sdk\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\MsBullet.Sdk\tools\**\*" LinkBase="testassets\boilerplate\sdk\tools\" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <Target Name="GenerateTestGlobalJson" AfterTargets="CopyFilesToOutputDirectory">
+    <PropertyGroup>
+      <GlobalJsonContent>
+{
+  "tools": {
+    "dotnet": "$(NETCoreSdkVersion)"
+  },
+  "msbuild-sdks": {
+    "MsBullet.Sdk": "$(PackageVersion)"
+  }
+}
+      </GlobalJsonContent>
+    </PropertyGroup>
+    <WriteLinesToFile Lines="$(GlobalJsonContent)" File="$(TargetDir)testassets\boilerplate\global.json" Overwrite="true" />
+  </Target>
 
 </Project>

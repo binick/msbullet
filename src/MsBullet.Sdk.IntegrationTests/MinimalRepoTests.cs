@@ -90,10 +90,14 @@ namespace MsBullet.Sdk.IntegrationTests
             // Then
             Assert.Equal(0, exitCode);
 
+#pragma warning disable SYSLIB0024 // Type or member is obsolete
             var domain = AppDomain.CreateDomain(nameof(this.MinimalRepoSignsWithoutErrors));
+#pragma warning restore SYSLIB0024 // Type or member is obsolete
             domain.Load(File.ReadAllBytes(Path.Combine(app.WorkingDirectory, "artifacts", "bin", "ClassLib1", "Debug", "netstandard2.0", "ClassLib1.dll")));
             Assert.NotEmpty(domain.GetAssemblies()[0].GetName().GetPublicKeyToken());
+#pragma warning disable SYSLIB0024 // Type or member is obsolete
             AppDomain.Unload(domain);
+#pragma warning restore SYSLIB0024 // Type or member is obsolete
 #pragma warning restore CS0162 // Unreachable code detected
         }
 

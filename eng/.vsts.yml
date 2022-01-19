@@ -65,11 +65,8 @@ stages:
           - checkout: self
             submodules: recursive
 
-          - script: .\build.cmd -t -integrationTest -c $env:CONFIGURATION -platform $env:PLATFORM -pack -ci
+          - script: .\build.cmd -t -integrationTest -c $(_BuildConfig) -platform $(_BuildPlatform) -pack -ci
             name: build_and_test
-            env:
-              CONFIGURATION: $(_BuildConfig)
-              PLATFORM: $(_BuildPlatform)
 
       - job: 'Linux'
 

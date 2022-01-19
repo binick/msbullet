@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DefaultItemExcludes>$(DefaultItemExcludes);testassets\**\*</DefaultItemExcludes>
     <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
@@ -44,7 +44,7 @@
       <_Parameter1>MsBulletSdkAssemblyPath</_Parameter1>
       <_Parameter2>$(OutputPath)MsBullet.Sdk.dll</_Parameter2>
     </AssemblyAttribute>
-    <!-- Captures the logs from functional test. Useful for debugging test failures when developing Phoenix SDK features. -->
+    <!-- Captures the logs from functional test. Useful for debugging test failures when developing MsBullet SDK features. -->
     <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
       <_Parameter1>LogOutputDir</_Parameter1>
       <_Parameter2>$(ArtifactsLogDir)tests\</_Parameter2>
