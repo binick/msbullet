@@ -3,10 +3,13 @@ title: Artifact folder structure
 weight: 5
 ---
 
+# Single build output.
+
+All projects output will be places into the `artifacts` folder 
+
 ```
-.
-└─ $(ArtifactsDir)
-   ├─ toolset
+root
+└─ artifacts
    ├─ obj
    ├─ bin
    ├─ log
@@ -32,4 +35,3 @@ weight: 5
 | SymStore | Storage for converted Windows PDBs |
 | log | Build binary log and other logs. |
 | tmp | Temp files generated during build. |
-| toolset | Files generated during toolset restore. |

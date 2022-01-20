@@ -25,7 +25,7 @@ namespace MsBullet.Sdk.Tests
             this.fixture = fixture;
         }
 
-        public static TheoryData<IDictionary<string, string>> ProjectTypeDiscriminatorData => new TheoryData<IDictionary<string, string>>
+        public static TheoryData<IDictionary<string, string>> ProjectTypeDiscriminatorByProperties => new TheoryData<IDictionary<string, string>>
         {
             {
                 new Dictionary<string, string>
@@ -55,12 +55,12 @@ namespace MsBullet.Sdk.Tests
             }
         };
 
-        public static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> TestProjectExpectedData => InternalTestProjectExpectedData();
+        public static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> TestProjectExpectedWhenHasProperties => InternalTestProjectExpectedWhenHasProperties();
 
-        public static TheoryData<IDictionary<string, string>, IDictionary<string, string>> PackageReferenceVersionExpectedData => InternalPackageReferenceVersionExpectedData();
+        public static TheoryData<IDictionary<string, string>, IDictionary<string, string>> PackageReferenceVersionExpectedFor => InternalPackageReferenceVersionExpectedFor();
 
         [Theory]
-        [MemberData(nameof(TestProjectExpectedData))]
+        [MemberData(nameof(TestProjectExpectedWhenHasProperties))]
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Test data must be valorized.")]
         public void ShouldBeATestProjectWhenSet(IDictionary<string, string> globalProperties, IDictionary<string, bool> expectedProperties)
         {
@@ -89,19 +89,27 @@ namespace MsBullet.Sdk.Tests
                 .EndWith("artifacts");
         }
 
-        [Theory]
-        [InlineData("AnyCPU", "Debug")]
-        [InlineData("AnyCPU", "Release")]
-        [InlineData("x86", "Debug")]
-        [InlineData("x86", "Release")]
-        [InlineData("x64", "Debug")]
-        [InlineData("x64", "Release")]
-        public void ShouldPlaceOutputBinariesIntoArtifactsBinaryDirectoryName(string platform, string configuration)
+        [Fact]
+        public void ShouldBeAValorizedArtifactDirectoryName()
         {
-            var expectedPathParts = platform is "AnyCPU"
-                ? new[] { configuration }
-                : new[] { platform, configuration };
+            var project = this.fixture.ProvideProject(this.output);
 
+            project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue
+                .Trim(Path.DirectorySeparatorChar)
+                .Split(Path.DirectorySeparatorChar)
+                .Should()
+                .EndWith("artifacts");
+        }
+
+        [Theory]
+        [InlineData("AnyCPU", "Debug", "Debug")]
+        [InlineData("AnyCPU", "Release", "Release")]
+        [InlineData("x86", "Debug", "x86", "Debug")]
+        [InlineData("x86", "Release", "x86", "Release")]
+        [InlineData("x64", "Debug", "x64", "Debug")]
+        [InlineData("x64", "Release", "x64", "Release")]
+        public void ShouldPlaceOutputBinariesIntoArtifactsBinaryDirectoryName(string platform, string configuration, params string[] expectedPathParts)
+        {
             var project = this.fixture.ProvideProject(this.output, "MultiTargets", new Dictionary<string, string>
             {
                 { "Platform", platform },
@@ -112,6 +120,31 @@ namespace MsBullet.Sdk.Tests
                 .Trim(Path.DirectorySeparatorChar)
                 .Split(Path.DirectorySeparatorChar)
                 .Except(project.ShouldCountainProperty("BaseOutputPath").EvaluatedValue
+                    .Trim(Path.DirectorySeparatorChar)
+                    .Split(Path.DirectorySeparatorChar))
+                .Should()
+                .ContainInOrder(expectedPathParts);
+        }
+
+        [Theory]
+        [InlineData("AnyCPU", "Debug", "Debug")]
+        [InlineData("AnyCPU", "Release", "Release")]
+        [InlineData("x86", "Debug", "x86", "Debug")]
+        [InlineData("x86", "Release", "x86", "Release")]
+        [InlineData("x64", "Debug", "x64", "Debug")]
+        [InlineData("x64", "Release", "x64", "Release")]
+        public void ShouldPlaceIntermediateLanguageIntoArtifactsBinaryDirectoryName(string platform, string configuration, params string[] expectedPathParts)
+        {
+            var project = this.fixture.ProvideProject(this.output, "MultiTargets", new Dictionary<string, string>
+            {
+                { "Platform", platform },
+                { "Configuration", configuration }
+            });
+
+            project.ShouldCountainProperty("IntermediateOutputPath").EvaluatedValue
+                .Trim(Path.DirectorySeparatorChar)
+                .Split(Path.DirectorySeparatorChar)
+                .Except(project.ShouldCountainProperty("BaseIntermediateOutputPath").EvaluatedValue
                     .Trim(Path.DirectorySeparatorChar)
                     .Split(Path.DirectorySeparatorChar))
                 .Should()
@@ -219,7 +252,7 @@ namespace MsBullet.Sdk.Tests
         }
 
         [Theory]
-        [MemberData(nameof(PackageReferenceVersionExpectedData))]
+        [MemberData(nameof(PackageReferenceVersionExpectedFor))]
         [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Test data must be valorized.")]
         public void ShouldHasOnlyPackageReferenceWithHighestAcceptableStableVersion(IDictionary<string, string> globalProperties, [NotNull] IDictionary<string, string> expectedPackageVersions)
         {
@@ -297,7 +330,7 @@ namespace MsBullet.Sdk.Tests
                 .BeEquivalentTo(expectedVersion);
         }
 
-        private static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> InternalTestProjectExpectedData()
+        private static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> InternalTestProjectExpectedWhenHasProperties()
         {
             var expectedProperties = new Dictionary<string, bool>[]
             {
@@ -333,7 +366,7 @@ namespace MsBullet.Sdk.Tests
 
             var set = new TheoryData<IDictionary<string, string>, IDictionary<string, bool>>();
             var counter = 0;
-            foreach (var data in ProjectTypeDiscriminatorData)
+            foreach (var data in ProjectTypeDiscriminatorByProperties)
             {
                 set.Add((IDictionary<string, string>)data[0], expectedProperties[counter++]);
             }
@@ -341,7 +374,7 @@ namespace MsBullet.Sdk.Tests
             return set;
         }
 
-        private static TheoryData<IDictionary<string, string>, IDictionary<string, string>> InternalPackageReferenceVersionExpectedData()
+        private static TheoryData<IDictionary<string, string>, IDictionary<string, string>> InternalPackageReferenceVersionExpectedFor()
         {
             var expectedPackageVersions = new Dictionary<string, string>[]
             {
@@ -365,7 +398,7 @@ namespace MsBullet.Sdk.Tests
 
             var set = new TheoryData<IDictionary<string, string>, IDictionary<string, string>>();
             var counter = 0;
-            foreach (var data in ProjectTypeDiscriminatorData)
+            foreach (var data in ProjectTypeDiscriminatorByProperties)
             {
                 set.Add((IDictionary<string, string>)data[0], expectedPackageVersions[counter++]);
             }

@@ -3,6 +3,7 @@ name: github pages
 on:
   pull_request:
     types: [ closed ]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -15,7 +16,9 @@ jobs:
           fetch-depth: 0
         
       - name: Build
-        run: docker run -w /src/docs --mount type=bind,source="$(pwd)",target=/src klakegg/hugo:0.74.3-ext --minify
+        uses: nikeee/docfx-action@v1.0.0
+        with:
+          args: docs/docfx.json
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

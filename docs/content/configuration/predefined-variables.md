@@ -1,11 +1,10 @@
 ---
-title: Predefined variables
-weight: 7
+title: Well-known properties
 ---
 
-# Prefedined variables.
+# Well-known properties.
 
-MsBullet SDK provides some variables for internal use and you can used it to your build logic.
+MsBullet SDK provides some properties for internal use and you can used it to your build logic.
 
 For all other mentioned variables that are not present into the table above you can find more info at the [official documentation](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-reserved-and-well-known-properties).
 
@@ -15,7 +14,7 @@ For all other mentioned variables that are not present into the table above you 
 | Platform | Specify the current project platform. | `AnyCPU` | ✔ | |
 | PlatformName | Specify the current project platform name. | `$(Platform)` | ✔ | |
 | RepoRoot | Identifying the root of repository. | N/A | ✔ | |
-| ArtifactsDir | Specify the root where build system outputs are placed. | `$(RepoRoot)/artifacts/` | ✔ | |
+| ArtifactsDir | Specify the root where build system outputs are placed. | `$(RepoRoot)/artifacts/` | ❌ | |
 | OutDirName | Used to specified the end folder of path where artifacts are placed | `$(MSBuildProjectName)` | ✔ | |
 | BaseOutputPath | Identifying folder where binary artifacts are placed | `$(ArtifactsBinDir)/$(MSBuildProjectName)/` | ✔ | |
 | OutputPath | Identifying folder where artifacts are placed | When `$(PlatformName)` is equal to `AnyCPU` `$(BaseOutputPath)/$(Configuration)/`, otherwise `$(BaseOutputPath)/$(PlatformName)/$(Configuration)/` | ❌ | |
