@@ -17,6 +17,23 @@
     <IntermediateOutputPath Condition="'$(PlatformName)' != 'AnyCPU'">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net5')) or $(TargetFramework.StartsWith('net6'))">
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="$(TargetFramework.StartsWith('net5'))">
+      <PropertyGroup>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(TargetFramework.StartsWith('net6'))">
+      <PropertyGroup>
+        <AnalysisMode>All</AnalysisMode>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
   <ItemGroup>
     <AdditionalFiles Include="$(StyleCopConfig)" Link="stylecop.json" Condition="Exists('$(StyleCopConfig)')" />
   </ItemGroup>

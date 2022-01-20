@@ -1,13 +1,13 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -25,185 +25,81 @@ namespace MsBullet.Sdk.Tests
             this.fixture = fixture;
         }
 
-        public static TheoryData<IDictionary<string, string>> ProjectTypeDiscriminatorByProperties => new TheoryData<IDictionary<string, string>>
+        public static IEnumerable<object[]> TargetFrameworksWithoutShippedRoslynAnalizersShipped => ProjectDefaultsTests.SupportedTargetFrameworks
+            .Where(t => !(t.StartsWith("net5", StringComparison.OrdinalIgnoreCase) || t.StartsWith("net6", StringComparison.OrdinalIgnoreCase)))
+            .Select(t => new object[] { t });
+
+        public static IEnumerable<object[]> AllNet5TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
+            .Where(t => t.StartsWith("net5", StringComparison.OrdinalIgnoreCase))
+            .Select(t => new object[] { t });
+
+        public static IEnumerable<object[]> AllNet6TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
+            .Where(t => t.StartsWith("net6", StringComparison.OrdinalIgnoreCase))
+            .Select(t => new object[] { t });
+
+        public static IEnumerable<string> SupportedTargetFrameworks => new[]
         {
-            {
-                new Dictionary<string, string>
-                {
-                    { "IsUnitTestProject", "false" },
-                    { "IsIntegrationTestProject", "false" },
-                    { "IsPerformanceTestProject", "false" }
-                }
-            },
-            {
-                new Dictionary<string, string>
-                {
-                    { "IsUnitTestProject", "true" }
-                }
-            },
-            {
-                new Dictionary<string, string>
-                {
-                    { "IsIntegrationTestProject", "true" }
-                }
-            },
-            {
-                new Dictionary<string, string>
-                {
-                    { "IsPerformanceTestProject", "true" }
-                }
-            }
+            "netcoreapp1.0",
+            "netcoreapp1.1",
+            "netcoreapp2.0",
+            "netcoreapp2.1",
+            "netcoreapp2.2",
+            "netcoreapp3.0",
+            "netcoreapp3.1",
+            "net5.0",
+            "net5.0-windows",
+            "net6.0",
+            "net6.0-android",
+            "net6.0-ios",
+            "net6.0-macos",
+            "net6.0-maccatalyst",
+            "net6.0-tvos",
+            "net6.0-windows",
+            "netstandard1.0",
+            "netstandard1.1",
+            "netstandard1.2",
+            "netstandard1.3",
+            "netstandard1.4",
+            "netstandard1.5",
+            "netstandard1.6",
+            "netstandard2.0",
+            "netstandard2.1",
+            "net11",
+            "net20",
+            "net35",
+            "net40",
+            "net403",
+            "net45",
+            "net451",
+            "net452",
+            "net46",
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "netcore",
+            "netcore45",
+            "netcore45",
+            "win",
+            "win8",
+            "netcore451",
+            "win81",
+            "netmf",
+            "sl4",
+            "sl5",
+            "wp",
+            "wp7",
+            "wp75",
+            "wp8",
+            "wp81",
+            "wpa81",
+            "uap",
+            "uap10.0",
+            "win10",
+            "netcore50"
         };
-
-        public static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> TestProjectExpectedWhenHasProperties => InternalTestProjectExpectedWhenHasProperties();
-
-        public static TheoryData<IDictionary<string, string>, IDictionary<string, string>> PackageReferenceVersionExpectedFor => InternalPackageReferenceVersionExpectedFor();
-
-        [Theory]
-        [MemberData(nameof(TestProjectExpectedWhenHasProperties))]
-        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Test data must be valorized.")]
-        public void ShouldBeATestProjectWhenSet(IDictionary<string, string> globalProperties, IDictionary<string, bool> expectedProperties)
-        {
-            var project = this.fixture.ProvideProject(this.output, globalProperties);
-
-            using (new AssertionScope())
-            {
-                foreach (var property in expectedProperties)
-                {
-                    project
-                        .ShouldCountainProperty(property.Key)
-                        .ShouldEvaluatedEquivalentTo(property.Value);
-                }
-            }
-        }
-
-        [Fact]
-        public void ShouldHasAValorizedArtifactDirectoryName()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue
-                .Trim(Path.DirectorySeparatorChar)
-                .Split(Path.DirectorySeparatorChar)
-                .Should()
-                .EndWith("artifacts");
-        }
-
-        [Fact]
-        public void ShouldBeAValorizedArtifactDirectoryName()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue
-                .Trim(Path.DirectorySeparatorChar)
-                .Split(Path.DirectorySeparatorChar)
-                .Should()
-                .EndWith("artifacts");
-        }
-
-        [Theory]
-        [InlineData("AnyCPU", "Debug", "Debug")]
-        [InlineData("AnyCPU", "Release", "Release")]
-        [InlineData("x86", "Debug", "x86", "Debug")]
-        [InlineData("x86", "Release", "x86", "Release")]
-        [InlineData("x64", "Debug", "x64", "Debug")]
-        [InlineData("x64", "Release", "x64", "Release")]
-        public void ShouldPlaceOutputBinariesIntoArtifactsBinaryDirectoryName(string platform, string configuration, params string[] expectedPathParts)
-        {
-            var project = this.fixture.ProvideProject(this.output, "MultiTargets", new Dictionary<string, string>
-            {
-                { "Platform", platform },
-                { "Configuration", configuration }
-            });
-
-            project.ShouldCountainProperty("OutputPath").EvaluatedValue
-                .Trim(Path.DirectorySeparatorChar)
-                .Split(Path.DirectorySeparatorChar)
-                .Except(project.ShouldCountainProperty("BaseOutputPath").EvaluatedValue
-                    .Trim(Path.DirectorySeparatorChar)
-                    .Split(Path.DirectorySeparatorChar))
-                .Should()
-                .ContainInOrder(expectedPathParts);
-        }
-
-        [Theory]
-        [InlineData("AnyCPU", "Debug", "Debug")]
-        [InlineData("AnyCPU", "Release", "Release")]
-        [InlineData("x86", "Debug", "x86", "Debug")]
-        [InlineData("x86", "Release", "x86", "Release")]
-        [InlineData("x64", "Debug", "x64", "Debug")]
-        [InlineData("x64", "Release", "x64", "Release")]
-        public void ShouldPlaceIntermediateLanguageIntoArtifactsBinaryDirectoryName(string platform, string configuration, params string[] expectedPathParts)
-        {
-            var project = this.fixture.ProvideProject(this.output, "MultiTargets", new Dictionary<string, string>
-            {
-                { "Platform", platform },
-                { "Configuration", configuration }
-            });
-
-            project.ShouldCountainProperty("IntermediateOutputPath").EvaluatedValue
-                .Trim(Path.DirectorySeparatorChar)
-                .Split(Path.DirectorySeparatorChar)
-                .Except(project.ShouldCountainProperty("BaseIntermediateOutputPath").EvaluatedValue
-                    .Trim(Path.DirectorySeparatorChar)
-                    .Split(Path.DirectorySeparatorChar))
-                .Should()
-                .ContainInOrder(expectedPathParts);
-        }
-
-        [Fact]
-        public void ShouldNotBeATestProjectWhenProjectNameDoesNotEndWithTests()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            project
-                .ShouldCountainProperty("IsTestProject")
-                .ShouldEvaluatedEquivalentTo(false);
-        }
-
-        [Fact]
-        public void ShouldNotBeAUnitTestProjectWhenProjectNameDoesNotEndWithTestsOrUnitTests()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            project
-                .ShouldCountainProperty("IsUnitTestProject")
-                .ShouldEvaluatedEquivalentTo(false);
-        }
-
-        [Fact]
-        public void ShouldNotBeAnIntegrationTestProjectWhenProjectNameDoesNotEndWithIntegrationTests()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            project
-                .ShouldCountainProperty("IsIntegrationTestProject")
-                .ShouldEvaluatedEquivalentTo(false);
-        }
-
-        [Fact]
-        public void ShouldNotBeAPerformancenTestProjectWhenProjectNameDoesNotEndWithPerformanceTests()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            project
-                .ShouldCountainProperty("IsPerformanceTestProject")
-                .ShouldEvaluatedEquivalentTo(false);
-        }
-
-        [Fact]
-        public void ShouldMarkWithTestExplorerServiceTagWhenIsTestProject()
-        {
-            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>
-            {
-                { "IsTestProject", "true" }
-            });
-
-            foreach (var item in project.ShouldContainItem("Service"))
-            {
-                item.ShouldEvaluatedEquivalentTo("{82a7f48d-3b50-4b1e-b82e-3ada8210c358}");
-            }
-        }
 
         [Fact]
         public void ShouldHasAValorizedEngeeneringDirectoryName()
@@ -251,35 +147,8 @@ namespace MsBullet.Sdk.Tests
                 .BeEquivalentTo(properties["StyleCopConfig"]);
         }
 
-        [Theory]
-        [MemberData(nameof(PackageReferenceVersionExpectedFor))]
-        [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Test data must be valorized.")]
-        public void ShouldHasOnlyPackageReferenceWithHighestAcceptableStableVersion(IDictionary<string, string> globalProperties, [NotNull] IDictionary<string, string> expectedPackageVersions)
-        {
-            var project = this.fixture.ProvideProject(this.output, globalProperties);
-
-            using (new AssertionScope())
-            {
-                var items = project.ShouldContainItem("PackageReference");
-
-                foreach (var item in items.ExceptBy(expectedPackageVersions.Select(p => p.Key), i => i.EvaluatedInclude))
-                {
-                    item.ShouldContainMetadata("Version").EvaluatedValue
-                        .Should()
-                        .MatchRegex(@"\d*.[*]");
-                }
-
-                foreach (var item in items.IntersectBy(expectedPackageVersions.Select(p => p.Key), i => i.EvaluatedInclude))
-                {
-                    item.ShouldContainMetadata("Version").EvaluatedValue
-                        .Should()
-                        .Be(expectedPackageVersions[item.EvaluatedInclude]);
-                }
-            }
-        }
-
-        [Fact]
-        public void ShouldHasOnlyImplicitlyDefinedPackageReference()
+        [Fact(DisplayName = "Should have only implicit references to defined packages")]
+        public void ShouldHaveOnlyImplicitlyDefinedPackageReference()
         {
             var project = this.fixture.ProvideProject(this.output);
 
@@ -293,19 +162,58 @@ namespace MsBullet.Sdk.Tests
             }
         }
 
-        [Fact]
-        public void ShouldHasOnlyPackageReferenceWithPrivateAssets()
+        [Fact(DisplayName = "Should have only reference packages with private assets")]
+        public void ShouldHaveOnlyPackagesReferenceWithPrivateAssets()
         {
-            var project = this.fixture.ProvideProject(this.output);
+            var project = this.ProvideProject();
 
-            using (new AssertionScope())
+            project.ShouldContainItem("PackageReference")
+                .Should()
+                .SatisfyRespectively(i => i
+                    .ShouldContainMetadata("PrivateAssets")
+                    .ShouldEvaluatedEquivalentTo("all"));
+        }
+
+        [Theory(DisplayName = "Should be reference Roslyn analyzers when target framework is: ")]
+        [MemberData(nameof(TargetFrameworksWithoutShippedRoslynAnalizersShipped))]
+        public void ShouldBeReferenceRoslynAnalyzer(string targetFramework)
+        {
+            var project = this.ProvideProject(new Dictionary<string, string>
             {
-                foreach (var item in project.ShouldContainItem("PackageReference"))
-                {
-                    item.ShouldContainMetadata("PrivateAssets")
-                        .ShouldEvaluatedEquivalentTo("all");
-                }
-            }
+                { "TargetFramework", targetFramework }
+            });
+
+            Func<ProjectItem, string, bool> ensureInclude = (i, packageName) => i.EvaluatedInclude.Equals(packageName, StringComparison.OrdinalIgnoreCase);
+
+            project
+                .ShouldContainItem("PackageReference")
+                .Should()
+                .Contain(i => ensureInclude(i, "Microsoft.VisualStudio.Threading.Analyzers"))
+                .And
+                .Contain(i => ensureInclude(i, "Microsoft.CodeAnalysis.NetAnalyzers"));
+        }
+
+        [Theory(DisplayName = "Should enforching all analysis rules")]
+        [MemberData(nameof(AllNet5TargetFrameworks))]
+        [MemberData(nameof(AllNet6TargetFrameworks))]
+        public void ShouldEnforchingAllAnalysisRules(string targetFramework)
+        {
+            var expectedAnalysisMode = ProjectDefaultsTests.AllNet5TargetFrameworks.SelectMany(p => p.Cast<string>()).Contains(targetFramework)
+                ? "AllEnabledByDefault"
+                : "All";
+
+            var project = this.ProvideProject(new Dictionary<string, string>
+            {
+                { "TargetFramework", targetFramework }
+            });
+
+            project
+                .ShouldCountainProperty("AnalysisMode")
+                .ShouldEvaluatedEquivalentTo(expectedAnalysisMode);
+
+            project
+                .ShouldCountainProperty("EnforceCodeStyleInBuild")
+                .ShouldEvaluatedEquivalentTo(true);
         }
 
         [Theory]
@@ -320,7 +228,7 @@ namespace MsBullet.Sdk.Tests
         [InlineData("NerdbankGitVersioningVersion", "1.0.0")]
         public void ShouldRespectPackageReferenceVersion(string packageVersionProperty, string expectedVersion)
         {
-            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>
+            var project = this.ProvideProject(new Dictionary<string, string>
             {
                 { packageVersionProperty, expectedVersion }
             });
@@ -330,80 +238,24 @@ namespace MsBullet.Sdk.Tests
                 .BeEquivalentTo(expectedVersion);
         }
 
-        private static TheoryData<IDictionary<string, string>, IDictionary<string, bool>> InternalTestProjectExpectedWhenHasProperties()
+        protected virtual Project ProvideProject(IDictionary<string, string> globalProperties = null)
         {
-            var expectedProperties = new Dictionary<string, bool>[]
-            {
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", false },
-                    { "IsUnitTestProject", false },
-                    { "IsIntegrationTestProject", false },
-                    { "IsPerformanceTestProject", false },
-                },
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", true },
-                    { "IsIntegrationTestProject", false },
-                    { "IsPerformanceTestProject", false },
-                },
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", false },
-                    { "IsIntegrationTestProject", true },
-                    { "IsPerformanceTestProject", false },
-                },
-                new Dictionary<string, bool>
-                {
-                    { "IsTestProject", true },
-                    { "IsUnitTestProject", false },
-                    { "IsIntegrationTestProject", false },
-                    { "IsPerformanceTestProject", true },
-                }
-            };
+            var properties = new Dictionary<string, string>();
 
-            var set = new TheoryData<IDictionary<string, string>, IDictionary<string, bool>>();
-            var counter = 0;
-            foreach (var data in ProjectTypeDiscriminatorByProperties)
+            if (this is UnitTestsProjectDefaultTests)
             {
-                set.Add((IDictionary<string, string>)data[0], expectedProperties[counter++]);
+                properties.Add("IsUnitTestProject", true.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (this is IntegrationTestsProjectDefaultTests)
+            {
+                properties.Add("IsIntegrationTestProject", true.ToString(CultureInfo.InvariantCulture));
+            }
+            else if (this is PerformanceTestsProjectDefaultsTests)
+            {
+                properties.Add("IsPerformanceTestProject", true.ToString(CultureInfo.InvariantCulture));
             }
 
-            return set;
-        }
-
-        private static TheoryData<IDictionary<string, string>, IDictionary<string, string>> InternalPackageReferenceVersionExpectedFor()
-        {
-            var expectedPackageVersions = new Dictionary<string, string>[]
-            {
-                new Dictionary<string, string>(),
-                new Dictionary<string, string>
-                {
-                    { "xunit.runner.console", "2.4.1" },
-                    { "xunit.runner.visualstudio", "2.4.3" }
-                },
-                new Dictionary<string, string>
-                {
-                    { "xunit.runner.console", "2.4.1" },
-                    { "xunit.runner.visualstudio", "2.4.3" }
-                },
-                new Dictionary<string, string>
-                {
-                    { "xunit.runner.console", "2.4.1" },
-                    { "xunit.runner.visualstudio", "2.4.3" }
-                }
-            };
-
-            var set = new TheoryData<IDictionary<string, string>, IDictionary<string, string>>();
-            var counter = 0;
-            foreach (var data in ProjectTypeDiscriminatorByProperties)
-            {
-                set.Add((IDictionary<string, string>)data[0], expectedPackageVersions[counter++]);
-            }
-
-            return set;
+            return this.fixture.ProvideProject(this.output, globalProperties);
         }
     }
 }

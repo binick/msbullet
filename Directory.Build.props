@@ -4,7 +4,6 @@
   <Import Project="Sdk.props" Sdk="MsBullet.Sdk" />
 
   <PropertyGroup>
-    <LangVersion>8.0</LangVersion>
     <NoWarn>$(NoWarn);SA1311;SA1413</NoWarn>
     <NoWarn Condition="'$(IsShippable)' != 'true'">$(NoWarn);SA0001;SA1600</NoWarn>
   </PropertyGroup>
