@@ -1,5 +1,6 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
@@ -40,7 +41,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName("obj")
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Fact(DisplayName = "Should be provided with a default build output directory name")]
@@ -52,7 +53,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName("bin")
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default log directory name")]
@@ -69,7 +70,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName(Path.Join("log", configuration))
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default temporary files directory name")]
@@ -86,7 +87,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName(Path.Join("tmp", configuration))
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default test results directory name")]
@@ -103,7 +104,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName(Path.Join("TestResults", configuration))
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default test report directory name")]
@@ -120,7 +121,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName("Reports")
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsTestResultsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsTestResultsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default symbols store directory name")]
@@ -137,7 +138,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName("Coverage")
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsTestResultsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsTestResultsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default symbols store directory name")]
@@ -154,7 +155,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName(Path.Join("SymStore", configuration))
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default output packages directory name")]
@@ -171,7 +172,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName(Path.Join("packages", configuration))
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default output shippable packages directory name")]
@@ -188,7 +189,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName("Shippable")
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsPackagesDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsPackagesDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
 
         [Theory(DisplayName = "Should be provided with a default output non shippable packages directory name")]
@@ -205,7 +206,7 @@ namespace MsBullet.Sdk.Tests
                 .ShouldBeAValidPath()
                 .ShouldHasFolderName("NonShippable")
                 .And
-                .Contain(project.ShouldCountainProperty("ArtifactsPackagesDir").EvaluatedValue);
+                .MatchRegex($"^\\{Path.DirectorySeparatorChar}?{project.ShouldCountainProperty("ArtifactsPackagesDir").EvaluatedValue.Trim(Path.DirectorySeparatorChar).Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.Ordinal)}\\{Path.DirectorySeparatorChar}?");
         }
     }
 }

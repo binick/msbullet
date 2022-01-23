@@ -26,7 +26,7 @@ namespace MsBullet.Sdk.Tests
         [Fact(DisplayName = "Should be provided with a default location when fallback property or environment variable is empty")]
         public void ShouldBeProvidedWithADefaultLocation()
         {
-            var expected = $"^{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages").Replace($"{Path.DirectorySeparatorChar}", string.Format(CultureInfo.InvariantCulture, "{0}{0}", Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase)}\\\\?$";
+            var expected = $"^{Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages").Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase)}\\{Path.DirectorySeparatorChar}?$";
 
             var project = this.fixture.ProvideProject(this.output);
 
@@ -63,7 +63,7 @@ namespace MsBullet.Sdk.Tests
 
             project
                 .ShouldCountainProperty("NuGetPackageRoot")
-                .ShouldEvaluatedMatchRegex($"^{expected.Replace($"{Path.DirectorySeparatorChar}", string.Format(CultureInfo.InvariantCulture, "{0}{0}", Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase)}\\\\?$")
+                .ShouldEvaluatedMatchRegex($"^{expected.Replace($"{Path.DirectorySeparatorChar}", $"\\{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase)}\\{Path.DirectorySeparatorChar}?$")
                 .EvaluatedValue
                 .ShouldBeAValidPath();
         }

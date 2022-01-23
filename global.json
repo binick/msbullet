@@ -1,6 +1,9 @@
 {
+  "sdk": {
+    "allowPrerelease": false
+  },
   "tools": {
-    "dotnet": "6.0.100-rc.2.21505.57"
+    "dotnet": "6.0.101"
   },
   "msbuild-sdks": {
     "MsBullet.Sdk": "0.2.3"

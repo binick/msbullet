@@ -1,13 +1,13 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
-using FluentAssertions;
-using FluentAssertions.Execution;
-using Microsoft.Build.Evaluation;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using FluentAssertions;
+using FluentAssertions.Execution;
+using Microsoft.Build.Evaluation;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,79 +26,70 @@ namespace MsBullet.Sdk.Tests
         }
 
         public static IEnumerable<object[]> TargetFrameworksWithoutShippedRoslynAnalizersShipped => ProjectDefaultsTests.SupportedTargetFrameworks
-            .Where(t => !(t.StartsWith("net5", StringComparison.OrdinalIgnoreCase) || t.StartsWith("net6", StringComparison.OrdinalIgnoreCase)))
-            .Select(t => new object[] { t });
+            .Where(t => !(t.Cast<string>().First().StartsWith("net5", StringComparison.OrdinalIgnoreCase) || t.Cast<string>().First().StartsWith("net6", StringComparison.OrdinalIgnoreCase)));
 
         public static IEnumerable<object[]> AllNet5TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
-            .Where(t => t.StartsWith("net5", StringComparison.OrdinalIgnoreCase))
-            .Select(t => new object[] { t });
+            .Where(t => t.Cast<string>().First().StartsWith("net5", StringComparison.OrdinalIgnoreCase));
 
         public static IEnumerable<object[]> AllNet6TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
-            .Where(t => t.StartsWith("net6", StringComparison.OrdinalIgnoreCase))
-            .Select(t => new object[] { t });
+            .Where(t => t.Cast<string>().First().StartsWith("net6", StringComparison.OrdinalIgnoreCase));
 
-        public static IEnumerable<string> SupportedTargetFrameworks => new[]
+        public static IEnumerable<object[]> SupportedTargetFrameworks => new object[][]
         {
-            "netcoreapp1.0",
-            "netcoreapp1.1",
-            "netcoreapp2.0",
-            "netcoreapp2.1",
-            "netcoreapp2.2",
-            "netcoreapp3.0",
-            "netcoreapp3.1",
-            "net5.0",
-            "net5.0-windows",
-            "net6.0",
-            "net6.0-android",
-            "net6.0-ios",
-            "net6.0-macos",
-            "net6.0-maccatalyst",
-            "net6.0-tvos",
-            "net6.0-windows",
-            "netstandard1.0",
-            "netstandard1.1",
-            "netstandard1.2",
-            "netstandard1.3",
-            "netstandard1.4",
-            "netstandard1.5",
-            "netstandard1.6",
-            "netstandard2.0",
-            "netstandard2.1",
-            "net11",
-            "net20",
-            "net35",
-            "net40",
-            "net403",
-            "net45",
-            "net451",
-            "net452",
-            "net46",
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "netcore",
-            "netcore45",
-            "netcore45",
-            "win",
-            "win8",
-            "netcore451",
-            "win81",
-            "netmf",
-            "sl4",
-            "sl5",
-            "wp",
-            "wp7",
-            "wp75",
-            "wp8",
-            "wp81",
-            "wpa81",
-            "uap",
-            "uap10.0",
-            "win10",
-            "netcore50"
+            new string[] { "netcoreapp1.0" },
+            new string[] { "netcoreapp1.1" },
+            new string[] { "netcoreapp2.0" },
+            new string[] { "netcoreapp2.1" },
+            new string[] { "netcoreapp2.2" },
+            new string[] { "netcoreapp3.0" },
+            new string[] { "netcoreapp3.1" },
+            new string[] { "net5.0" },
+            new string[] { "net5.0-windows" },
+            new string[] { "net6.0" },
+            new string[] { "net6.0-android" },
+            new string[] { "net6.0-ios" },
+            new string[] { "net6.0-macos" },
+            new string[] { "net6.0-maccatalyst" },
+            new string[] { "net6.0-tvos" },
+            new string[] { "net6.0-windows" },
+            new string[] { "netstandard1.0" },
+            new string[] { "netstandard1.1" },
+            new string[] { "netstandard1.2" },
+            new string[] { "netstandard1.3" },
+            new string[] { "netstandard1.4" },
+            new string[] { "netstandard1.5" },
+            new string[] { "netstandard1.6" },
+            new string[] { "netstandard2.0" },
+            new string[] { "netstandard2.1" },
+            new string[] { "net11" },
+            new string[] { "net20" },
+            new string[] { "net35" },
+            new string[] { "net40" },
+            new string[] { "net403" },
+            new string[] { "net45" },
+            new string[] { "net451" },
+            new string[] { "net452" },
+            new string[] { "net46" },
+            new string[] { "net461" },
+            new string[] { "net462" },
+            new string[] { "net47" },
+            new string[] { "net471" },
+            new string[] { "net472" },
+            new string[] { "net48" },
+            new string[] { "netcore" },
+            new string[] { "netcore45" },
+            new string[] { "netcore451" },
+            new string[] { "netmf" },
+            new string[] { "sl4" },
+            new string[] { "sl5" },
+            new string[] { "wp" },
+            new string[] { "wp7" },
+            new string[] { "wp75" },
+            new string[] { "wp8" },
+            new string[] { "wp81" },
+            new string[] { "wpa81" },
+            new string[] { "uap" },
+            new string[] { "uap10.0" }
         };
 
         [Fact]
@@ -157,21 +148,35 @@ namespace MsBullet.Sdk.Tests
                 foreach (var item in project.ShouldContainItem("PackageReference"))
                 {
                     item.ShouldContainMetadata("IsImplicitlyDefined")
-                        .ShouldEvaluatedEquivalentTo(true);
+                        .ShouldEvaluatedEquivalentTo(true, options => options);
                 }
             }
         }
 
-        [Fact(DisplayName = "Should have only reference packages with private assets")]
-        public void ShouldHaveOnlyPackagesReferenceWithPrivateAssets()
+        [Theory(DisplayName = "Should have only reference packages with private assets")]
+        [MemberData(nameof(SupportedTargetFrameworks))]
+        public void ShouldHaveOnlyPackagesReferenceWithPrivateAssets(string targetFramework)
         {
-            var project = this.ProvideProject();
+            var builtInSdkLibraries = new string[]
+            {
+                "NETStandard.Library",
+                "Microsoft.NETCore.App"
+            };
 
-            project.ShouldContainItem("PackageReference")
-                .Should()
-                .SatisfyRespectively(i => i
-                    .ShouldContainMetadata("PrivateAssets")
-                    .ShouldEvaluatedEquivalentTo("all"));
+            var project = this.ProvideProject(new Dictionary<string, string>
+            {
+                { "TargetFramework", targetFramework }
+            });
+
+            using (new AssertionScope())
+            {
+                foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(builtInSdkLibraries, i => i.EvaluatedInclude))
+                {
+                    item
+                        .ShouldContainMetadata("PrivateAssets")
+                        .ShouldEvaluatedEquivalentTo("All", options => options.Using<string>(ctx => ctx.Subject.ToUpperInvariant().Should().Be(ctx.Expectation.ToUpperInvariant())).WhenTypeIs<string>());
+                }
+            }
         }
 
         [Theory(DisplayName = "Should be reference Roslyn analyzers when target framework is: ")]
@@ -216,26 +221,22 @@ namespace MsBullet.Sdk.Tests
                 .ShouldEvaluatedEquivalentTo(true);
         }
 
-        [Theory]
-        [InlineData("MicrosoftCodeAnalysisFxCopAnalyzersVersion", "1.0.0")]
-        [InlineData("MicrosoftVisualStudioThreadingAnalyzersVersion", "1.0.0")]
-        [InlineData("StyleCopAnalyzersVersion", "1.0.0")]
-        [InlineData("MicrosoftNETTestSdkVersion", "1.0.0")]
-        [InlineData("XUnitAssertVersion", "1.0.0")]
-        [InlineData("XUnitRunnerVisualstudioVersion", "1.0.0")]
-        [InlineData("XUnitRunnerConsoleVersion", "1.0.0")]
-        [InlineData("XUnitAbstractionsVersion", "1.0.0")]
-        [InlineData("NerdbankGitVersioningVersion", "1.0.0")]
-        public void ShouldRespectPackageReferenceVersion(string packageVersionProperty, string expectedVersion)
+        [Fact(DisplayName = "Should respect user package reference verions")]
+        public void ShouldRespectUserPackageReferenceVersions()
         {
-            var project = this.ProvideProject(new Dictionary<string, string>
-            {
-                { packageVersionProperty, expectedVersion }
-            });
+            var project = this.ProvideProject();
 
-            project.ShouldCountainProperty(packageVersionProperty).UnevaluatedValue
-                .Should()
-                .BeEquivalentTo(expectedVersion);
+            using (new AssertionScope())
+            {
+                foreach (var item in project.ShouldContainItem("PackageReference"))
+                {
+                    var propertyName = new string(item.ShouldContainMetadata("Version").UnevaluatedValue.Skip(2).SkipLast(1).ToArray());
+                    project
+                        .ShouldCountainProperty(propertyName).Xml.Condition
+                        .Should()
+                        .Be($"'$({propertyName})' == ''");
+                }
+            }
         }
 
         protected virtual Project ProvideProject(IDictionary<string, string> globalProperties = null)

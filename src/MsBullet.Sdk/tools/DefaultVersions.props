@@ -14,16 +14,7 @@
   
   <!-- Libs -->
   <PropertyGroup> 
-    <MicrosoftCodeAnalysisNetAnalyzersVersion Condition="'$(MicrosoftCodeAnalysisNetAnalyzersVersion)' == ''">6.*</MicrosoftCodeAnalysisNetAnalyzersVersion>
-    <MicrosoftVisualStudioThreadingAnalyzersVersion Condition="'$(MicrosoftVisualStudioThreadingAnalyzersVersion)' == ''">16.*</MicrosoftVisualStudioThreadingAnalyzersVersion>
     <StyleCopAnalyzersVersion Condition="'$(StyleCopAnalyzersVersion)' == ''">1.*</StyleCopAnalyzersVersion>
-    <MicrosoftNETTestSdkVersion Condition="'$(MicrosoftNETTestSdkVersion)' == ''">16.*</MicrosoftNETTestSdkVersion>
-    <XUnitVersion Condition="'$(XUnitVersion)' == ''">2.*</XUnitVersion>
-    <XUnitAssertVersion Condition="'$(XUnitAssertVersion)' == ''">$(XUnitVersion)</XUnitAssertVersion>
-    <XUnitRunnerVisualstudioVersion Condition="'$(XUnitRunnerVisualstudioVersion)' == ''">2.4.3</XUnitRunnerVisualstudioVersion>
-    <XUnitRunnerConsoleVersion Condition="'$(XUnitRunnerConsoleVersion)' == ''">2.4.1</XUnitRunnerConsoleVersion>
-    <XUnitAbstractionsVersion Condition="'$(XUnitAbstractionsVersion)' == ''">$(XUnitVersion)</XUnitAbstractionsVersion>
-    <NerdbankGitVersioningVersion Condition="'$(NerdbankGitVersioningVersion)' == ''">3.*</NerdbankGitVersioningVersion>
   </PropertyGroup>
   
 </Project>

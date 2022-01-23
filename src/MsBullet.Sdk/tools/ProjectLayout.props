@@ -18,20 +18,26 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net5')) or $(TargetFramework.StartsWith('net6'))">
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == ''">true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <Choose>
     <When Condition="$(TargetFramework.StartsWith('net5'))">
       <PropertyGroup>
-        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisMode Condition="'$(AnalysisMode)' == ''">AllEnabledByDefault</AnalysisMode>
       </PropertyGroup>
     </When>
     <When Condition="$(TargetFramework.StartsWith('net6'))">
       <PropertyGroup>
-        <AnalysisMode>All</AnalysisMode>
+        <AnalysisMode Condition="'$(AnalysisMode)' == ''">All</AnalysisMode>
       </PropertyGroup>
     </When>
+    <Otherwise>
+      <PropertyGroup>
+        <MicrosoftCodeAnalysisNetAnalyzersVersion Condition="'$(MicrosoftCodeAnalysisNetAnalyzersVersion)' == ''">6.*</MicrosoftCodeAnalysisNetAnalyzersVersion>
+        <MicrosoftVisualStudioThreadingAnalyzersVersion Condition="'$(MicrosoftVisualStudioThreadingAnalyzersVersion)' == ''">16.*</MicrosoftVisualStudioThreadingAnalyzersVersion>
+      </PropertyGroup>
+    </Otherwise>
   </Choose>
 
   <ItemGroup>

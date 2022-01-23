@@ -36,5 +36,11 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="tools\Nerdbank.GitVersioning\Nerdbank.GitVersioning.props">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+  </ItemGroup>
+
   <Import Project="$(RepoRoot)eng\BuildTask.targets" />
 </Project>
