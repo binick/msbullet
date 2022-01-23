@@ -2,6 +2,14 @@
 <Project>
 
   <PropertyGroup>
+    <XUnitVersion Condition="'$(XUnitVersion)' == ''">2.*</XUnitVersion>
+    <XUnitAssertVersion Condition="'$(XUnitAssertVersion)' == ''">$(XUnitVersion)</XUnitAssertVersion>
+    <XUnitAbstractionsVersion Condition="'$(XUnitAbstractionsVersion)' == ''">$(XUnitVersion)</XUnitAbstractionsVersion>
+    <XUnitRunnerVisualstudioVersion Condition="'$(XUnitRunnerVisualstudioVersion)' == ''">2.4.3</XUnitRunnerVisualstudioVersion>
+    <XUnitRunnerConsoleVersion Condition="'$(XUnitRunnerConsoleVersion)' == ''">2.4.1</XUnitRunnerConsoleVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <XUnitDesktopSettingsFile>$(MSBuildThisFileDirectory)xunit.runner.json</XUnitDesktopSettingsFile>
   </PropertyGroup>
   

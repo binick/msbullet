@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using FluentAssertions.Collections;
 
 namespace Microsoft.Build.Evaluation
 {

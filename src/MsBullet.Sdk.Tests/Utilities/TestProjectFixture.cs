@@ -75,6 +75,16 @@ namespace MsBullet.Sdk.Tests
             return this.InternalProvideProject(output, "ClassLib1.PerformanceTests", globalProperties ?? new Dictionary<string, string>());
         }
 
+        public Project ProvideToolsProject(ITestOutputHelper output, string relativePath, IDictionary<string, string> globalProperties = null)
+        {
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            var collection = new ProjectCollection(globalProperties ?? new Dictionary<string, string>());
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            collection.RegisterLoggers(new[] { new XUnitLogger(output) });
+            this.disposables.Enqueue(collection);
+            return collection.LoadProject(Path.Combine(this.boilerplateDir, "sdk", "tools", relativePath));
+        }
+
         public void Dispose()
         {
             this.Dispose(true);
