@@ -63,7 +63,7 @@ jobs:
       - name: Commit pre-release version
         run: |
           git add version.json \
-          && git commit -m "[Bot] Bump version after stable release (${{ github.event.inputs.version }})." \
+          && git commit -m "[Bot] Bump version after stable release (${{ github.event.inputs.version }}).\n\n[skip ci]" \
           && hub push
         env: 
           GITHUB_TOKEN: ${{ secrets.AUTOBOT_TOKEN }}  
