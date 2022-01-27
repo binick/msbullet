@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "content/artifact/index.html",
-          "hash": "n2AnGjsIl4+peqZjL8wffA=="
+          "hash": "B8kBNbixuBYNK3R5/W7BKw=="
         }
       },
       "is_incremental": false,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "content/configuration/conventions.html",
-          "hash": "lQLFK7fVvruAUC7iNi0a6A=="
+          "hash": "V2mgnwCWbMUYzeSwI3Al+A=="
         }
       },
       "is_incremental": false,
@@ -57,7 +57,19 @@
       "output": {
         ".html": {
           "relative_path": "content/configuration/predefined-variables.html",
-          "hash": "5NvIERqKlvfTw2XAY7tfQg=="
+          "hash": "tDb7Q6WExdrY1zIC7RFPvQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "content/configuration/tools.md",
+      "output": {
+        ".html": {
+          "relative_path": "content/configuration/tools.html",
+          "hash": "SADpYeQOAauTCSVIMs1CpA=="
         }
       },
       "is_incremental": false,
@@ -69,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "content/getting-started/index.html",
-          "hash": "s07cjML/40el+bnAqYg64Q=="
+          "hash": "wP4l9Oihdy4mbxXYtZhUQw=="
         }
       },
       "is_incremental": false,
@@ -93,19 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "content/toc.html",
-          "hash": "vQr+n1L8C2/dhLGk2VZTpQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "content/tools/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "content/tools/index.html",
-          "hash": "0GCF899pyJkpBhMcVrzEyA=="
+          "hash": "fHpQAg7l/V3OIRxkOo7CCQ=="
         }
       },
       "is_incremental": false,
