@@ -55,6 +55,9 @@
     <PropertyGroup>
       <GlobalJsonContent>
 {
+  "sdk": {
+    "allowPrerelease": false
+  },
   "tools": {
     "dotnet": "$(NETCoreSdkVersion)"
   },

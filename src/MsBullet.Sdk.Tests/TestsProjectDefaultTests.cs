@@ -1,7 +1,6 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -31,7 +30,7 @@ namespace MsBullet.Sdk.Tests
 
             foreach (var item in project.ShouldContainItem("Service"))
             {
-                item.ShouldEvaluatedEquivalentTo("{82a7f48d-3b50-4b1e-b82e-3ada8210c358}");
+                item.ShouldEvaluatedIncludeEquivalentTo("{82a7f48d-3b50-4b1e-b82e-3ada8210c358}");
             }
         }
 
@@ -50,7 +49,7 @@ namespace MsBullet.Sdk.Tests
             {
                 var items = project.ShouldContainItem("PackageReference");
 
-                foreach (var item in items.ExceptBy(expectedPackageVersions.Select(p => p.Key), i => i.EvaluatedInclude))
+                foreach (var item in items.ExceptBy(expectedPackageVersions.Select(p => p.Key).Concat(this.FrameworkDependentPackages), i => i.EvaluatedInclude))
                 {
                     item.ShouldContainMetadata("Version").EvaluatedValue
                         .Should()
@@ -64,6 +63,16 @@ namespace MsBullet.Sdk.Tests
                         .Be(expectedPackageVersions[item.EvaluatedInclude]);
                 }
             }
+        }
+
+        [Fact(DisplayName = "Should not be packable")]
+        public void ShouldNotBePackable()
+        {
+            var project = this.ProvideProject();
+
+            project
+                .ShouldCountainProperty("IsPackable")
+                .ShouldEvaluatedEquivalentTo(false);
         }
 
         protected virtual Project ProvideProject(string projectName, IDictionary<string, string> globalProperties = null)

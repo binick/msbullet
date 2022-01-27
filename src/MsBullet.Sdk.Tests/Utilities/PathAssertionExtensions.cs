@@ -33,6 +33,7 @@ namespace FluentAssertions
         public static AndConstraint<StringAssertions> ShouldHasParent(this string path, string expcected, string because = "", params object[] becauseArgs)
         {
             return path
+                .Replace('/', Path.DirectorySeparatorChar)
                 .Should()
                 .StartWith(expcected, because, becauseArgs);
         }

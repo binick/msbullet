@@ -24,13 +24,6 @@
     <BuildForLiveUnitTesting Condition="'$(BuildForLiveUnitTesting)' == '' and '$(IsIntegrationTestProject)' == 'true'">false</BuildForLiveUnitTesting>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
-    <!-- VS TestExplorer uses this to identify a test project -->
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" IsImplicitlyDefined="true" />
-  </ItemGroup>
-
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <MicrosoftNETTestSdkVersion Condition="'$(MicrosoftNETTestSdkVersion)' == ''">16.*</MicrosoftNETTestSdkVersion>
 
@@ -43,6 +36,13 @@
     <!-- exclude test projects from source-build by default -->
     <ExcludeFromSourceBuild Condition="'$(ExcludeFromSourceBuild)' == ''">true</ExcludeFromSourceBuild>
   </PropertyGroup>
+  
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <!-- VS TestExplorer uses this to identify a test project -->
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" IsImplicitlyDefined="true" />
+  </ItemGroup>
 
   <!-- Import specialized props files of supported test runners -->
   <Import Project="$(MSBuildThisFileDirectory)$(TestRunnerName)\$(TestRunnerName).props" Condition="'$(TestRunnerName)' != '' and Exists('$(MSBuildThisFileDirectory)$(TestRunnerName)\$(TestRunnerName).props')"/>

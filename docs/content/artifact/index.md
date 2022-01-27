@@ -1,6 +1,5 @@
 ---
 title: Artifact folder structure
-weight: 5
 ---
 
 # Single build output.

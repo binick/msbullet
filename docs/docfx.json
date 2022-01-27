@@ -8,7 +8,6 @@
             "**/*.csproj"
           ],
           "exclude": [
-            "*Tests.csproj",
             "*Tests/**",
             "*MsBullet.Sdk/**"
           ]

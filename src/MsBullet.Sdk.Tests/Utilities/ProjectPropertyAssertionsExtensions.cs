@@ -15,14 +15,14 @@ namespace Microsoft.Build.Evaluation
     {
         public static ProjectProperty ShouldEvaluatedEquivalentTo<T>(this ProjectProperty property, T value, string because = "", params object[] becauseArgs)
         {
-            InternalShouldEvaluatedEquivalentTo(property.EvaluatedValue, value, property.Project, t => t, because, becauseArgs);
+            InternalShouldEquivalentTo(property.EvaluatedValue, value, property.Project, t => t, because, becauseArgs);
 
             return property;
         }
 
         public static ProjectProperty ShouldEvaluatedEquivalentTo<T>(this ProjectProperty property, T value, Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config, string because = "", params object[] becauseArgs)
         {
-            InternalShouldEvaluatedEquivalentTo(property.EvaluatedValue, value, property.Project, config, because, becauseArgs);
+            InternalShouldEquivalentTo(property.EvaluatedValue, value, property.Project, config, because, becauseArgs);
 
             return property;
         }
@@ -36,7 +36,30 @@ namespace Microsoft.Build.Evaluation
             return property;
         }
 
-        private static void InternalShouldEvaluatedEquivalentTo<T>(string value, T expectedValue, Project project, Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config, string because = "", params object[] becauseArgs)
+        public static ProjectProperty ShouldUnevaluatedEquivalentTo<T>(this ProjectProperty property, T value, string because = "", params object[] becauseArgs)
+        {
+            InternalShouldEquivalentTo(property.UnevaluatedValue, value, property.Project, t => t, because, becauseArgs);
+
+            return property;
+        }
+
+        public static ProjectProperty ShouldUnevaluatedEquivalentTo<T>(this ProjectProperty property, T value, Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config, string because = "", params object[] becauseArgs)
+        {
+            InternalShouldEquivalentTo(property.UnevaluatedValue, value, property.Project, config, because, becauseArgs);
+
+            return property;
+        }
+
+        public static ProjectProperty ShouldUnevaluatedEquivalentTo(this ProjectProperty property, string reqularExpression, string because = "", params object[] becauseArgs)
+        {
+            property.UnevaluatedValue
+                .Should()
+                .MatchRegex(reqularExpression, because, becauseArgs);
+
+            return property;
+        }
+
+        private static void InternalShouldEquivalentTo<T>(string value, T expectedValue, Project project, Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config, string because = "", params object[] becauseArgs)
         {
             value
                 .Should()

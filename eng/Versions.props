@@ -2,14 +2,14 @@
 <Project>
 
   <PropertyGroup>
-    <MicrosoftBuildFrameworkVersion>16.5.0</MicrosoftBuildFrameworkVersion>
+    <MicrosoftBuildFrameworkVersion>16.*</MicrosoftBuildFrameworkVersion>
     <MicrosoftBuildVersion>$(MicrosoftBuildFrameworkVersion)</MicrosoftBuildVersion>
     <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildFrameworkVersion)</MicrosoftBuildUtilitiesCoreVersion>
-    <MicrosoftBuildLocatorVersion>1.4.1</MicrosoftBuildLocatorVersion>
-    <MicrosoftCodeAnalysisCommonVersion>3.5.0</MicrosoftCodeAnalysisCommonVersion>
-    <MicrosoftCodeAnalysisWorkspacesCommonVersion>3.5.0</MicrosoftCodeAnalysisWorkspacesCommonVersion>
-    <MicrosoftSourceLinkGitHubVersion>1.0.0</MicrosoftSourceLinkGitHubVersion>
-    <FluentAssertionsVersion>6.3.0</FluentAssertionsVersion>
+    <MicrosoftBuildLocatorVersion>1.*</MicrosoftBuildLocatorVersion>
+    <MicrosoftCodeAnalysisCommonVersion>3.*</MicrosoftCodeAnalysisCommonVersion>
+    <MicrosoftCodeAnalysisWorkspacesCommonVersion>3.*</MicrosoftCodeAnalysisWorkspacesCommonVersion>
+    <MicrosoftSourceLinkGitHubVersion>1.*</MicrosoftSourceLinkGitHubVersion>
+    <FluentAssertionsVersion>6.*</FluentAssertionsVersion>
   </PropertyGroup>
 
 </Project>
