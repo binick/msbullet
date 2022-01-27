@@ -1,27 +1,7 @@
-trigger:
+pr:
 - main
-- refs/tags/v*
 
 stages:
-
-- stage: pipeline
-  displayName: Setup pipeline
-
-  jobs:
-
-  - template: templates/jobs.yml
-    parameters:
-
-      jobs:
-
-      - job: common
-
-        pool:
-          vmImage: windows-latest
-
-        steps:
-          - pwsh: ./eng/common-variables.ps1 -RepoRoot $(Build.Repository.LocalPath) -SourceBranch $(Build.SourceBranch)
-            name: variables
 
 - stage: build
   displayName: Build
@@ -146,14 +126,12 @@ stages:
   displayName: Publish
 
   dependsOn:
-  - pipeline
   - build
     
   jobs:
 
   - template: templates/jobs.yml
     parameters:
-      condition: eq(stageDependencies.pipeline.common.outputs['variables._PublicRelease'], 'true')
       artifacts:
         download:
           name: Artifacts_$(Agent.OS)_Release_x64
