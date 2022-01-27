@@ -1,6 +1,3 @@
-pr:
-- main
-
 stages:
 
 - stage: build
