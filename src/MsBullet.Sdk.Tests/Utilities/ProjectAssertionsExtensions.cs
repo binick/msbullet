@@ -21,7 +21,7 @@ namespace Microsoft.Build.Evaluation
 
         public static IEnumerable<ProjectItem> ShouldContainItem(this Project project, string itemType, string because = "", params object[] becauseArgs)
         {
-            return project.GetItems(itemType)
+            return project.GetItemsIgnoringCondition(itemType)
                 .Should()
                 .NotBeNull(because, becauseArgs)
                 .And

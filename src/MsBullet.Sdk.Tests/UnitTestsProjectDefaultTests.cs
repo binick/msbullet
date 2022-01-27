@@ -37,5 +37,11 @@ namespace MsBullet.Sdk.Tests
                 .ShouldCountainProperty("IsTestProject")
                 .ShouldEvaluatedEquivalentTo(true);
         }
+
+        [Fact(DisplayName = "Should respect user package reference verions")]
+        public override void ShouldRespectUserPackageReferenceVersions()
+        {
+            base.ShouldRespectUserPackageReferenceVersions();
+        }
     }
 }

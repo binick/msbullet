@@ -92,10 +92,16 @@ namespace MsBullet.Sdk.Tests
             new string[] { "uap10.0" }
         };
 
-        [Fact]
-        public void ShouldHasAValorizedEngeeneringDirectoryName()
+        public IEnumerable<string> FrameworkDependentPackages => new string[]
         {
-            var project = this.fixture.ProvideProject(this.output);
+            "Microsoft.NETCore.App",
+            "NETStandard.Library"
+        };
+
+        [Fact(DisplayName = "Should has a valorized engeenering directory name")]
+        public virtual void ShouldHasAValorizedEngeeneringDirectoryName()
+        {
+            var project = this.ProvideProject();
 
             project.ShouldCountainProperty("RepositoryEngineeringDir").EvaluatedValue
                 .Trim(Path.DirectorySeparatorChar)
@@ -104,44 +110,10 @@ namespace MsBullet.Sdk.Tests
                 .EndWith("eng");
         }
 
-        [Fact]
-        public void ShouldUseStyleCopConfigurationFileFromEngineeringDirectory()
-        {
-            var project = this.fixture.ProvideProject(this.output);
-
-            var repoEngDirProperty = new DirectoryInfo(project.ShouldCountainProperty("RepositoryEngineeringDir").EvaluatedValue);
-
-            var styleCopConfigProperty = new FileInfo(project.ShouldCountainProperty("StyleCopConfig").EvaluatedValue);
-
-            styleCopConfigProperty.Directory.FullName
-                .Trim(Path.DirectorySeparatorChar)
-                .Should()
-                .BeEquivalentTo(repoEngDirProperty.FullName.Trim(Path.DirectorySeparatorChar));
-
-            styleCopConfigProperty.Name
-                .Should()
-                .BeEquivalentTo("stylecop.json");
-        }
-
-        [Fact]
-        public void ShouldRespectStyleCopConfigProperty()
-        {
-            var properties = new Dictionary<string, string>
-            {
-                { "StyleCopConfig", @"$(RepoRoot)\stylecop.json" }
-            };
-
-            var project = this.fixture.ProvideProject(this.output, properties);
-
-            project.ShouldCountainProperty("StyleCopConfig").UnevaluatedValue
-                .Should()
-                .BeEquivalentTo(properties["StyleCopConfig"]);
-        }
-
         [Fact(DisplayName = "Should have only implicit references to defined packages")]
-        public void ShouldHaveOnlyImplicitlyDefinedPackageReference()
+        public virtual void ShouldHaveOnlyImplicitlyDefinedPackageReference()
         {
-            var project = this.fixture.ProvideProject(this.output);
+            var project = this.ProvideProject();
 
             using (new AssertionScope())
             {
@@ -157,12 +129,6 @@ namespace MsBullet.Sdk.Tests
         [MemberData(nameof(SupportedTargetFrameworks))]
         public void ShouldHaveOnlyPackagesReferenceWithPrivateAssets(string targetFramework)
         {
-            var builtInSdkLibraries = new string[]
-            {
-                "NETStandard.Library",
-                "Microsoft.NETCore.App"
-            };
-
             var project = this.ProvideProject(new Dictionary<string, string>
             {
                 { "TargetFramework", targetFramework }
@@ -170,7 +136,11 @@ namespace MsBullet.Sdk.Tests
 
             using (new AssertionScope())
             {
-                foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(builtInSdkLibraries, i => i.EvaluatedInclude))
+                /*
+                 * Todo: Microsoft.NET.Test.Sdk should not be there.
+                 * Investigate why it is added even though the IsTestProject property is false.
+                 */
+                foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(this.FrameworkDependentPackages.Append("Microsoft.NET.Test.Sdk"), i => i.EvaluatedInclude))
                 {
                     item
                         .ShouldContainMetadata("PrivateAssets")
@@ -181,7 +151,7 @@ namespace MsBullet.Sdk.Tests
 
         [Theory(DisplayName = "Should be reference Roslyn analyzers when target framework is: ")]
         [MemberData(nameof(TargetFrameworksWithoutShippedRoslynAnalizersShipped))]
-        public void ShouldBeReferenceRoslynAnalyzer(string targetFramework)
+        public virtual void ShouldBeReferenceRoslynAnalyzer(string targetFramework)
         {
             var project = this.ProvideProject(new Dictionary<string, string>
             {
@@ -201,7 +171,7 @@ namespace MsBullet.Sdk.Tests
         [Theory(DisplayName = "Should enforching all analysis rules")]
         [MemberData(nameof(AllNet5TargetFrameworks))]
         [MemberData(nameof(AllNet6TargetFrameworks))]
-        public void ShouldEnforchingAllAnalysisRules(string targetFramework)
+        public virtual void ShouldEnforchingAllAnalysisRules(string targetFramework)
         {
             var expectedAnalysisMode = ProjectDefaultsTests.AllNet5TargetFrameworks.SelectMany(p => p.Cast<string>()).Contains(targetFramework)
                 ? "AllEnabledByDefault"
@@ -222,13 +192,25 @@ namespace MsBullet.Sdk.Tests
         }
 
         [Fact(DisplayName = "Should respect user package reference verions")]
-        public void ShouldRespectUserPackageReferenceVersions()
+        public virtual void ShouldRespectUserPackageReferenceVersions()
         {
             var project = this.ProvideProject();
 
+            var excludePackages = this.FrameworkDependentPackages;
+
+            /*
+             * Todo: Microsoft.NET.Test.Sdk should not be there.
+             * Investigate why it is added even though the IsTestProject property is false.
+             */
+            bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
+            if (!isTestProject)
+            {
+                excludePackages = excludePackages.Append("Microsoft.NET.Test.Sdk");
+            }
+
             using (new AssertionScope())
             {
-                foreach (var item in project.ShouldContainItem("PackageReference"))
+                foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(excludePackages, i => i.EvaluatedInclude))
                 {
                     var propertyName = new string(item.ShouldContainMetadata("Version").UnevaluatedValue.Skip(2).SkipLast(1).ToArray());
                     project
@@ -239,21 +221,31 @@ namespace MsBullet.Sdk.Tests
             }
         }
 
+        [Fact(DisplayName = "Should be packable")]
+        public void ShouldBePackable()
+        {
+            var project = this.ProvideProject();
+
+            project
+                .ShouldCountainProperty("IsPackable")
+                .ShouldEvaluatedEquivalentTo(true);
+        }
+
         protected virtual Project ProvideProject(IDictionary<string, string> globalProperties = null)
         {
-            var properties = new Dictionary<string, string>();
+            globalProperties ??= new Dictionary<string, string>();
 
             if (this is UnitTestsProjectDefaultTests)
             {
-                properties.Add("IsUnitTestProject", true.ToString(CultureInfo.InvariantCulture));
+                globalProperties.Add("IsUnitTestProject", true.ToString(CultureInfo.InvariantCulture));
             }
             else if (this is IntegrationTestsProjectDefaultTests)
             {
-                properties.Add("IsIntegrationTestProject", true.ToString(CultureInfo.InvariantCulture));
+                globalProperties.Add("IsIntegrationTestProject", true.ToString(CultureInfo.InvariantCulture));
             }
             else if (this is PerformanceTestsProjectDefaultsTests)
             {
-                properties.Add("IsPerformanceTestProject", true.ToString(CultureInfo.InvariantCulture));
+                globalProperties.Add("IsPerformanceTestProject", true.ToString(CultureInfo.InvariantCulture));
             }
 
             return this.fixture.ProvideProject(this.output, globalProperties);

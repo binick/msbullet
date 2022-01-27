@@ -10,11 +10,8 @@
     <!-- Opt-out features -->
     <UsingToolXUnit Condition="'$(UsingToolXUnit)' == ''">true</UsingToolXUnit>
     <UsingToolNerdbankGitVersioning Condition="'$(UsingToolNerdbankGitVersioning)' == ''">true</UsingToolNerdbankGitVersioning>
-  </PropertyGroup>
-  
-  <!-- Libs -->
-  <PropertyGroup> 
-    <StyleCopAnalyzersVersion Condition="'$(StyleCopAnalyzersVersion)' == ''">1.*</StyleCopAnalyzersVersion>
+    <UsingToolStyleCopAnalyzers Condition="'$(UsingToolStyleCopAnalyzers)' == ''">true</UsingToolStyleCopAnalyzers>
+    <UsingToolSonarAnalyzer Condition="'$(UsingToolSonarAnalyzer)' == ''">true</UsingToolSonarAnalyzer>
   </PropertyGroup>
   
 </Project>

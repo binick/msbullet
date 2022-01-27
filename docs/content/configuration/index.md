@@ -1,5 +1,3 @@
 ---
 title: Configuration
 ---
-
-# Static analyzers

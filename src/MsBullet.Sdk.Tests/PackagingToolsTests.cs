@@ -12,12 +12,12 @@ using Xunit.Abstractions;
 namespace MsBullet.Sdk.Tests
 {
     [Collection(TestProjectCollection.Name)]
-    public class NugetPackageManagerTests
+    public class PackagingToolsTests
     {
         private readonly ITestOutputHelper output;
         private readonly TestProjectFixture fixture;
 
-        public NugetPackageManagerTests(ITestOutputHelper output, TestProjectFixture fixture)
+        public PackagingToolsTests(ITestOutputHelper output, TestProjectFixture fixture)
         {
             this.output = output;
             this.fixture = fixture;
