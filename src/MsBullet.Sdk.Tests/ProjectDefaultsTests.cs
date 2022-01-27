@@ -136,10 +136,12 @@ namespace MsBullet.Sdk.Tests
 
             using (new AssertionScope())
             {
+#pragma warning disable S1135 // Track uses of "TODO" tags
                 /*
                  * Todo: Microsoft.NET.Test.Sdk should not be there.
                  * Investigate why it is added even though the IsTestProject property is false.
                  */
+#pragma warning restore S1135 // Track uses of "TODO" tags
                 foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(this.FrameworkDependentPackages.Append("Microsoft.NET.Test.Sdk"), i => i.EvaluatedInclude))
                 {
                     item
@@ -198,10 +200,12 @@ namespace MsBullet.Sdk.Tests
 
             var excludePackages = this.FrameworkDependentPackages;
 
+#pragma warning disable S1135 // Track uses of "TODO" tags
             /*
              * Todo: Microsoft.NET.Test.Sdk should not be there.
              * Investigate why it is added even though the IsTestProject property is false.
              */
+#pragma warning restore S1135 // Track uses of "TODO" tags
             bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
             if (!isTestProject)
             {

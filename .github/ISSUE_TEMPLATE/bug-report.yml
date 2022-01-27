@@ -1,0 +1,43 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+
+labels: 
+  - bug
+  - triage
+
+assignees:
+  - binick
+
+body:
+
+  - type: textarea
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      placeholder: Example: macOS Big Sur
+      value: operating system
+    validations:
+      required: true
+
+  - type: textarea
+    id: version
+    attributes:
+      label: Version
+      description: What version of MsBullet SDK are you running?
+    validations:
+      required: true
+
+  - type: markdown
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: How do you trigger this bug?
+      placeholder: Describe how we can reproduce it
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: Thank you for reporting the bug! 🙏
