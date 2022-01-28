@@ -10,7 +10,7 @@ assignees:
 
 body:
 
-  - type: markdown
+  - type: textarea
     id: description
     attributes:
       label: Description
@@ -19,17 +19,16 @@ body:
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: os
     attributes:
       label: Operating System
       description: What operating system are you using?
-      placeholder: Example: macOS Big Sur
-      value: operating system
+      placeholder: macOS Big Sur
     validations:
       required: false
 
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Version
