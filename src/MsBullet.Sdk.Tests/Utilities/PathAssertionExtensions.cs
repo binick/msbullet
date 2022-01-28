@@ -12,7 +12,7 @@ namespace FluentAssertions
         {
             var act = () =>
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(value);
+                _ = new DirectoryInfo(value);
             };
 
             act
