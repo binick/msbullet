@@ -11,17 +11,17 @@ assignees:
 
 body:
 
-  - type: textarea
+  - type: input
     id: os
     attributes:
       label: Operating System
       description: What operating system are you using?
-      placeholder: Example: macOS Big Sur
+      placeholder: macOS Big Sur
       value: operating system
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Version
@@ -29,7 +29,7 @@ body:
     validations:
       required: true
 
-  - type: markdown
+  - type: textarea
     id: repro
     attributes:
       label: Reproduction steps
