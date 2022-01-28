@@ -122,6 +122,7 @@ stages:
               PLATFORM: $(_BuildPlatform)
 
 - stage: publish
+  condition: ${{ startsWith(Build.SourceBranch, 'refs/tags/') }}
   displayName: Publish
 
   dependsOn:
@@ -130,7 +131,6 @@ stages:
   jobs:
 
   - template: templates/jobs.yml
-    condition: ${{ startsWith(Build.SourceBranch, 'refs/tags/') }}
     parameters:
       artifacts:
         download:
