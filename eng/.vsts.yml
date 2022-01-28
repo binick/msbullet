@@ -122,7 +122,7 @@ stages:
               PLATFORM: $(_BuildPlatform)
 
 - stage: publish
-  condition: ${{ startsWith(Build.SourceBranch, 'refs/tags/') }}
+  condition: ${{ startsWith($(Build.SourceBranch), 'refs/tags/') }}
   displayName: Publish
 
   dependsOn:
