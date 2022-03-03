@@ -6,6 +6,6 @@
     "dotnet": "6.0.101"
   },
   "msbuild-sdks": {
-    "MsBullet.Sdk": "0.3.0"
+    "MsBullet.Sdk": "0.4.0"
   }
 }

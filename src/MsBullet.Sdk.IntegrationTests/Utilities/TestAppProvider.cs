@@ -73,6 +73,7 @@ namespace MsBullet.Sdk.IntegrationTests.Utilities
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S3241:Methods should not return values that are never used", Justification = "This method allows you to call the system command-line interpreter which will return execution information.")]
         private static int Execute(ITestOutputHelper output, TestApp app, string command, params string[] commandArgs)
         {
             return app.UsafeExecutionScript(output, command, commandArgs);

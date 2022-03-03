@@ -1,27 +1,6 @@
-trigger:
-- main
-- refs/tags/v*
+trigger: none
 
 stages:
-
-- stage: pipeline
-  displayName: Setup pipeline
-
-  jobs:
-
-  - template: templates/jobs.yml
-    parameters:
-
-      jobs:
-
-      - job: common
-
-        pool:
-          vmImage: windows-latest
-
-        steps:
-          - pwsh: ./eng/common-variables.ps1 -RepoRoot $(Build.Repository.LocalPath) -SourceBranch $(Build.SourceBranch)
-            name: variables
 
 - stage: build
   displayName: Build
@@ -143,17 +122,16 @@ stages:
               PLATFORM: $(_BuildPlatform)
 
 - stage: publish
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   displayName: Publish
 
   dependsOn:
-  - pipeline
   - build
     
   jobs:
 
   - template: templates/jobs.yml
     parameters:
-      condition: eq(stageDependencies.pipeline.common.outputs['variables._PublicRelease'], 'true')
       artifacts:
         download:
           name: Artifacts_$(Agent.OS)_Release_x64

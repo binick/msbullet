@@ -5,7 +5,7 @@
     <XUnitVersion Condition="'$(XUnitVersion)' == ''">2.*</XUnitVersion>
     <XUnitAssertVersion Condition="'$(XUnitAssertVersion)' == ''">$(XUnitVersion)</XUnitAssertVersion>
     <XUnitAbstractionsVersion Condition="'$(XUnitAbstractionsVersion)' == ''">$(XUnitVersion)</XUnitAbstractionsVersion>
-    <XUnitRunnerVisualstudioVersion Condition="'$(XUnitRunnerVisualstudioVersion)' == ''">2.4.3</XUnitRunnerVisualstudioVersion>
+    <XUnitRunnerVisualStudioVersion Condition="'$(XUnitRunnerVisualStudioVersion)' == ''">2.4.3</XUnitRunnerVisualStudioVersion>
     <XUnitRunnerConsoleVersion Condition="'$(XUnitRunnerConsoleVersion)' == ''">2.4.1</XUnitRunnerConsoleVersion>
   </PropertyGroup>
 
