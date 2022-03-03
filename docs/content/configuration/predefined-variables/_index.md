@@ -1,5 +1,6 @@
 ---
 title: Well-known properties
+bookToc: false
 ---
 
 # Well-known properties.
