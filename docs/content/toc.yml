@@ -1,9 +1,0 @@
-- name: Getting started
-  href: getting-started/toc.yml
-  topicHref: getting-started/index.md
-- name: Artifacts
-  href: artifact/toc.yml
-  topicHref: artifact/index.md
-- name: Configuration
-  href: configuration/toc.yml
-  topicHref: configuration/index.md

@@ -1,0 +1,21 @@
+languageCode: en-us
+title: MsBullet
+theme: book
+
+# Book configuration
+disablePathToLower: true
+enableGitInfo: true
+
+publishDir: ../artifacts/tmp/docs
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+params:
+  BookSection: '*'
+  BookRepo: https://github.com/binick/msbullet
+  BookEditPath: edit/main/docs
+  BookDateFormat: "January 2, 2006"
+  BookComments: false
