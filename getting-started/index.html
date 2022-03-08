@@ -1,0 +1,139 @@
+<!doctype html><html lang=en-us dir=ltr>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="Getting started #  You can start using this SDK based on MSBuild in three steps:
+ Add global.json:  { &#34;tools&#34;: { &#34;dotnet&#34;: &#34;[dotnet sdk version]&#34; }, &#34;msbuild-sdks&#34;: { &#34;MsBullet.Sdk&#34;: &#34;[MsBullet.Sdk version]&#34; } } Add Directory.Build.props or copy this on root of your repo:  <?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?> <Project> <Import Project=&#34;Sdk.props&#34; Sdk=&#34;MsBullet.Sdk&#34; /> </Project> Add Directory.Build.targets or copy this on root of your repo:  <?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?> <Project> <Import Project=&#34;Sdk.">
+<meta name=theme-color content="#FFFFFF">
+<meta name=color-scheme content="light dark"><meta property="og:title" content="Getting started">
+<meta property="og:description" content>
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://binick.github.io/msbullet/getting-started/">
+<title>Getting started | MsBullet</title>
+<link rel=manifest href=/msbullet/manifest.json>
+<link rel=icon href=/msbullet/favicon.png type=image/x-icon>
+<link rel=stylesheet href=/msbullet/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css integrity="sha256-gsXb0jRHzuC0wqo+0Izglh+qQOH6Nw7uT4yfAuDUa18=" crossorigin=anonymous>
+<script defer src=/msbullet/flexsearch.min.js></script>
+<script defer src=/msbullet/en.search.min.6c968dfae775bdedff9cc6ce1b9c99f05f438d46da85c637c8ff2f49316c16c2.js integrity="sha256-bJaN+ud1ve3/nMbOG5yZ8F9DjUbahcY3yP8vSTFsFsI=" crossorigin=anonymous></script>
+<link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/getting-started/index.xml title=MsBullet>
+</head>
+<body dir=ltr>
+<input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control>
+<main class="container flex">
+<aside class=book-menu>
+<div class=book-menu-content>
+<nav>
+<h2 class=book-brand>
+<a class="flex align-center" href=/msbullet/><span>MsBullet</span>
+</a>
+</h2>
+<div class=book-search>
+<input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/>
+<div class="book-search-spinner hidden"></div>
+<ul id=book-search-results></ul>
+</div>
+<ul>
+<li>
+<a href=/msbullet/getting-started/ class=active>Getting started</a>
+<ul>
+</ul>
+</li>
+<li>
+<a href=/msbullet/configuration/>Configuration</a>
+<ul>
+<li>
+<a href=/msbullet/configuration/tools/>Built-in tools</a>
+</li>
+<li>
+<a href=/msbullet/configuration/conventions/>Conventions</a>
+</li>
+<li>
+<a href=/msbullet/configuration/conventions/>Conventions</a>
+<ul>
+</ul>
+</li>
+<li>
+<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+</div>
+</aside>
+<div class=book-page>
+<header class=book-header>
+<div class="flex align-center justify-between">
+<label for=menu-control>
+<img src=/msbullet/svg/menu.svg class=book-icon alt=Menu>
+</label>
+<strong>Getting started</strong>
+<label for=toc-control>
+<img src=/msbullet/svg/toc.svg class=book-icon alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id=TableOfContents></nav>
+</aside>
+</header>
+<article class=markdown><h1 id=getting-started>
+Getting started
+<a class=anchor href=#getting-started>#</a>
+</h1>
+<p>You can start using this SDK based on <a href=https://docs.microsoft.com/visualstudio/msbuild>MSBuild</a> in three steps:</p>
+<ol>
+<li>Add <code>global.json</code>:</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
+  <span style=color:#f92672>&#34;tools&#34;</span>: {
+    <span style=color:#f92672>&#34;dotnet&#34;</span>: <span style=color:#e6db74>&#34;[dotnet sdk version]&#34;</span>
+  },
+  <span style=color:#f92672>&#34;msbuild-sdks&#34;</span>: {
+    <span style=color:#f92672>&#34;MsBullet.Sdk&#34;</span>: <span style=color:#e6db74>&#34;[MsBullet.Sdk version]&#34;</span>
+  }
+}
+
+</code></pre></div><ol start=2>
+<li>Add <code>Directory.Build.props</code> or copy this on <code>root</code> of your repo:</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;Project&gt;</span>
+
+  <span style=color:#f92672>&lt;Import</span> <span style=color:#a6e22e>Project=</span><span style=color:#e6db74>&#34;Sdk.props&#34;</span> <span style=color:#a6e22e>Sdk=</span><span style=color:#e6db74>&#34;MsBullet.Sdk&#34;</span> <span style=color:#f92672>/&gt;</span>
+
+<span style=color:#f92672>&lt;/Project&gt;</span>
+</code></pre></div><ol start=3>
+<li>Add <code>Directory.Build.targets</code> or copy this on <code>root</code> of your repo:</li>
+</ol>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;Project&gt;</span>
+
+  <span style=color:#f92672>&lt;Import</span> <span style=color:#a6e22e>Project=</span><span style=color:#e6db74>&#34;Sdk.targets&#34;</span> <span style=color:#a6e22e>Sdk=</span><span style=color:#e6db74>&#34;MsBullet.Sdk&#34;</span> <span style=color:#f92672>/&gt;</span>
+
+<span style=color:#f92672>&lt;/Project&gt;</span>
+</code></pre></div></article>
+<footer class=book-footer>
+<div class="flex flex-wrap justify-between">
+<div>
+<a class="flex align-center" href=https://github.com/binick/msbullet/edit/main/docs/content/getting-started/_index.md target=_blank rel=noopener>
+<img src=/msbullet/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span>
+</a>
+</div>
+</div>
+<script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+</footer>
+<label for=menu-control class="hidden book-menu-overlay"></label>
+</div>
+<aside class=book-toc>
+<div class=book-toc-content>
+<nav id=TableOfContents></nav>
+</div>
+</aside>
+</main>
+</body>
+</html>
