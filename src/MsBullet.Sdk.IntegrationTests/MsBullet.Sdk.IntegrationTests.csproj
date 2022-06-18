@@ -113,5 +113,12 @@
     <MakeDir Directories="$(ArtifactsShippingPackagesDir)" Condition="!Exists('$(ArtifactsShippingPackagesDir)')" />
     <MakeDir Directories="$(ArtifactsNonShippingPackagesDir)" Condition="!Exists('$(ArtifactsNonShippingPackagesDir)')" />
   </Target>
+
+  <Target Name="_RemovePackageFromCache" BeforeTargets="Build">
+    <PropertyGroup>
+      <_PackagePath>$(NuGetPackageRoot)\msbullet.sdk\$(PackageVersion)</_PackagePath>
+    </PropertyGroup>
+    <RemoveDir Directories="$(_PackagePath)" Condition="Exists('$(_PackagePath)')" />
+  </Target>
   
 </Project>

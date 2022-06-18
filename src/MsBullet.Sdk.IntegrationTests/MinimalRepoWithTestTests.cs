@@ -90,6 +90,51 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
+        [InlineData("Debug", "ClassLib1.Tests", "xml")]
+        [InlineData("Release", "ClassLib1.Tests", "xml")]
+        public void MinimalRepoRunTestsShoudCollectCoverageMetrics(string configuration, string project, string fileExtension)
+        {
+            // Given
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+            var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration, "Coverage");
+            var fileName = $"{project}.{fileExtension}";
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                $"-configuration {configuration}");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.True(Directory.Exists(outDir));
+            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+        }
+
+        [Theory]
+        [InlineData("Debug", "ClassLib1.Tests", "index.html")]
+        [InlineData("Release", "ClassLib1.Tests", "index.html")]
+        [InlineData("Debug", "ClassLib1.Tests", "Summary.tex")]
+        [InlineData("Release", "ClassLib1.Tests", "Summary.tex")]
+        public void MinimalRepoRunTestsShoudGenerateCoverageReports(string configuration, string project, string fileName)
+        {
+            // Given
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+            var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration, "Reports", project, "Reports");
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                $"-configuration {configuration}");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.True(Directory.Exists(outDir));
+            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+        }
+
+        [Theory]
         [InlineData(false, "NonShippable")]
         [InlineData(true, "Shippable")]
         public void MinimalRepoPackWithoutErrors(bool isShippable, string destinationFolder)

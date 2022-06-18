@@ -4,5 +4,7 @@
   <Import Project="ProjectDefaults.targets" />
   <Import Project="Versions.targets" />
   <Import Project="Tests.targets" />
+  <Import Project="CollectCoverage.targets" />
+  <Import Project="ReportCoverage.targets" />
   
 </Project>

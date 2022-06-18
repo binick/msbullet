@@ -5,6 +5,7 @@
 
   <PropertyGroup>
     <StyleCopConfig Condition="'$(StyleCopConfig)' == ''">$(RepoRoot)eng/stylecop.json</StyleCopConfig>
+    <ShowStyleCopConfig Condition="'$(ShowStyleCopConfig)' == ''">false</ShowStyleCopConfig>
 
     <OutDirName Condition="'$(OutDirName)' == ''">$(MSBuildProjectName)</OutDirName>
 
@@ -41,7 +42,7 @@
   </Choose>
 
   <ItemGroup>
-    <AdditionalFiles Include="$(StyleCopConfig)" Link="stylecop.json" Condition="Exists('$(StyleCopConfig)')" />
+    <AdditionalFiles Include="$(StyleCopConfig)" Link="stylecop.json" Condition="Exists('$(StyleCopConfig)')" Visible="$(ShowStyleCopConfig)" />
   </ItemGroup>
 
 </Project>

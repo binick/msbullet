@@ -14,3 +14,5 @@ To disable the following tools, you will need to set their property to `false`.
 | [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning "Nerdbank.GitVersioning") | `UsingToolNerdbankGitVersioning` |
 | [StyleCop](https://github.com/DotNetAnalyzers/StyleCopAnalyzers "StyleCop") | `UsingToolStyleCopAnalyzers` |
 | [SonarSource](https://www.sonarsource.com/csharp/ "SonarSource") | `UsingToolSonarAnalyzer` |
+| [Coverlet](https://github.com/coverlet-coverage "Coverlet") | `UsingToolCoverletMsBuild` |
+| [ReportGenerator](https://github.com/danielpalme/ReportGenerator "ReportGenerator") | `UsingToolReportGenerator` |

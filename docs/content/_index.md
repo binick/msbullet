@@ -150,6 +150,8 @@ See [`DefaultVersions.props`](../../src/MsBullet.Sdk/tools/DefaultVersions.props
 
 The default path where place the configuration of [StyleCop.Analyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers) overridable by property `StyleCopConfig`.
 
+If you want to show the configuration file on project folder you can set `ShowStyleCopConfig` to `true`.
+
 <!-- 
 ## Why you need to use or promote this in your organization.
 

@@ -1,3 +1,4 @@
+baseURL: http://localhost
 languageCode: en-us
 title: MsBullet
 theme: book

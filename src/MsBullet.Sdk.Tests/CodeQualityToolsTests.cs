@@ -18,8 +18,8 @@ namespace MsBullet.Sdk.Tests
             this.fixture = fixture;
         }
 
-        [Fact(DisplayName = "Should be use SonarAnalyzer as default tool")]
-        public void ShouldBeUseStyleCopAsDefaultTool()
+        [Fact(DisplayName = "Should be use Sonar as default tool")]
+        public void ShouldBeUseSonarAsDefaultTool()
         {
             var project = this.fixture.ProvideProject(this.output);
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <_GetCollectCoverageCallbackTarget Condition="'$(CollectCoverageToolName)' == 'Coverlet'">GenerateCoverageResultAfterTest</_GetCollectCoverageCallbackTarget>
+  </PropertyGroup>
+
+  <Target Name="CollectCoverage" AfterTargets="$(_GetCollectCoverageCallbackTarget)" />
+
+  <!-- Import specialized targets files of supported code coverage tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(CollectCoverageToolName)\$(CollectCoverageToolName).targets" Condition="'$(CollectCoverageToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(CollectCoverageToolName)\$(CollectCoverageToolName).targets')"/>
+
+</Project>

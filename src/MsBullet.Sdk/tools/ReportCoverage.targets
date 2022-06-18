@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Target Name="ReportCoverage" DependsOnTargets="GenerateCoverageReport" AfterTargets="CollectCoverage" />
+
+  <!-- Import specialized targets files of supported code coverage report generator tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(ReportCoverageToolName)\$(ReportCoverageToolName).targets" Condition="'$(ReportCoverageToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(ReportCoverageToolName)\$(ReportCoverageToolName).targets')"/>
+
+</Project>

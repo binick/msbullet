@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <CollectCoverageToolName Condition="'$(UsingToolCoverlet)' == 'true'">Coverlet</CollectCoverageToolName>
+  </PropertyGroup>
+
+  <!-- Import specialized props files of supported code coverage tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(CollectCoverageToolName)\$(CollectCoverageToolName).props" Condition="'$(CollectCoverageToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(CollectCoverageToolName)\$(CollectCoverageToolName).props')"/>
+
+</Project>

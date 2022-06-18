@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <CoverletMSBuildVersion Condition="'$(CoverletMSBuildVersion)' == ''">3.*</CoverletMSBuildVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_CoverletOutputFormat Condition="'$(CoverletOutputFormat)' == ''">cobertura</_CoverletOutputFormat>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CoverletOutputFormat>$(_CoverletOutputFormat)</CoverletOutputFormat>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <_CoverletOutputFormat Condition="'$(CoverletOutputFormat)' == ''">cobertura</_CoverletOutputFormat>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>$(_CoverletOutputFormat)</CoverletOutputFormat>
+    <CoverletOutput>$(ArtifactsCoverageDir)\$(MSBuildProjectName).xml</CoverletOutput>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildVersion)" IsImplicitlyDefined="true" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!--
+    Workaround: there seems to be a deep connection with https://github.com/microsoft/vstest,
+    so to run `InstrumentModules` at the moment we call `VSTest` assuming it is present
+    as a project dependency.
+  -->
+  <Target Name="CollectCoverage" DependsOnTargets="VSTest" AfterTargets="RunTests" />
+
+</Project>
