@@ -6,5 +6,7 @@
   <Import Project="ProjectDefaults.props" />
   <Import Project="Versions.props" />
   <Import Project="Tests.props" />
+  <Import Project="CollectCoverage.props" />
+  <Import Project="ReportCoverage.props" />
 
 </Project>

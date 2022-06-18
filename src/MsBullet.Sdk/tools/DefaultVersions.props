@@ -10,6 +10,8 @@
     <!-- Opt-out features -->
     <UsingToolXUnit Condition="'$(UsingToolXUnit)' == ''">true</UsingToolXUnit>
     <UsingToolNerdbankGitVersioning Condition="'$(UsingToolNerdbankGitVersioning)' == ''">true</UsingToolNerdbankGitVersioning>
+    <UsingToolCoverlet Condition="'$(UsingToolCoverlet)' == ''">true</UsingToolCoverlet>
+    <UsingToolReportGenerator Condition="'$(UsingToolReportGenerator)' == ''">true</UsingToolReportGenerator>
     <UsingToolStyleCopAnalyzers Condition="'$(UsingToolStyleCopAnalyzers)' == ''">true</UsingToolStyleCopAnalyzers>
     <UsingToolSonarAnalyzer Condition="'$(UsingToolSonarAnalyzer)' == ''">true</UsingToolSonarAnalyzer>
   </PropertyGroup>

@@ -23,9 +23,12 @@ For all other variables mentioned that are not in the table above, you can find 
 | `IntermediateOutputPath` | Identifying folder where artifacts are placed | When `$(PlatformName)` is equal to `AnyCPU` `$(BaseIntermediateOutputPath)/$(Configuration)/`, otherwise `$(BaseIntermediateOutputPath)/$(PlatformName)/$(Configuration)/` | ❌ | |
 | `UsingToolXUnit` | Used to opt-out built-in features.<br/>By default we use [xUnit](https://xunit.github.io/) as test framework, that're represents the standart de-facto. | true | ✔️ | |
 | `UsingToolNerdbankGitVersioning` | Used to opt-out built-in features.<br/>By default we use [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning) as semantic versioning tool. | true | ✔️ | |
+| `UsingToolCoverletMsBuild` | Used to opt-out built-in features.<br/>By default we use [Coverlet](https://github.com/coverlet-coverage) to collect code coverage metrics. | true | ✔️ | |
+| `UsingToolReportGenerator` | Used to opt-out built-in features.<br/>By default we use [ReportGenerator](https://github.com/danielpalme/ReportGenerator) to generate code coverage reports. | true | ✔️ | |
 | `UsingToolStyleCopAnalyzers` | Used to opt-out built-in features.<br/>By default we use [StyleCopAnalyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers) to enforce a set of style and consistency code rules. | true | ✔️ | |
 | `UsingToolSonarAnalyzer` | Used to opt-out built-in features.<br/>By default we use [SonarSource](https://www.sonarsource.com/csharp/) as a well-established code quality standards. | true | ✔️ | |
 | `StyleCopConfig` | Used to customize the default rules of [StyleCopAnalyzers](https://github.com/DotNetAnalyzers/StyleCopAnalyzers) through the [`stylecop.json`](https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/Configuration.md). | `$(RepoRoot)/eng/stylecop.json` | ✔️ | |
+| `ShowStyleCopConfig` | Used to display the configuration file set through `StyleCopConfig` into the project directory on **Visual Studio** | `false` | ✔️ | |
 | `IsUnitTestProject` | Identifying unit test project.<br/> A project is identified as unit test project when your's name end with:<br/><ul><li>`.Tests`</li><li>`.UnitTests`</li></ul> | false | ✔️ | |
 | `IsIntegrationTestProject` | Identifying integration test project.<br/> A project is identified as integration test project when your's name end with: `.IntegrationTests` | false | ✔️ | |
 | `IsPerformanceTestProject` | Identifying performance test project.<br/> A project is identified as performance test project when your's name end with: `.PerformanceTests` | false | ✔️ | |
@@ -61,6 +64,8 @@ For all other variables mentioned that are not in the table above, you can find 
 | `ExcludeFromSourceBuild` |  |  | ❌ |  |
 | `VersionToolName` |  |  | ❌ |  |
 | `NerdbankGitVersioningVersion` | Specifies the version of [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning) | `3.*` | ✔️ |  |
+| `CoverletMSBuildVersion` | Specifies the version of [Coverlet](https://github.com/coverlet-coverage) | `3.*` | ✔️ |  |
+| `ReportGeneratorVersion` | Specifies the version of [ReportGenerator](https://github.com/danielpalme/ReportGenerator) | `5.*` | ✔️ |  |
 | `XUnitVersion` | Specifies the version of [xUnit](https://xunit.net/) | `2.*` | ✔️ | Available only when `$(IsTestProject)` is equal to `true` |
 | `XUnitAssertVersion` | Specifies the version of [xUnit](https://xunit.net/) | `$(XUnitVersion)` | ✔️ | Available only when `$(IsTestProject)` is equal to `true` |
 | `XUnitAbstractionsVersion` | Specifies the version of [xUnit](https://xunit.net/) | `$(XUnitVersion)` | ✔️ | Available only when `$(IsTestProject)` is equal to `true` |

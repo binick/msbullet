@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using FluentAssertions.Execution;
+using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Xunit;
 using Xunit.Abstractions;
@@ -81,6 +82,16 @@ namespace MsBullet.Sdk.Tests
                     .Condition
                     .Should()
                     .Be("Exists('$(StyleCopConfig)')");
+
+                andWitchConstraint
+                    .Which
+                    .DirectMetadata
+                    .Should()
+                    .ContainSingle(c => c.Name.Equals("Visible"))
+                    .Which
+                    .UnevaluatedValue
+                    .Should()
+                    .Be("$(ShowStyleCopConfig)");
             }
         }
     }

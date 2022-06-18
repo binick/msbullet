@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <ReportCoverageToolName Condition="'$(UsingToolReportGenerator)' == 'true'">ReportGenerator</ReportCoverageToolName>
+  </PropertyGroup>
+
+  <!-- Import specialized props files of supported code coverage report generator tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(ReportCoverageToolName)\$(ReportCoverageToolName).props" Condition="'$(ReportCoverageToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(ReportCoverageToolName)\$(ReportCoverageToolName).props')"/>
+
+</Project>
