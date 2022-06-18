@@ -2,7 +2,9 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="Coming soon 😐">
+<meta name=description content="Recommended conventions. #  File Naming. #  Filenames should be all lowercase, for instance: build.cmd or nuget.config. Only exceptions are for files that need to be cased a particular way for an existing set of tools to read them (Example: Directory.Build.props which MSBuild expects exactly that case on Linux).
+Filenames with multiple words should use kebab-casing like common-variables.ps1.
+MSBuild based targets and props files for a particular library should match the exact casing of the library package they belong to, like Microsoft.">
 <meta name=theme-color content="#FFFFFF">
 <meta name=color-scheme content="light dark"><meta property="og:title" content="Conventions">
 <meta property="og:description" content>
@@ -13,7 +15,7 @@
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css integrity="sha256-gsXb0jRHzuC0wqo+0Izglh+qQOH6Nw7uT4yfAuDUa18=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.6c968dfae775bdedff9cc6ce1b9c99f05f438d46da85c637c8ff2f49316c16c2.js integrity="sha256-bJaN+ud1ve3/nMbOG5yZ8F9DjUbahcY3yP8vSTFsFsI=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.fba3da58b6f19ea1d79d7180117eecab6922afe868b55fc2b9eda8a4eb36383f.js integrity="sha256-+6PaWLbxnqHXnXGAEX7sq2kir+hotV/Cue2opOs2OD8=" crossorigin=anonymous></script>
 <link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/configuration/conventions/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
@@ -45,9 +47,6 @@
 <a href=/msbullet/configuration/tools/>Built-in tools</a>
 </li>
 <li>
-<a href=/msbullet/configuration/conventions/>Conventions</a>
-</li>
-<li>
 <a href=/msbullet/configuration/conventions/ class=active>Conventions</a>
 <ul>
 </ul>
@@ -76,10 +75,37 @@
 </label>
 </div>
 <aside class="hidden clearfix">
-<nav id=TableOfContents></nav>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#file-naming>File Naming.</a></li>
+<li><a href=#dependent-packages-version>Dependent Packages Version.</a></li>
+</ul>
+</li>
+</ul>
+</nav>
 </aside>
 </header>
-<article class=markdown><p>Coming soon 😐</p>
+<article class=markdown><h1 id=recommended-conventions>
+Recommended conventions.
+<a class=anchor href=#recommended-conventions>#</a>
+</h1>
+<h3 id=file-naming>
+File Naming.
+<a class=anchor href=#file-naming>#</a>
+</h3>
+<p>Filenames should be all lowercase, for instance: <code>build.cmd</code> or <code>nuget.config</code>. Only exceptions are for files that need to be cased a particular way for an existing set of tools to read them (Example: <code>Directory.Build.props</code> which <em>MSBuild</em> expects exactly that case on Linux).</p>
+<p>Filenames with multiple words should use kebab-casing like <code>common-variables.ps1</code>.</p>
+<p><em>MSBuild</em> based targets and props files for a particular library should match the exact casing of the library package they belong to, like <code>Microsoft.Common.targets</code>.</p>
+<h3 id=dependent-packages-version>
+Dependent Packages Version.
+<a class=anchor href=#dependent-packages-version>#</a>
+</h3>
+<p>Package versions are stored in <em>MSBuild</em> properties in the <code>eng\Versions.props</code> file, like <a href=https://github.com/binick/msbullet/blob/main/eng/Versions.props>this</a>. Use these properties to include the correct version of the package. New properties will be included as needed.</p>
+<p>The property version should be named with this pattern <code>{PackageName}Version</code> where <code>PackageName</code> shouldn&rsquo;t have any punctuation characters, for example for <code>Microsoft.NET.Test.Sdk</code> the property version will be <code>MicrosoftNETTestSdkVersion</code>.</p>
+<p>If your project depends on a package that is also part of the .NET SDK used by <strong>MsBullet</strong> (check <code>global.json</code> to see which version is currently in use) the project should use the version of the package available in the SDK. Otherwise, the latest stable version of the package should be used. For instance, the <code>Microsoft.SourceLink.GitHub</code> (version 1.0.0) is present on the .NET SDK and the version is exposed in <strong>MsBullet</strong> through the <code>$(MicrosoftSourceLinkGitHubVersion)</code> property in <a href=https://github.com/binick/msbullet/blob/main/eng/Versions.props><code>eng\Versions.props</code></a>. Therefore, to include <code>Newtonsoft.Json</code> in your project do the following:</p>
+<p><code>&lt;PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" /></code></p>
 </article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
@@ -96,7 +122,16 @@
 </div>
 <aside class=book-toc>
 <div class=book-toc-content>
-<nav id=TableOfContents></nav>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#file-naming>File Naming.</a></li>
+<li><a href=#dependent-packages-version>Dependent Packages Version.</a></li>
+</ul>
+</li>
+</ul>
+</nav>
 </div>
 </aside>
 </main>

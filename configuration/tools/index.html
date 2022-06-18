@@ -4,12 +4,12 @@
 <meta name=viewport content="width=device-width,initial-scale=1">
 <meta name=description content="Opt-out tools. #  Some tools supplied with the MsBullet SDK can be excluded by setting specific variables.
 To disable the following tools, you will need to set their property to false.
-   Tool Property     xUnit UsingToolXUnit   Nerdbank.GitVersioning UsingToolNerdbankGitVersioning   StyleCop UsingToolStyleCopAnalyzers   SonarSource UsingToolSonarAnalyzer    ">
+   Tool Property     xUnit UsingToolXUnit   Nerdbank.GitVersioning UsingToolNerdbankGitVersioning   StyleCop UsingToolStyleCopAnalyzers   SonarSource UsingToolSonarAnalyzer   Coverlet UsingToolCoverletMsBuild   ReportGenerator UsingToolReportGenerator    ">
 <meta name=theme-color content="#FFFFFF">
 <meta name=color-scheme content="light dark"><meta property="og:title" content="Built-in tools">
 <meta property="og:description" content="Opt-out tools. #  Some tools supplied with the MsBullet SDK can be excluded by setting specific variables.
 To disable the following tools, you will need to set their property to false.
-   Tool Property     xUnit UsingToolXUnit   Nerdbank.GitVersioning UsingToolNerdbankGitVersioning   StyleCop UsingToolStyleCopAnalyzers   SonarSource UsingToolSonarAnalyzer    ">
+   Tool Property     xUnit UsingToolXUnit   Nerdbank.GitVersioning UsingToolNerdbankGitVersioning   StyleCop UsingToolStyleCopAnalyzers   SonarSource UsingToolSonarAnalyzer   Coverlet UsingToolCoverletMsBuild   ReportGenerator UsingToolReportGenerator    ">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://binick.github.io/msbullet/configuration/tools/"><meta property="article:section" content="configuration">
 <title>Built-in tools | MsBullet</title>
@@ -17,7 +17,7 @@ To disable the following tools, you will need to set their property to false.
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css integrity="sha256-gsXb0jRHzuC0wqo+0Izglh+qQOH6Nw7uT4yfAuDUa18=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.6c968dfae775bdedff9cc6ce1b9c99f05f438d46da85c637c8ff2f49316c16c2.js integrity="sha256-bJaN+ud1ve3/nMbOG5yZ8F9DjUbahcY3yP8vSTFsFsI=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.fba3da58b6f19ea1d79d7180117eecab6922afe868b55fc2b9eda8a4eb36383f.js integrity="sha256-+6PaWLbxnqHXnXGAEX7sq2kir+hotV/Cue2opOs2OD8=" crossorigin=anonymous></script>
 </head>
 <body dir=ltr>
 <input type=checkbox class="hidden toggle" id=menu-control>
@@ -46,9 +46,6 @@ To disable the following tools, you will need to set their property to false.
 <ul>
 <li>
 <a href=/msbullet/configuration/tools/ class=active>Built-in tools</a>
-</li>
-<li>
-<a href=/msbullet/configuration/conventions/>Conventions</a>
 </li>
 <li>
 <a href=/msbullet/configuration/conventions/>Conventions</a>
@@ -111,6 +108,14 @@ Opt-out tools.
 <tr>
 <td><a href=https://www.sonarsource.com/csharp/ title=SonarSource>SonarSource</a></td>
 <td><code>UsingToolSonarAnalyzer</code></td>
+</tr>
+<tr>
+<td><a href=https://github.com/coverlet-coverage title=Coverlet>Coverlet</a></td>
+<td><code>UsingToolCoverletMsBuild</code></td>
+</tr>
+<tr>
+<td><a href=https://github.com/danielpalme/ReportGenerator title=ReportGenerator>ReportGenerator</a></td>
+<td><code>UsingToolReportGenerator</code></td>
 </tr>
 </tbody>
 </table>

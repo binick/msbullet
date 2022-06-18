@@ -15,7 +15,7 @@ For all other variables mentioned that are not in the table above, you can find 
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css integrity="sha256-gsXb0jRHzuC0wqo+0Izglh+qQOH6Nw7uT4yfAuDUa18=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.6c968dfae775bdedff9cc6ce1b9c99f05f438d46da85c637c8ff2f49316c16c2.js integrity="sha256-bJaN+ud1ve3/nMbOG5yZ8F9DjUbahcY3yP8vSTFsFsI=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.fba3da58b6f19ea1d79d7180117eecab6922afe868b55fc2b9eda8a4eb36383f.js integrity="sha256-+6PaWLbxnqHXnXGAEX7sq2kir+hotV/Cue2opOs2OD8=" crossorigin=anonymous></script>
 <link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/configuration/predefined-variables/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
@@ -45,9 +45,6 @@ For all other variables mentioned that are not in the table above, you can find 
 <ul>
 <li>
 <a href=/msbullet/configuration/tools/>Built-in tools</a>
-</li>
-<li>
-<a href=/msbullet/configuration/conventions/>Conventions</a>
 </li>
 <li>
 <a href=/msbullet/configuration/conventions/>Conventions</a>
@@ -179,6 +176,20 @@ Well-known properties.
 <td></td>
 </tr>
 <tr>
+<td><code>UsingToolCoverletMsBuild</code></td>
+<td>Used to opt-out built-in features.<br>By default we use <a href=https://github.com/coverlet-coverage>Coverlet</a> to collect code coverage metrics.</td>
+<td>true</td>
+<td style=text-align:center>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>UsingToolReportGenerator</code></td>
+<td>Used to opt-out built-in features.<br>By default we use <a href=https://github.com/danielpalme/ReportGenerator>ReportGenerator</a> to generate code coverage reports.</td>
+<td>true</td>
+<td style=text-align:center>✔️</td>
+<td></td>
+</tr>
+<tr>
 <td><code>UsingToolStyleCopAnalyzers</code></td>
 <td>Used to opt-out built-in features.<br>By default we use <a href=https://github.com/DotNetAnalyzers/StyleCopAnalyzers>StyleCopAnalyzers</a> to enforce a set of style and consistency code rules.</td>
 <td>true</td>
@@ -196,6 +207,13 @@ Well-known properties.
 <td><code>StyleCopConfig</code></td>
 <td>Used to customize the default rules of <a href=https://github.com/DotNetAnalyzers/StyleCopAnalyzers>StyleCopAnalyzers</a> through the <a href=https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/Configuration.md><code>stylecop.json</code></a>.</td>
 <td><code>$(RepoRoot)/eng/stylecop.json</code></td>
+<td style=text-align:center>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ShowStyleCopConfig</code></td>
+<td>Used to display the configuration file set through <code>StyleCopConfig</code> into the project directory on <strong>Visual Studio</strong></td>
+<td><code>false</code></td>
 <td style=text-align:center>✔️</td>
 <td></td>
 </tr>
@@ -441,6 +459,20 @@ Well-known properties.
 <td><code>NerdbankGitVersioningVersion</code></td>
 <td>Specifies the version of <a href=https://github.com/dotnet/Nerdbank.GitVersioning>Nerdbank.GitVersioning</a></td>
 <td><code>3.*</code></td>
+<td style=text-align:center>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>CoverletMSBuildVersion</code></td>
+<td>Specifies the version of <a href=https://github.com/coverlet-coverage>Coverlet</a></td>
+<td><code>3.*</code></td>
+<td style=text-align:center>✔️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ReportGeneratorVersion</code></td>
+<td>Specifies the version of <a href=https://github.com/danielpalme/ReportGenerator>ReportGenerator</a></td>
+<td><code>5.*</code></td>
 <td style=text-align:center>✔️</td>
 <td></td>
 </tr>
