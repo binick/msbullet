@@ -15,12 +15,20 @@
     <PackageReference Include="ReportGenerator" Version="$(ReportGeneratorVersion)" IsImplicitlyDefined="true" PrivateAssets="all" />
   </ItemGroup>
 
-  <Target Name="GenerateCoverageReport">
+  <Target Name="_GenerateCoverageReport">
     <ItemGroup>
       <CoverageFiles Include="$(ArtifactsCoverageDir)\$(MSBuildProjectName).xml" />
     </ItemGroup>
 
     <ReportGenerator ProjectDirectory="$(MSBuildProjectDirectory)" ReportFiles="@(CoverageFiles)" TargetDirectory="$(ArtifactsReportDir)\$(MSBuildProjectName)\Reports" ReportTypes="$(ReportTypes)" HistoryDirectory="$(ArtifactsReportDir)\$(MSBuildProjectName)\History" VerbosityLevel="$(VerbosityLevel)" />
+  </Target>
+
+  <Target Name="_GenerateCoverageReportSummary" DependsOnTargets="_GenerateCoverageReport" >
+    <ItemGroup>
+      <CoverageFiles Include="$(ArtifactsCoverageDir)\*.xml" />
+    </ItemGroup>
+
+    <ReportGenerator ProjectDirectory="$(RepositoryEngineeringDir)" ReportFiles="@(CoverageFiles)" TargetDirectory="$(ArtifactsTestResultsDir)\Reports\Summary" ReportTypes="$(ReportTypes)" VerbosityLevel="$(VerbosityLevel)" />
   </Target>
 
 </Project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="SummaryReportCoverage" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <PackageReference Include="ReportGenerator" Version="$(ReportGeneratorVersion)" IsImplicitlyDefined="true" PrivateAssets="all" Publish="true" />
+  </ItemGroup>
+  
+  <UsingTask TaskName="ReportGenerator" AssemblyFile="$(NuGetPackageRoot)reportgenerator\$(ReportGeneratorVersion)\tools\$(TargetFramework)\ReportGenerator.MSBuild.dll" />
+
+  <Target Name="SummaryReportCoverage" DependsOnTargets="Restore">
+    <ItemGroup>
+      <CoverageFiles Include="$(ArtifactsCoverageDir)\*.xml" />
+    </ItemGroup>
+
+    <ReportGenerator ProjectDirectory="$(MSBuildProjectDirectory)" ReportFiles="@(CoverageFiles)" TargetDirectory="$(ArtifactsTestResultsDir)\Reports\Summary" ReportTypes="Cobertura" />
+  </Target>
+
+</Project>

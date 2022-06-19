@@ -75,3 +75,4 @@ For all other variables mentioned that are not in the table above, you can find 
 | `TestRuntime` |  |  | ❌ |  |
 | `TestArchitectures` |  |  | ✔️ |  |
 | `GitRepoRoot` | Used by [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning) to identify the `.git` folder | `$(RepoRoot)` | ✔️ |  |
+| `GenerateCoverageReportSummary` | Specifies if produce code coverage reports summary | `true` | ✔️ | Available only when `$(IsTestProject)` is equal to `true` |
