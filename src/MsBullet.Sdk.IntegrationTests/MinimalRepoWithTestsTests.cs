@@ -8,12 +8,12 @@ using Xunit.Abstractions;
 namespace MsBullet.Sdk.IntegrationTests
 {
     [Collection(TestProjectCollection.Name)]
-    public class MinimalRepoWithTestTests
+    public class MinimalRepoWithTestsTests
     {
         private readonly ITestOutputHelper output;
         private readonly TestProjectFixture fixture;
 
-        public MinimalRepoWithTestTests(ITestOutputHelper output, TestProjectFixture fixture)
+        public MinimalRepoWithTestsTests(ITestOutputHelper output, TestProjectFixture fixture)
         {
             this.output = output;
             this.fixture = fixture;
