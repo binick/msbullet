@@ -26,9 +26,14 @@
   <Target Name="_GenerateCoverageReportSummary" DependsOnTargets="_GenerateCoverageReport" >
     <ItemGroup>
       <CoverageFiles Include="$(ArtifactsCoverageDir)\*.xml" />
+      <_InnerSummaryReportTypes Include="$(ReportTypes);Cobertura" />
     </ItemGroup>
 
-    <ReportGenerator ProjectDirectory="$(RepositoryEngineeringDir)" ReportFiles="@(CoverageFiles)" TargetDirectory="$(ArtifactsTestResultsDir)\Reports\Summary" ReportTypes="$(ReportTypes)" VerbosityLevel="$(VerbosityLevel)" />
+    <PropertyGroup>
+      <_SummaryReportTypes>@(_InnerSummaryReportTypes->Distinct())</_SummaryReportTypes>
+    </PropertyGroup>
+
+    <ReportGenerator ProjectDirectory="$(RepositoryEngineeringDir)" ReportFiles="@(CoverageFiles)" TargetDirectory="$(ArtifactsTestResultsDir)\Reports\Summary" ReportTypes="$(_SummaryReportTypes)" VerbosityLevel="$(VerbosityLevel)" />
   </Target>
 
 </Project>

@@ -16,6 +16,7 @@ stages:
           manifests: true       
       enablePublishUsingPipelines: true
       enablePublishTestResults: true
+      enablePublishCodeCoverageResults: true
       
       jobs:
         
