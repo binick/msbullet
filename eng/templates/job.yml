@@ -19,6 +19,7 @@ parameters:
   enablePublishBuildArtifacts: false
   enablePublishBuildAssets: false
   enablePublishTestResults: false
+  enablePublishCodeCoverageResults: false
   enablePublishUsingPipelines: false
   useBuildManifest: false
   mergeTestResults: false
@@ -181,6 +182,16 @@ jobs:
         mergeTestResults: ${{ parameters.mergeTestResults }}
       continueOnError: true
       condition: always()
+
+  - ${{ if eq(parameters.enablePublishCodeCoverageResults, 'true') }}:
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish Code Coverage Results
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)/artifacts/TestResults/$(_BuildConfig)/Reports/Summary/Cobertura.xml'
+      continueOnError: true
+      condition: always()
+
     
   - ${{ if and(eq(parameters.enablePublishBuildAssets, true), ne(parameters.enablePublishUsingPipelines, 'true'), notin(variables['Build.Reason'], 'PullRequest')) }}:
     - task: CopyFiles@2

@@ -20,26 +20,37 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Theory]
-        [InlineData("Debug", "index.html")]
-        [InlineData("Release", "index.html")]
-        [InlineData("Debug", "Summary.tex")]
-        [InlineData("Release", "Summary.tex")]
-        public void MinimalRepoRunTestsShoudGenerateCoverageReportSummary(string configuration, string fileName)
+        [InlineData("Debug", "", "index.html", "Summary.tex", "Cobertura.xml")]
+        [InlineData("Release", "", "index.html", "Summary.tex", "Cobertura.xml")]
+        [InlineData("Debug", "Html", "index.html", "Cobertura.xml")]
+        [InlineData("Release", "Html", "index.html", "Cobertura.xml")]
+        public void MinimalRepoRunTestsShoudGenerateCoverageReportSummary(string configuration, string reportTypes, params string[] reports)
         {
             // Given
             TestApp app = this.fixture.ProvideTestApp("MultipleProjectsWithTests").Create(this.output);
             var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration, "Reports", "Summary");
+            var args = new[]
+            {
+                "-test",
+                $"-configuration {configuration}"
+            };
+            if (!string.IsNullOrWhiteSpace(reportTypes))
+            {
+                args = args.Append($"/p:ReportTypes=\"{reportTypes}\"").ToArray();
+            }
 
             // When
-            int exitCode = app.ExecuteBuild(
-                this.output,
-                "-test",
-                $"-configuration {configuration}");
+            int exitCode = app.ExecuteBuild(this.output, args);
 
             // Then
             Assert.Equal(0, exitCode);
             Assert.True(Directory.Exists(outDir));
-            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+
+            var outDirPahts = Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path));
+            foreach (var report in reports)
+            {
+                Assert.Contains(report, outDirPahts);
+            }
         }
     }
 }
