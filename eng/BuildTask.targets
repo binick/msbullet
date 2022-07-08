@@ -2,14 +2,19 @@
   <PropertyGroup>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IsPackable>true</IsPackable>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <!-- Build Tasks should not include any dependencies -->
     <SuppressDependenciesWhenPacking Condition="'$(SuppressDependenciesWhenPacking)' == ''">true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
+    <ProjectUrl>https://binick.github.io/msbullet</ProjectUrl> 
+    <RepositoryUrl>https://github.com/binick/msbullet.git</RepositoryUrl> 
+    <RepositoryType>git</RepositoryType> 
   </PropertyGroup>
 
   <!--
@@ -24,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="$(RepoRoot)README.md" PackagePath="" Pack="true" />
     <None Include="$(RepoRoot)LICENSE" PackagePath="" Pack="true"/>
     <None Include="$(RepoRoot)assets/icon.png" PackagePath="$(PackageIcon)" Pack="true"/>
   </ItemGroup>
