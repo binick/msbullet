@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="$(RepoRoot)README.md" PackagePath="" Pack="true" />
+    <None Include="$(RepoRoot)assets/README.md" PackagePath="" Pack="true" />
     <None Include="$(RepoRoot)LICENSE" PackagePath="" Pack="true"/>
     <None Include="$(RepoRoot)assets/icon.png" PackagePath="$(PackageIcon)" Pack="true"/>
   </ItemGroup>

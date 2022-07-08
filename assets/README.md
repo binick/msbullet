@@ -1,9 +1,3 @@
-![Logo](/assets/icon.png)
-
-# MsBullet SDK 
-
-The project is inspired to [Arcade](https://github.com/dotnet/arcade) and your intent is that to avoid the tedious configuration of tools related to development cycle such as testing, versioning and other best practices.
-
 ## How to use
 
 You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild) in three steps:
@@ -12,9 +6,6 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us
 
 ``` json
 {
-  "tools": {
-    "dotnet": "[dotnet sdk version]"
-  },
   "msbuild-sdks": {
     "MsBullet.Sdk": "[MsBullet.Sdk version]"
   }
