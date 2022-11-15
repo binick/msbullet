@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <CodeConventionsToolName Condition="'$(UsingToolStyleCopAnalyzers)' == 'true'">StyleCopAnalyzers</CodeConventionsToolName>
+  </PropertyGroup>
+
+  <!-- Import specialized props files of supported code coverage tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(CodeConventionsToolName)\$(CodeConventionsToolName).props" Condition="'$(CodeConventionsToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(CodeConventionsToolName)\$(CodeConventionsToolName).props')"/>
+
+</Project>

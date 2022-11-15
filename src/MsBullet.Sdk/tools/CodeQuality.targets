@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <CodeQualityToolName Condition="'$(UsingToolSonarAnalyzer)' == 'true'">SonarAnalyzer</CodeQualityToolName>
+  </PropertyGroup>
+
+  <!-- Import specialized props files of supported code coverage tool -->
+  <Import Project="$(MSBuildThisFileDirectory)$(CodeQualityToolName)\$(CodeQualityToolName).targets" Condition="'$(CodeQualityToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(CodeQualityToolName)\$(CodeQualityToolName).targets')"/>
+
+</Project>

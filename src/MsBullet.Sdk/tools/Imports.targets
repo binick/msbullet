@@ -4,6 +4,8 @@
   <Import Project="ProjectDefaults.targets" />
   <Import Project="Versions.targets" />
   <Import Project="Tests.targets" />
+  <Import Project="CodeConventions.targets" />
+  <Import Project="CodeQuality.targets" />
   <Import Project="CollectCoverage.targets" />
   <Import Project="ReportCoverage.targets" />
   

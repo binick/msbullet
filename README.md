@@ -52,3 +52,13 @@ The steps below are optionally, but recommended.
 4. Copy to `/eng/common/tools.sh` this contents [tools.sh](eng/common/tools.sh)
 5. Copy to `build.cmd` content [build.cmd](build.cmd)
 6. Copy to `build.sh` content [build.sh](build.sh)
+
+## Contributing
+
+**NET 7.0 workaround**  
+As reported in the problem [#16400 [net7.0-rc2] Creating a cross-target library with net6.0-mac fails with an obscure error](https://github.com/xamarin/xamarin-macios/issues/16400) at the moment there is a problem that makes it mandatory to install the following workloads:
+
+ - `dotnet workload install ios`
+ - `dotnet workload install maccatalyst`
+ - `dotnet workload install macos`
+ - `dotnet workload install tvos`

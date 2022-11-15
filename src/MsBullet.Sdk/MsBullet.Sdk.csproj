@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net472;$(TargetFrameworkForNetSdk)</TargetFrameworks>
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ExcludeFromSourceBuild>false</ExcludeFromSourceBuild>
@@ -37,7 +37,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="tools\CodeQuality.props">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\CodeQuality.targets">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\CodeConventions.targets">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\CodeConventions.props">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
     <None Update="tools\Nerdbank.GitVersioning\Nerdbank.GitVersioning.props">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\SonarAnalyzer\SonarAnalyzer.props">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\SonarAnalyzer\SonarAnalyzer.targets">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\StyleCopAnalyzers\StyleCopAnalyzers.targets">
+      <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <None Update="tools\StyleCopAnalyzers\StyleCopAnalyzers.props">
       <PackagePath>tools/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
     </None>
   </ItemGroup>

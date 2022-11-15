@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="$(SonarAnalyzerCSharpVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
+</Project>

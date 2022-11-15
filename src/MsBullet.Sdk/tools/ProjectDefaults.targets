@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
+  <PropertyGroup Condition="'$(VersionlessImplicitFrameworkDefine)' == 'NET'">
+    <EnableNETAnalyzers Condition="'$(EnableNETAnalyzers)' == ''">true</EnableNETAnalyzers>
+    <EnableSingleFileAnalyzer Condition="'$(EnableSingleFileAnalyzer)' == ''">true</EnableSingleFileAnalyzer>
+    <EnableTrimAnalyzer Condition="'$(EnableTrimAnalyzer)' == ''">true</EnableTrimAnalyzer>
+    <EnableAotAnalyzer Condition="'$(EnableAotAnalyzer)' == ''">true</EnableAotAnalyzer>
+    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == ''">true</EnforceCodeStyleInBuild>
+    <AnalysisMode Condition="'$(ImplicitFrameworkDefine)' == 'NET5_0' and '$(AnalysisMode)' == ''">AllEnabledByDefault</AnalysisMode>
+    <AnalysisMode Condition="'$(AnalysisMode)' == ''">All</AnalysisMode>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(VersionlessImplicitFrameworkDefine)' != 'NET'">
+    <!-- Suppress latest NuGet package update warning -->
+    <_SkipUpgradeNetAnalyzersNuGetWarning Condition="'$(_SkipUpgradeNetAnalyzersNuGetWarning)' == ''">true</_SkipUpgradeNetAnalyzersNuGetWarning>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MicrosoftCodeAnalysisNetAnalyzersVersion Condition="'$(MicrosoftCodeAnalysisNetAnalyzersVersion)' == ''">6.*</MicrosoftCodeAnalysisNetAnalyzersVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Condition="'$(VersionlessImplicitFrameworkDefine)' != 'NET'" Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
+  </ItemGroup>
+
   <PropertyGroup>
     <DeployProjectOutput Condition="'$(DeployProjectOutput)' == ''">$(_DeployProjectOutput)</DeployProjectOutput>
     

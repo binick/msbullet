@@ -4,8 +4,13 @@
   <Import Project="Sdk.props" Sdk="MsBullet.Sdk" />
 
   <PropertyGroup>
+    <TargetFrameworkForNetSdk>net7.0</TargetFrameworkForNetSdk>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <NoWarn>$(NoWarn);SA1311;SA1413</NoWarn>
     <NoWarn Condition="'$(IsShippable)' != 'true'">$(NoWarn);SA0001;SA1600</NoWarn>
+    <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
   </PropertyGroup>
 
   <ItemGroup>

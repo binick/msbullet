@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <PropertyGroup> 
-    <StyleCopAnalyzersVersion Condition="'$(StyleCopAnalyzersVersion)' == ''">1.*</StyleCopAnalyzersVersion>
-    <SonarAnalyzerCSharpVersion Condition="'$(SonarAnalyzerCSharpVersion)' == ''">8.*</SonarAnalyzerCSharpVersion>
+  <PropertyGroup>
+    <MicrosoftVisualStudioThreadingAnalyzersVersion Condition="'$(MicrosoftVisualStudioThreadingAnalyzersVersion)' == ''">17.*</MicrosoftVisualStudioThreadingAnalyzersVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="$(SonarAnalyzerCSharpVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="$(MicrosoftVisualStudioThreadingAnalyzersVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
   </ItemGroup>
 
-  <ItemGroup Condition="!($(TargetFramework.StartsWith('net5')) or $(TargetFramework.StartsWith('net6')))"> 
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="$(MicrosoftVisualStudioThreadingAnalyzersVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" PrivateAssets="all" IsImplicitlyDefined="true" />
-  </ItemGroup>
-  
 </Project>

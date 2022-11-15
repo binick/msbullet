@@ -53,6 +53,17 @@ namespace MsBullet.Sdk.Tests
                 .NotContain(i => i.EvaluatedInclude.Equals("coverlet.msbuild", StringComparison.OrdinalIgnoreCase));
         }
 
+        [Fact(DisplayName = "Should not be reference coverlet.msbuild package when it is opted out")]
+        public void ShouldNotBeReferenceCoverletPackageWhenItIsOptedOut()
+        {
+            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>() { { "UsingToolCoverlet", "false" } });
+
+            project
+                .ShouldContainItem("PackageReference")
+                .Should()
+                .NotContain(i => i.EvaluatedInclude.Equals("coverlet.msbuild", StringComparison.OrdinalIgnoreCase));
+        }
+
         [Fact(DisplayName = "Should be referenced in a test project")]
         public void ShouldBeReferencedInATestProjectWithDefaultTool()
         {

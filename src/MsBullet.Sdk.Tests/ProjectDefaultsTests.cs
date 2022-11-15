@@ -26,13 +26,18 @@ namespace MsBullet.Sdk.Tests
         }
 
         public static IEnumerable<object[]> TargetFrameworksWithoutShippedRoslynAnalizersShipped => ProjectDefaultsTests.SupportedTargetFrameworks
-            .Where(t => !(t.Cast<string>().First().StartsWith("net5", StringComparison.OrdinalIgnoreCase) || t.Cast<string>().First().StartsWith("net6", StringComparison.OrdinalIgnoreCase)));
+            .Where(t => !(t.Cast<string>().First().StartsWith("net5", StringComparison.OrdinalIgnoreCase) ||
+                t.Cast<string>().First().StartsWith("net6", StringComparison.OrdinalIgnoreCase) ||
+                t.Cast<string>().First().StartsWith("net7", StringComparison.OrdinalIgnoreCase)));
 
         public static IEnumerable<object[]> AllNet5TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
             .Where(t => t.Cast<string>().First().StartsWith("net5", StringComparison.OrdinalIgnoreCase));
 
         public static IEnumerable<object[]> AllNet6TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
             .Where(t => t.Cast<string>().First().StartsWith("net6", StringComparison.OrdinalIgnoreCase));
+
+        public static IEnumerable<object[]> AllNet7TargetFrameworks => ProjectDefaultsTests.SupportedTargetFrameworks
+            .Where(t => t.Cast<string>().First().StartsWith("net7", StringComparison.OrdinalIgnoreCase));
 
         public static IEnumerable<object[]> SupportedTargetFrameworks => new object[][]
         {
@@ -52,6 +57,13 @@ namespace MsBullet.Sdk.Tests
             new string[] { "net6.0-maccatalyst" },
             new string[] { "net6.0-tvos" },
             new string[] { "net6.0-windows" },
+            new string[] { "net7.0" },
+            new string[] { "net7.0-android" },
+            new string[] { "net7.0-ios" },
+            new string[] { "net7.0-macos" },
+            new string[] { "net7.0-maccatalyst" },
+            new string[] { "net7.0-tvos" },
+            new string[] { "net7.0-windows" },
             new string[] { "netstandard1.0" },
             new string[] { "netstandard1.1" },
             new string[] { "netstandard1.2" },
@@ -134,15 +146,27 @@ namespace MsBullet.Sdk.Tests
                 { "TargetFramework", targetFramework }
             });
 
+            var excludePackages = this.FrameworkDependentPackages;
+
+#pragma warning disable S1135 // Track uses of "TODO" tags
+            /*
+             * Todo: Microsoft.NET.Test.Sdk should not be there.
+             * Investigate why it is added even though the IsTestProject property is false.
+             *
+             * Todo: System.Runtime.InteropServices.NFloat.Internal
+             * This package reference is shipped whitin a iOS and macOS runtimes.
+             */
+#pragma warning restore S1135 // Track uses of "TODO" tags
+            bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
+            if (!isTestProject)
+            {
+                excludePackages = excludePackages.Append("Microsoft.NET.Test.Sdk");
+                excludePackages = excludePackages.Append("System.Runtime.InteropServices.NFloat.Internal");
+            }
+
             using (new AssertionScope())
             {
-#pragma warning disable S1135 // Track uses of "TODO" tags
-                /*
-                 * Todo: Microsoft.NET.Test.Sdk should not be there.
-                 * Investigate why it is added even though the IsTestProject property is false.
-                 */
-#pragma warning restore S1135 // Track uses of "TODO" tags
-                foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(this.FrameworkDependentPackages.Append("Microsoft.NET.Test.Sdk"), i => i.EvaluatedInclude))
+                foreach (var item in project.ShouldContainItem("PackageReference").ExceptBy(excludePackages, i => i.EvaluatedInclude))
                 {
                     item
                         .ShouldContainMetadata("PrivateAssets")
@@ -152,7 +176,7 @@ namespace MsBullet.Sdk.Tests
         }
 
         [Theory(DisplayName = "Should be reference Roslyn analyzers when target framework is: ")]
-        [MemberData(nameof(TargetFrameworksWithoutShippedRoslynAnalizersShipped))]
+        [MemberData(nameof(SupportedTargetFrameworks))]
         public virtual void ShouldBeReferenceRoslynAnalyzer(string targetFramework)
         {
             var project = this.ProvideProject(new Dictionary<string, string>
@@ -173,6 +197,7 @@ namespace MsBullet.Sdk.Tests
         [Theory(DisplayName = "Should enforching all analysis rules")]
         [MemberData(nameof(AllNet5TargetFrameworks))]
         [MemberData(nameof(AllNet6TargetFrameworks))]
+        [MemberData(nameof(AllNet7TargetFrameworks))]
         public virtual void ShouldEnforchingAllAnalysisRules(string targetFramework)
         {
             var expectedAnalysisMode = ProjectDefaultsTests.AllNet5TargetFrameworks.SelectMany(p => p.Cast<string>()).Contains(targetFramework)
