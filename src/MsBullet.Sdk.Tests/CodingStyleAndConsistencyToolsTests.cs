@@ -1,10 +1,13 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
+using Microsoft.CodeAnalysis;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -59,8 +62,8 @@ namespace MsBullet.Sdk.Tests
                 .ShouldHasParent(project.ShouldCountainProperty("RepositoryEngineeringDir").EvaluatedValue);
         }
 
-        [Fact(DisplayName = "Should be place StyleCop configuration file into project root")]
-        public void ShouldBePlaceStyleCopConfigIntoProjectRoot()
+        [Fact(DisplayName = "Should be include StyleCop configuration file into project root")]
+        public void ShouldBeIncludeStyleCopConfigIntoProjectRoot()
         {
             var project = this.fixture.ProvideProject(this.output);
 
@@ -93,6 +96,45 @@ namespace MsBullet.Sdk.Tests
                     .Should()
                     .Be("$(ShowStyleCopConfig)");
             }
+        }
+
+        [Fact(DisplayName = "Should not be include StyleCop configuration file into project root when it is opted out")]
+        public void ShouldNotIncludeStyleCopConfigIntoProjectRootWhenItIsOptedOut()
+        {
+            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>
+            {
+                { "UsingToolStyleCopAnalyzers", "false" }
+            });
+
+            project
+                .ShouldContainItem("AdditionalFiles")
+                .Should()
+                .NotContain(i => i.EvaluatedInclude.Equals(project.ShouldCountainProperty("StyleCopConfig", string.Empty).EvaluatedValue));
+        }
+
+        [Fact(DisplayName = "Should be referenced StyleCopAnalyzers package")]
+        public void ShouldBeReferencedStyleCopAnalyzersPackage()
+        {
+            var project = this.fixture.ProvideProject(this.output);
+
+            project
+                .ShouldContainItem("PackageReference")
+                .Should()
+                .Contain(i => i.EvaluatedInclude.Equals("StyleCop.Analyzers", StringComparison.OrdinalIgnoreCase));
+        }
+
+        [Fact(DisplayName = "Should not be referenced StyleCopAnalyzers package when it is opted out")]
+        public void ShouldNotBeReferencedStyleCopAnalyzersPackageWhenItIsOptedOut()
+        {
+            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>
+            {
+                { "UsingToolStyleCopAnalyzers", "false" }
+            });
+
+            project
+                .ShouldContainItem("PackageReference")
+                .Should()
+                .NotContain(i => i.EvaluatedInclude.Equals("StyleCop.Analyzers", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

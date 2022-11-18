@@ -12,7 +12,7 @@ If you have identified a security problem or think there is a potential for one,
 
 Given the cross-platform nature of the project, it is necessary to carry out tests on at least Windows and Linux.
 
-In this regard, if you use, from [Visual Studio](https://www.visualstudio.com/downloads/) 2022 Update 17.0 Preview 3 or later the [Remote Testing in Visual Studio](https://docs.microsoft.com/visualstudio/test/remote-testing) feature is available in experimental preview.
+In this regard, if you use, from [Visual Studio](https://www.visualstudio.com/downloads/) 2022 Update 17.0 or later the [Remote Testing in Visual Studio](https://docs.microsoft.com/visualstudio/test/remote-testing) feature is available in experimental preview.
 
 ## Pull requests
 

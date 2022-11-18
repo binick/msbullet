@@ -41,8 +41,6 @@ namespace MsBullet.Sdk.Tests
 
             var expectedPackageVersions = new Dictionary<string, string>
             {
-                { "xunit.runner.console", "2.4.1" },
-                { "xunit.runner.visualstudio", "2.4.3" }
             };
 
             using (new AssertionScope())

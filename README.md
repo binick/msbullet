@@ -43,3 +43,22 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/en-us
 
 </Project>
 ```
+
+The steps below are optionally, but recommended.
+
+1. Copy to `/eng/common/build.ps1` and this contents [build.ps1](eng/common/build.ps1)
+2. Copy to `/eng/common/build.sh` and this contents [build.sh](eng/common/build.sh)
+3. Copy to `/eng/common/tools.ps1` this contents [tools.ps1](eng/common/tools.ps1)
+4. Copy to `/eng/common/tools.sh` this contents [tools.sh](eng/common/tools.sh)
+5. Copy to `build.cmd` content [build.cmd](build.cmd)
+6. Copy to `build.sh` content [build.sh](build.sh)
+
+## Contributing
+
+**NET 7.0 workaround**  
+As reported in the problem [#16400 [net7.0-rc2] Creating a cross-target library with net6.0-mac fails with an obscure error](https://github.com/xamarin/xamarin-macios/issues/16400) at the moment there is a problem that makes it mandatory to install the following workloads:
+
+ - `dotnet workload install ios`
+ - `dotnet workload install maccatalyst`
+ - `dotnet workload install macos`
+ - `dotnet workload install tvos`

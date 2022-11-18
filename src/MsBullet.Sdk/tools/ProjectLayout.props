@@ -4,9 +4,6 @@
   <Import Project="RepoLayout.props"/>
 
   <PropertyGroup>
-    <StyleCopConfig Condition="'$(StyleCopConfig)' == ''">$(RepoRoot)eng/stylecop.json</StyleCopConfig>
-    <ShowStyleCopConfig Condition="'$(ShowStyleCopConfig)' == ''">false</ShowStyleCopConfig>
-
     <OutDirName Condition="'$(OutDirName)' == ''">$(MSBuildProjectName)</OutDirName>
 
     <BaseOutputPath Condition="'$(BaseOutputPath)' == ''">$([System.IO.Path]::GetFullPath('$(ArtifactsBinDir)$(OutDirName)\'))</BaseOutputPath>
@@ -17,32 +14,5 @@
     <IntermediateOutputPath Condition="'$(PlatformName)' == 'AnyCPU'">$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
     <IntermediateOutputPath Condition="'$(PlatformName)' != 'AnyCPU'">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
-
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net5')) or $(TargetFramework.StartsWith('net6'))">
-    <EnforceCodeStyleInBuild Condition="'$(EnforceCodeStyleInBuild)' == ''">true</EnforceCodeStyleInBuild>
-  </PropertyGroup>
-
-  <Choose>
-    <When Condition="$(TargetFramework.StartsWith('net5'))">
-      <PropertyGroup>
-        <AnalysisMode Condition="'$(AnalysisMode)' == ''">AllEnabledByDefault</AnalysisMode>
-      </PropertyGroup>
-    </When>
-    <When Condition="$(TargetFramework.StartsWith('net6'))">
-      <PropertyGroup>
-        <AnalysisMode Condition="'$(AnalysisMode)' == ''">All</AnalysisMode>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup>
-        <MicrosoftCodeAnalysisNetAnalyzersVersion Condition="'$(MicrosoftCodeAnalysisNetAnalyzersVersion)' == ''">6.*</MicrosoftCodeAnalysisNetAnalyzersVersion>
-        <MicrosoftVisualStudioThreadingAnalyzersVersion Condition="'$(MicrosoftVisualStudioThreadingAnalyzersVersion)' == ''">16.*</MicrosoftVisualStudioThreadingAnalyzersVersion>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
-
-  <ItemGroup>
-    <AdditionalFiles Include="$(StyleCopConfig)" Link="stylecop.json" Condition="Exists('$(StyleCopConfig)')" Visible="$(ShowStyleCopConfig)" />
-  </ItemGroup>
 
 </Project>

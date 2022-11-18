@@ -67,6 +67,17 @@ namespace MsBullet.Sdk.Tests
                 .NotContain(i => i.EvaluatedInclude.Equals("ReportGenerator", StringComparison.OrdinalIgnoreCase));
         }
 
+        [Fact(DisplayName = "Should not be reference ReportGenerator package when it is opted out")]
+        public void ShouldNotBeReferenceReportGeneratorPackageWhenItIsOptedOut()
+        {
+            var project = this.fixture.ProvideProject(this.output, new Dictionary<string, string>() { { "UsingToolReportGenerator", "false" } });
+
+            project
+                .ShouldContainItem("PackageReference")
+                .Should()
+                .NotContain(i => i.EvaluatedInclude.Equals("ReportGenerator", StringComparison.OrdinalIgnoreCase));
+        }
+
         [Fact(DisplayName = "Should be referenced in a test project")]
         public void ShouldBeReferencedInATestProjectWithDefaultTool()
         {

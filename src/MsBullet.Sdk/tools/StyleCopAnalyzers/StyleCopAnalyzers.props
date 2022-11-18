@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <StyleCopAnalyzersVersion Condition="'$(StyleCopAnalyzersVersion)' == ''">1.*</StyleCopAnalyzersVersion>
+    <StyleCopConfig Condition="'$(StyleCopConfig)' == ''">$(RepoRoot)eng/stylecop.json</StyleCopConfig>
+    <ShowStyleCopConfig Condition="'$(ShowStyleCopConfig)' == ''">false</ShowStyleCopConfig>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <AdditionalFiles Include="$(StyleCopConfig)" Link="stylecop.json" Condition="Exists('$(StyleCopConfig)')" Visible="$(ShowStyleCopConfig)" />
+  </ItemGroup>
+
+</Project>

@@ -30,6 +30,7 @@
       <_TestRuntime>%(TestToRun.TestRuntime)</_TestRuntime>
       <_TestTimeout>%(TestToRun.TestTimeout)</_TestTimeout>
       <_TestRunnerAdditionalArguments>%(TestToRun.TestRunnerAdditionalArguments)</_TestRunnerAdditionalArguments>
+      <_TestRunnerPackageRoot>$(Pkgxunit_runner_console)</_TestRunnerPackageRoot>
 
       <!-- Always use net472 for desktop to enable displaying source location from Portable PDBs in stack traces -->
       <_TestRunnerTargetFramework>net472</_TestRunnerTargetFramework>
@@ -46,13 +47,13 @@
       <_TestRunner Condition="'%(TestToRun.Architecture)'=='x86' And Exists('$(DotNetRoot)x86\dotnet.exe')">$(DotNetRoot)x86\dotnet.exe</_TestRunner>
       <_TestRunner Condition="'$(_TestRunner)'==''">$(DotNetTool)</_TestRunner>
       
-      <_TestRunnerArgs>exec --depsfile "$(_CoreDepsPath)" --runtimeconfig "$(_CoreRuntimeConfigPath)" $(TestRuntimeAdditionalArguments) "$(NuGetPackageRoot)xunit.runner.console/$(XUnitRunnerConsoleVersion)/tools/$(_TestRunnerTargetFramework)/xunit.console.dll" "$(_TestAssembly)" -noautoreporters -xml "%(TestToRun.ResultsXmlPath)" -html "%(TestToRun.ResultsHtmlPath)" $(_TestRunnerAdditionalArguments)</_TestRunnerArgs>
+      <_TestRunnerArgs>exec --depsfile "$(_CoreDepsPath)" --runtimeconfig "$(_CoreRuntimeConfigPath)" $(TestRuntimeAdditionalArguments) "$(_TestRunnerPackageRoot)/tools/$(_TestRunnerTargetFramework)/xunit.console.dll" "$(_TestAssembly)" -noautoreporters -xml "%(TestToRun.ResultsXmlPath)" -html "%(TestToRun.ResultsHtmlPath)" $(_TestRunnerAdditionalArguments)</_TestRunnerArgs>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(_TestRuntime)' != 'Core'">
       <_XUnitConsoleExe>xunit.console.exe</_XUnitConsoleExe>
       <_XUnitConsoleExe Condition="'%(TestToRun.Architecture)' == 'x86'">xunit.console.x86.exe</_XUnitConsoleExe>
-      <_XUnitConsoleExePath>$(NuGetPackageRoot)xunit.runner.console\$(XUnitRunnerConsoleVersion)\tools\$(_TestRunnerTargetFramework)\$(_XUnitConsoleExe)</_XUnitConsoleExePath>
+      <_XUnitConsoleExePath>$(_TestRunnerPackageRoot)\tools\$(_TestRunnerTargetFramework)\$(_XUnitConsoleExe)</_XUnitConsoleExePath>
 
       <_TestRunnerArgs>"$(_TestAssembly)" -noshadow -xml "%(TestToRun.ResultsXmlPath)" -html "%(TestToRun.ResultsHtmlPath)" $(_TestRunnerAdditionalArguments)</_TestRunnerArgs>
       <_TestRunnerArgs Condition="'$(_TestRuntime)' == 'Mono'">$(TestRuntimeAdditionalArguments) "$(_XUnitConsoleExePath)" $(_TestRunnerArgs)</_TestRunnerArgs>

@@ -6,6 +6,7 @@
     <PackageProjectUrl>https://localhost/</PackageProjectUrl>
     <PackageDescription>MsBullet SDK minimal boilerplate test repo.</PackageDescription>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
   </PropertyGroup>
   
 </Project>
