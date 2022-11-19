@@ -37,6 +37,15 @@ body:
       placeholder: Describe how we can reproduce it
     validations:
       required: true
+      
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the issue encountered
+      placeholder: Describe the issue
+    validations:
+      required: true
 
   - type: markdown
     attributes:
