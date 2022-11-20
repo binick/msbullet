@@ -16,7 +16,7 @@ The developer teams are owners of their repos and they should be feel free to us
 
 <--->
 
-**Reusability of functionality**
+**Knowledge sharing**
 
 Business value is the main goal.  
 The functionality one team has developed can contribute to another's success.
@@ -142,7 +142,7 @@ The file should be used as single point of package versions for all NuGet packag
 ```
 
 The toolset also defines default versions for various tools and dependencies. These defaults can be overridden in the `Versions.props` file.  
-For more information about tools, please refer to [Built-in tools](./tools).
+For more information about tools, please refer to [Built-in tools](./configuration/tools).
 
 See [`DefaultVersions.props`](../../src/MsBullet.Sdk/tools/DefaultVersions.props) for a list of UsingTool properties and default versions.
 
