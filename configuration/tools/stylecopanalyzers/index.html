@@ -1,0 +1,166 @@
+<!doctype html><html lang=en-us dir=ltr>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="StyleCop Analyzers. #  This analyzer is provided as a built-in tool of MsBullet SDK to enforce standard code conventions
+How to use and customization. #  By default, there is no application of specific configurations within the SDK.
+NOTE
+For customization of the rules of this tool, you can refer to the official documentation     Property Description Default value Overridable Note     StyleCopConfig Specifies the file path of stylecop.">
+<meta name=theme-color content="#FFFFFF">
+<meta name=color-scheme content="light dark"><meta property="og:title" content="StyleCop Analyzers">
+<meta property="og:description" content="StyleCop Analyzers. #  This analyzer is provided as a built-in tool of MsBullet SDK to enforce standard code conventions
+How to use and customization. #  By default, there is no application of specific configurations within the SDK.
+NOTE
+For customization of the rules of this tool, you can refer to the official documentation     Property Description Default value Overridable Note     StyleCopConfig Specifies the file path of stylecop.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://binick.github.io/msbullet/configuration/tools/stylecopanalyzers/"><meta property="article:section" content="configuration">
+<title>StyleCop Analyzers | MsBullet</title>
+<link rel=manifest href=/msbullet/manifest.json>
+<link rel=icon href=/msbullet/favicon.png type=image/x-icon>
+<link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
+<script defer src=/msbullet/flexsearch.min.js></script>
+<script defer src=/msbullet/en.search.min.ace4069238fe4c3c4e2520d690d18aa197671f79e536700278917656cf06ded6.js integrity="sha256-rOQGkjj+TDxOJSDWkNGKoZdnH3nlNnACeJF2Vs8G3tY=" crossorigin=anonymous></script>
+</head>
+<body dir=ltr>
+<input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control>
+<main class="container flex">
+<aside class=book-menu>
+<div class=book-menu-content>
+<nav>
+<h2 class=book-brand>
+<a class="flex align-center" href=/msbullet/><span>MsBullet</span>
+</a>
+</h2>
+<div class=book-search>
+<input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/>
+<div class="book-search-spinner hidden"></div>
+<ul id=book-search-results></ul>
+</div>
+<ul>
+<li>
+<a href=/msbullet/getting-started/>Getting started</a>
+<ul>
+</ul>
+</li>
+<li>
+<a href=/msbullet/configuration/>Configuration</a>
+<ul>
+<li>
+<a href=/msbullet/configuration/tools/>Built-in tools</a>
+<ul>
+<li>
+<a href=/msbullet/configuration/tools/stylecopanalyzers/ class=active>StyleCop Analyzers</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=/msbullet/configuration/conventions/>Conventions</a>
+<ul>
+</ul>
+</li>
+<li>
+<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+<ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+</div>
+</aside>
+<div class=book-page>
+<header class=book-header>
+<div class="flex align-center justify-between">
+<label for=menu-control>
+<img src=/msbullet/svg/menu.svg class=book-icon alt=Menu>
+</label>
+<strong>StyleCop Analyzers</strong>
+<label for=toc-control>
+<img src=/msbullet/svg/toc.svg class=book-icon alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id=TableOfContents>
+<ul>
+<li><a href=#how-to-use-and-customization>How to use and customization.</a></li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class=markdown><h1 id=stylecop-analyzers>
+StyleCop Analyzers.
+<a class=anchor href=#stylecop-analyzers>#</a>
+</h1>
+<p>This analyzer is provided as a built-in tool of <strong>MsBullet SDK</strong> to enforce standard code conventions</p>
+<h2 id=how-to-use-and-customization>
+How to use and customization.
+<a class=anchor href=#how-to-use-and-customization>#</a>
+</h2>
+<p>By default, there is no application of specific configurations within the SDK.</p>
+<blockquote class="book-hint info">
+<strong>NOTE</strong><br>
+For customization of the rules of this tool, you can refer to the <a href=https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/Configuration.md>official documentation</a>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Default value</th>
+<th style=text-align:center>Overridable</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StyleCopConfig</code></td>
+<td>Specifies the file path of <code>stylecop.json</code> configuration file.</td>
+<td><code>$(RepoRoot)eng/stylecop.json</code></td>
+<td style=text-align:center>✔️️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ShowStyleCopConfig</code></td>
+<td>Specifies whether the <code>stylecop.json</code> file should be displayed within the project root.</td>
+<td><code>false</code></td>
+<td style=text-align:center>✔️️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>StyleCopAnalyzersVersion</code></td>
+<td>Set the tool version, by default it use the latest available major.</td>
+<td><code>1.*</code></td>
+<td style=text-align:center>✔️️</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</article>
+<footer class=book-footer>
+<div class="flex flex-wrap justify-between">
+<div>
+<a class="flex align-center" href=https://github.com/binick/msbullet/edit/main/docs/content/configuration/tools/stylecopanalyzers.md target=_blank rel=noopener>
+<img src=/msbullet/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span>
+</a>
+</div>
+</div>
+<script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){if(window.getSelection().toString())return;a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+</footer>
+<label for=menu-control class="hidden book-menu-overlay"></label>
+</div>
+<aside class=book-toc>
+<div class=book-toc-content>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#how-to-use-and-customization>How to use and customization.</a></li>
+</ul>
+</nav>
+</div>
+</aside>
+</main>
+</body>
+</html>

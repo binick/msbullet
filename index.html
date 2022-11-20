@@ -7,7 +7,7 @@
 The pillars on which MsBullet SDK is based are:
 Control and ownership
 The developer teams are owners of their repos and they should be feel free to use whatever tools they want.
- Reusability of functionality
+ Knowledge sharing
 Business value is the main goal.
 The functionality one team has developed can contribute to another&rsquo;s success.">
 <meta name=theme-color content="#FFFFFF">
@@ -20,7 +20,7 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.4f8fee36575deb22c68df2a431705761fe630a0b73a0a5d07f9e8543fc6c4f5e.js integrity="sha256-T4/uNldd6yLGjfKkMXBXYf5jCgtzoKXQf56FQ/xsT14=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.ace4069238fe4c3c4e2520d690d18aa197671f79e536700278917656cf06ded6.js integrity="sha256-rOQGkjj+TDxOJSDWkNGKoZdnH3nlNnACeJF2Vs8G3tY=" crossorigin=anonymous></script>
 <link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
@@ -50,6 +50,11 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 <ul>
 <li>
 <a href=/msbullet/configuration/tools/>Built-in tools</a>
+<ul>
+<li>
+<a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
+</li>
+</ul>
 </li>
 <li>
 <a href=/msbullet/configuration/conventions/>Conventions</a>
@@ -106,7 +111,7 @@ MsBullet SDK
 <p>The developer teams are owners of their repos and they should be feel free to use whatever tools they want.</p>
 </div>
 <div class="flex-even markdown-inner">
-<p><strong>Reusability of functionality</strong></p>
+<p><strong>Knowledge sharing</strong></p>
 <p>Business value is the main goal.<br>
 The functionality one team has developed can contribute to another&rsquo;s success.</p>
 </div>
@@ -238,7 +243,7 @@ All file references below are relative to repo root. The root is identified by p
 <span style=color:#f92672>&lt;/Project&gt;</span>
 
 </code></pre></div><p>The toolset also defines default versions for various tools and dependencies. These defaults can be overridden in the <code>Versions.props</code> file.<br>
-For more information about tools, please refer to <a href=./tools>Built-in tools</a>.</p>
+For more information about tools, please refer to <a href=./configuration/tools>Built-in tools</a>.</p>
 <p>See <a href=../../src/MsBullet.Sdk/tools/DefaultVersions.props><code>DefaultVersions.props</code></a> for a list of UsingTool properties and default versions.</p>
 <h3 id=engstylecopjson>
 <code>/eng/stylecop.json</code>
