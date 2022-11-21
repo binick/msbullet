@@ -1,5 +1,7 @@
 ---
 title: Conventions
+description: There are some useful conventions for keeping behavior consistent across multiple operating systems.
+weight: 10
 ---
 
 # Recommended conventions.
@@ -21,3 +23,8 @@ The property version should be named with this pattern `{PackageName}Version` wh
 If your project depends on a package that is also part of the .NET SDK used by **MsBullet** (check `global.json` to see which version is currently in use) the project should use the version of the package available in the SDK. Otherwise, the latest stable version of the package should be used. For instance, the `Microsoft.SourceLink.GitHub` (version 1.0.0) is present on the .NET SDK and the version is exposed in **MsBullet** through the `$(MicrosoftSourceLinkGitHubVersion)` property in [`eng\Versions.props`](https://github.com/binick/msbullet/blob/main/eng/Versions.props). Therefore, to include `Newtonsoft.Json` in your project do the following:
 
 `<PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />`
+
+### Project Naming.
+
+<!-- Todo -->
+Coming soon 🙏

@@ -1,6 +1,6 @@
 ---
 title: Getting started
-weight: 1
+weight: 10
 ---
 
 # Getting started
@@ -11,15 +11,13 @@ You can start using this SDK based on [MSBuild](https://docs.microsoft.com/visua
 
 ``` json
 {
-  "tools": {
-    "dotnet": "[dotnet sdk version]"
-  },
   "msbuild-sdks": {
-    "MsBullet.Sdk": "[MsBullet.Sdk version]"
+    "MsBullet.Sdk": "<MsBullet.Sdk version>"
   }
 }
-
 ```
+
+Replace `MsBullet.Sdk version` with desired NuGet package version, [https://www.nuget.org/packages/MsBullet.Sdk](https://www.nuget.org/packages/MsBullet.Sdk)
 
 2. Add `Directory.Build.props` or copy this on `root` of your repo:
 

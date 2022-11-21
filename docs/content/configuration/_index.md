@@ -1,7 +1,8 @@
 ---
 title: Configuration
+bookCollapseSection: true
 ---
 
-# Static analyzers
+# Configuration
 
-Coming soon 😐
+{{<section>}}
