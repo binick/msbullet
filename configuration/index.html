@@ -2,7 +2,7 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="Static analyzers #  Coming soon 😐">
+<meta name=description content="Configuration #    Well-known properties  MsBullet SDK provides a set of predefined properties that store information about the project in the MSBuild context. These properties are evaluated in the same manner as other MSBuild properties. MsBullet SDK uses the values in the following table to predefine reserved and well-known properties. Reserved properties cannot be overridden, and most well-known properties shouldn't be overridden except in advanced scenarios.   Conventions  There are some useful conventions for keeping behavior consistent across multiple operating systems.">
 <meta name=theme-color content="#FFFFFF">
 <meta name=color-scheme content="light dark"><meta property="og:title" content="Configuration">
 <meta property="og:description" content>
@@ -13,7 +13,7 @@
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.ace4069238fe4c3c4e2520d690d18aa197671f79e536700278917656cf06ded6.js integrity="sha256-rOQGkjj+TDxOJSDWkNGKoZdnH3nlNnACeJF2Vs8G3tY=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.8ec5a390bde2f39d3d35883425a09f244a1acac4288577c8e624c46934862dfc.js integrity="sha256-jsWjkL3i8509NYg0JaCfJEoaysQohXfI5iTEaTSGLfw=" crossorigin=anonymous></script>
 <link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/configuration/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
@@ -39,14 +39,19 @@
 </ul>
 </li>
 <li>
-<a href=/msbullet/configuration/ class=active>Configuration</a>
+<a href=/msbullet/single-build-output/>Single build output</a>
 <ul>
-<li>
-<a href=/msbullet/configuration/tools/>Built-in tools</a>
-<ul>
-<li>
-<a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
+</ul>
 </li>
+<li>
+<input type=checkbox id=section-632bb56b075027697eb90eb7e3d29a12 class=toggle checked>
+<label for=section-632bb56b075027697eb90eb7e3d29a12 class="flex justify-between">
+<a href=/msbullet/configuration/ class=active>Configuration</a>
+</label>
+<ul>
+<li>
+<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+<ul>
 </ul>
 </li>
 <li>
@@ -55,7 +60,18 @@
 </ul>
 </li>
 <li>
-<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+<input type=checkbox id=section-d9608d9525439e4d6fc7bd13543764bc class=toggle>
+<label for=section-d9608d9525439e4d6fc7bd13543764bc class="flex justify-between">
+<a href=/msbullet/configuration/tools/>Built-in tools</a>
+</label>
+<ul>
+<li>
+<a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Build extension points</span>
 <ul>
 </ul>
 </li>
@@ -81,11 +97,37 @@
 <nav id=TableOfContents></nav>
 </aside>
 </header>
-<article class=markdown><h1 id=static-analyzers>
-Static analyzers
-<a class=anchor href=#static-analyzers>#</a>
+<article class=markdown><h1 id=configuration>
+Configuration
+<a class=anchor href=#configuration>#</a>
 </h1>
-<p>Coming soon 😐</p>
+<dl>
+<dt>
+<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+</dt>
+<dd class=markdown-inner>
+MsBullet SDK provides a set of predefined properties that store information about the project in the MSBuild context. These properties are evaluated in the same manner as other MSBuild properties.
+MsBullet SDK uses the values in the following table to predefine reserved and well-known properties. Reserved properties cannot be overridden, and most well-known properties shouldn't be overridden except in advanced scenarios.
+</dd>
+<dt>
+<a href=/msbullet/configuration/conventions/>Conventions</a>
+</dt>
+<dd class=markdown-inner>
+There are some useful conventions for keeping behavior consistent across multiple operating systems.
+</dd>
+<dt>
+<a href=/msbullet/configuration/tools/>Built-in tools</a>
+</dt>
+<dd class=markdown-inner>
+The toolset provided by MsBullet SDK combines third-party tools and specific SDK features.
+</dd>
+<dt>
+<a href=/msbullet/configuration/extension-points/>Build extension points</a>
+</dt>
+<dd class=markdown-inner>
+It is possible to centrally manage the versioning of dependencies or to perform pre- or post-compilation steps.
+</dd>
+</dl>
 </article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">

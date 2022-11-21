@@ -6,7 +6,7 @@
 <meta name=description content="MsBullet SDK #  MsBullet SDK is a set of MSBuild files that provide common build features of MSBuild SDK distributed through NuGet package.
 The pillars on which MsBullet SDK is based are:
 Control and ownership
-The developer teams are owners of their repos and they should be feel free to use whatever tools they want.
+The developer teams are owners of their repos and they should feel free to use whatever tools they want.
  Knowledge sharing
 Business value is the main goal.
 The functionality one team has developed can contribute to another&rsquo;s success.">
@@ -20,7 +20,7 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.ace4069238fe4c3c4e2520d690d18aa197671f79e536700278917656cf06ded6.js integrity="sha256-rOQGkjj+TDxOJSDWkNGKoZdnH3nlNnACeJF2Vs8G3tY=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.8ec5a390bde2f39d3d35883425a09f244a1acac4288577c8e624c46934862dfc.js integrity="sha256-jsWjkL3i8509NYg0JaCfJEoaysQohXfI5iTEaTSGLfw=" crossorigin=anonymous></script>
 <link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
@@ -46,14 +46,19 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 </ul>
 </li>
 <li>
-<a href=/msbullet/configuration/>Configuration</a>
+<a href=/msbullet/single-build-output/>Single build output</a>
 <ul>
-<li>
-<a href=/msbullet/configuration/tools/>Built-in tools</a>
-<ul>
-<li>
-<a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
+</ul>
 </li>
+<li>
+<input type=checkbox id=section-632bb56b075027697eb90eb7e3d29a12 class=toggle>
+<label for=section-632bb56b075027697eb90eb7e3d29a12 class="flex justify-between">
+<a href=/msbullet/configuration/>Configuration</a>
+</label>
+<ul>
+<li>
+<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+<ul>
 </ul>
 </li>
 <li>
@@ -62,7 +67,18 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 </ul>
 </li>
 <li>
-<a href=/msbullet/configuration/predefined-variables/>Well-known properties</a>
+<input type=checkbox id=section-d9608d9525439e4d6fc7bd13543764bc class=toggle>
+<label for=section-d9608d9525439e4d6fc7bd13543764bc class="flex justify-between">
+<a href=/msbullet/configuration/tools/>Built-in tools</a>
+</label>
+<ul>
+<li>
+<a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Build extension points</span>
 <ul>
 </ul>
 </li>
@@ -87,8 +103,6 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 <aside class="hidden clearfix">
 <nav id=TableOfContents>
 <ul>
-<li><a href=#getting-started>Getting started</a></li>
-<li><a href=#single-build-output>Single build output</a></li>
 <li><a href=#built-in-tools-and-extensibility-points>Built-in tools and extensibility points</a>
 <ul>
 <li><a href=#engversionsprops-a-single-file-listing-packages-versions-and-used-tools><code>/eng/Versions.props</code>: a single file listing packages versions and used tools</a></li>
@@ -108,7 +122,7 @@ MsBullet SDK
 <div class="book-columns flex flex-wrap">
 <div class="flex-even markdown-inner">
 <p><strong>Control and ownership</strong></p>
-<p>The developer teams are owners of their repos and they should be feel free to use whatever tools they want.</p>
+<p>The developer teams are owners of their repos and they should feel free to use whatever tools they want.</p>
 </div>
 <div class="flex-even markdown-inner">
 <p><strong>Knowledge sharing</strong></p>
@@ -121,113 +135,22 @@ The functionality one team has developed can contribute to another&rsquo;s succe
 This project is highly inspired by <a href=https://github.com/dotnet/arcade>Arcade</a> and takes some implementations from it.
 </div>
 </details>
-<h2 id=getting-started>
-Getting started
-<a class=anchor href=#getting-started>#</a>
-</h2>
-<p>You can start using this SDK based on <a href=https://docs.microsoft.com/visualstudio/msbuild>MSBuild</a> in three steps:</p>
-<ol>
-<li>Add <code>global.json</code>:</li>
-</ol>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-  <span style=color:#f92672>&#34;tools&#34;</span>: {
-    <span style=color:#f92672>&#34;dotnet&#34;</span>: <span style=color:#e6db74>&#34;[dotnet sdk version]&#34;</span>
-  },
-  <span style=color:#f92672>&#34;msbuild-sdks&#34;</span>: {
-    <span style=color:#f92672>&#34;MsBullet.Sdk&#34;</span>: <span style=color:#e6db74>&#34;[MsBullet.Sdk version]&#34;</span>
-  }
-}
-
-</code></pre></div><ol start=2>
-<li>Add <code>Directory.Build.props</code> or copy this on <code>root</code> of your repo:</li>
-</ol>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
-<span style=color:#f92672>&lt;Project&gt;</span>
-
-  <span style=color:#f92672>&lt;Import</span> <span style=color:#a6e22e>Project=</span><span style=color:#e6db74>&#34;Sdk.props&#34;</span> <span style=color:#a6e22e>Sdk=</span><span style=color:#e6db74>&#34;MsBullet.Sdk&#34;</span> <span style=color:#f92672>/&gt;</span>
-
-<span style=color:#f92672>&lt;/Project&gt;</span>
-</code></pre></div><ol start=3>
-<li>Add <code>Directory.Build.targets</code> or copy this on <code>root</code> of your repo:</li>
-</ol>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
-<span style=color:#f92672>&lt;Project&gt;</span>
-
-  <span style=color:#f92672>&lt;Import</span> <span style=color:#a6e22e>Project=</span><span style=color:#e6db74>&#34;Sdk.targets&#34;</span> <span style=color:#a6e22e>Sdk=</span><span style=color:#e6db74>&#34;MsBullet.Sdk&#34;</span> <span style=color:#f92672>/&gt;</span>
-
-<span style=color:#f92672>&lt;/Project&gt;</span>
-</code></pre></div><h2 id=single-build-output>
-Single build output
-<a class=anchor href=#single-build-output>#</a>
-</h2>
-<p>All projects output will be placed into the <code>artifacts</code> folder that has structured below</p>
-<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-plain data-lang=plain>artifacts
-├─ obj
-│ └─ $(MSBuildProjectName)
-│   └─ ($(Platform)|)
-│     └─ $(Configuration)
-├─ bin
-│ └─ $(MSBuildProjectName)
-│   └─ ($(Platform)|)
-│     └─ $(Configuration)
-├─ log
-│ └─ $(Configuration)
-├─ tmp
-│ └─ $(Configuration)
-├─ TestResults
-│ └─ $(Configuration)
-│   └─ $(MSBuildProjectName)_$(TargetFramework)_$(Platform).(xml|html)
-└─ packages
-    └─ $(Configuration)
-        ├─ Shippable
-        └─ NonShippable
-</code></pre></div><table>
-<thead>
-<tr>
-<th>Directory</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>bin</td>
-<td>Build output of each project.</td>
-</tr>
-<tr>
-<td>obj</td>
-<td>Intermediate directory for each project.</td>
-</tr>
-<tr>
-<td>packages</td>
-<td>NuGet packages produced by all projects in the repo.</td>
-</tr>
-<tr>
-<td>log</td>
-<td>Build binary log and other logs.</td>
-</tr>
-<tr>
-<td>tmp</td>
-<td>Temp files generated during build.</td>
-</tr>
-</tbody>
-</table>
-<p>Each directory is identified by a property, please refer to <a href=./configuration/predefined-variables/>Well-known properties</a>.</p>
 <h2 id=built-in-tools-and-extensibility-points>
 Built-in tools and extensibility points
 <a class=anchor href=#built-in-tools-and-extensibility-points>#</a>
 </h2>
-<p>The toolset provided by MsBullet SDK combines third-party tools and specific SDK&rsquo;s features, all of these can be controlled by <code>UsingTool{tool-name}</code> properties, where <em>tool-name</em> identify the tool.</p>
-<p><blockquote class="book-hint info">
+<p>The toolset provided by MsBullet SDK combines third-party tools and specific SDK features, all of these can be controlled by <code>UsingTool{tool-name}</code> properties, where <em>tool-name</em> identifies the tool.</p>
+<blockquote class="book-hint info">
 <p><strong>NOTE</strong><br>
 All default dependency versions are referenced to the latest major using wildcard, for further info <a href=https://docs.microsoft.com/nuget/concepts/package-versioning>https://docs.microsoft.com/nuget/concepts/package-versioning</a>.</p>
 <p>This means that if you want to use a specific of a certain dependency you must override the default variable to lock restoring to the wanted version.</p>
 </blockquote>
-All file references below are relative to repo root. The root is identified by presence of <code>.git</code> folder.</p>
+<p>All file references below are relative to the repo root. The root is identified by the presence of <code>global.json</code> file.</p>
 <h3 id=engversionsprops-a-single-file-listing-packages-versions-and-used-tools>
 <code>/eng/Versions.props</code>: a single file listing packages versions and used tools
 <a class=anchor href=#engversionsprops-a-single-file-listing-packages-versions-and-used-tools>#</a>
 </h3>
-<p>The file should be used as single point of package versions for all NuGet packages used in the repository and for opt-out for tools or features, like suck.</p>
+<p>The file should be used as a single point of package versions for all NuGet packages used in the repository and for an opt-out for tools or features, like suck.</p>
 <div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
 <span style=color:#f92672>&lt;Project&gt;</span>
 
@@ -269,8 +192,6 @@ For more information about tools, please refer to <a href=./configuration/tools>
 <div class=book-toc-content>
 <nav id=TableOfContents>
 <ul>
-<li><a href=#getting-started>Getting started</a></li>
-<li><a href=#single-build-output>Single build output</a></li>
 <li><a href=#built-in-tools-and-extensibility-points>Built-in tools and extensibility points</a>
 <ul>
 <li><a href=#engversionsprops-a-single-file-listing-packages-versions-and-used-tools><code>/eng/Versions.props</code>: a single file listing packages versions and used tools</a></li>
