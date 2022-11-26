@@ -13,7 +13,7 @@
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
-<script defer src=/msbullet/en.search.min.8ec5a390bde2f39d3d35883425a09f244a1acac4288577c8e624c46934862dfc.js integrity="sha256-jsWjkL3i8509NYg0JaCfJEoaysQohXfI5iTEaTSGLfw=" crossorigin=anonymous></script>
+<script defer src=/msbullet/en.search.min.a90917af3a2b49e2cef07b7f3307fff57175441815cb959de840b6c757e0604b.js integrity="sha256-qQkXrzorSeLO8Ht/Mwf/9XF1RBgVy5Wd6EC2x1fgYEs=" crossorigin=anonymous></script>
 <link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/configuration/extension-points/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
@@ -66,12 +66,18 @@
 </label>
 <ul>
 <li>
+<a href=/msbullet/configuration/tools/coverletmsbuild/>Coverlet</a>
+</li>
+<li>
+<a href=/msbullet/configuration/tools/sonaranalyzer/>SonarSource Analyzer</a>
+</li>
+<li>
 <a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
 </li>
 </ul>
 </li>
 <li>
-<span>Build extension points</span>
+<a href=/msbullet/configuration/extension-points/ class=active>Build extension points</a>
 <ul>
 </ul>
 </li>
@@ -94,10 +100,47 @@
 </label>
 </div>
 <aside class="hidden clearfix">
-<nav id=TableOfContents></nav>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#engversionsprops-a-single-file-listing-packages-versions-and-used-tools><code>/eng/Versions.props</code>: a single file listing packages versions and used tools</a></li>
+<li><a href=#engstylecopjson><code>/eng/stylecop.json</code></a></li>
+</ul>
+</nav>
 </aside>
 </header>
-<article class=markdown></article>
+<article class=markdown><h1 id=build-extension-points>
+Build extension points
+<a class=anchor href=#build-extension-points>#</a>
+</h1>
+<p>All file references below are relative to the repo root. The root is identified by the presence of <code>global.json</code> file.</p>
+<h2 id=engversionsprops-a-single-file-listing-packages-versions-and-used-tools>
+<code>/eng/Versions.props</code>: a single file listing packages versions and used tools
+<a class=anchor href=#engversionsprops-a-single-file-listing-packages-versions-and-used-tools>#</a>
+</h2>
+<p>The file should be used as a single point of package versions for all NuGet packages used in the repository and for an opt-out for tools or features, like suck.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=color:#75715e>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style=color:#f92672>&lt;Project&gt;</span>
+
+  <span style=color:#f92672>&lt;PropertyGroup&gt;</span>
+    <span style=color:#f92672>&lt;MicrosoftBuildFrameworkVersion&gt;</span>16.5.0<span style=color:#f92672>&lt;/MicrosoftBuildFrameworkVersion&gt;</span>
+    <span style=color:#f92672>&lt;MicrosoftBuildVersion&gt;</span>$(MicrosoftBuildFrameworkVersion)<span style=color:#f92672>&lt;/MicrosoftBuildVersion&gt;</span>
+  <span style=color:#f92672>&lt;/PropertyGroup&gt;</span>
+
+  <span style=color:#f92672>&lt;PropertyGroup&gt;</span>
+    <span style=color:#f92672>&lt;UsingToolXUnit&gt;</span>false<span style=color:#f92672>&lt;/UsingToolXUnit&gt;</span>
+  <span style=color:#f92672>&lt;/PropertyGroup&gt;</span>
+
+<span style=color:#f92672>&lt;/Project&gt;</span>
+
+</code></pre></div><p>The toolset also defines default versions for various tools and dependencies. These defaults can be overridden in the <code>Versions.props</code> file.<br>
+For more information about tools or for a list of <code>UsingTool{Tool}</code> properties and default versions, please refer to <a href=../tools#opt-out>Built-in tools</a>.</p>
+<h2 id=engstylecopjson>
+<code>/eng/stylecop.json</code>
+<a class=anchor href=#engstylecopjson>#</a>
+</h2>
+<p>The default path where place the configuration of <a href=https://github.com/DotNetAnalyzers/StyleCopAnalyzers>StyleCop.Analyzers</a> overridable by property <code>StyleCopConfig</code>.</p>
+<p>If you want to show the configuration file on project folder you can set <code>ShowStyleCopConfig</code> to <code>true</code>.</p>
+</article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
 <div>
@@ -113,7 +156,12 @@
 </div>
 <aside class=book-toc>
 <div class=book-toc-content>
-<nav id=TableOfContents></nav>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#engversionsprops-a-single-file-listing-packages-versions-and-used-tools><code>/eng/Versions.props</code>: a single file listing packages versions and used tools</a></li>
+<li><a href=#engstylecopjson><code>/eng/stylecop.json</code></a></li>
+</ul>
+</nav>
 </div>
 </aside>
 </main>

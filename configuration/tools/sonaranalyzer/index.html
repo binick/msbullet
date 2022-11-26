@@ -2,19 +2,24 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content>
+<meta name=description content="SonarSource Analyzer. #  This analyzer is provided as a built-in tool of MsBullet SDK to help developers maintain high security and code quality.
+How to use and customization. #  By default, there is no application of specific configurations within the SDK.
+NOTE
+For customization of the rules of this tool, you can refer to the official repository     Property Description Default value Overridable Note     SonarAnalyzerCSharpVersion Set the tool version, by default it use the latest available major.">
 <meta name=theme-color content="#FFFFFF">
-<meta name=color-scheme content="light dark"><meta property="og:title" content="Tags">
-<meta property="og:description" content>
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://binick.github.io/msbullet/tags/">
-<title>Tags | MsBullet</title>
+<meta name=color-scheme content="light dark"><meta property="og:title" content="SonarSource Analyzer">
+<meta property="og:description" content="SonarSource Analyzer. #  This analyzer is provided as a built-in tool of MsBullet SDK to help developers maintain high security and code quality.
+How to use and customization. #  By default, there is no application of specific configurations within the SDK.
+NOTE
+For customization of the rules of this tool, you can refer to the official repository     Property Description Default value Overridable Note     SonarAnalyzerCSharpVersion Set the tool version, by default it use the latest available major.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://binick.github.io/msbullet/configuration/tools/sonaranalyzer/"><meta property="article:section" content="configuration">
+<title>SonarSource Analyzer | MsBullet</title>
 <link rel=manifest href=/msbullet/manifest.json>
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
 <script defer src=/msbullet/flexsearch.min.js></script>
 <script defer src=/msbullet/en.search.min.a90917af3a2b49e2cef07b7f3307fff57175441815cb959de840b6c757e0604b.js integrity="sha256-qQkXrzorSeLO8Ht/Mwf/9XF1RBgVy5Wd6EC2x1fgYEs=" crossorigin=anonymous></script>
-<link rel=alternate type=application/rss+xml href=https://binick.github.io/msbullet/tags/index.xml title=MsBullet>
 </head>
 <body dir=ltr>
 <input type=checkbox class="hidden toggle" id=menu-control>
@@ -44,7 +49,7 @@
 </ul>
 </li>
 <li>
-<input type=checkbox id=section-632bb56b075027697eb90eb7e3d29a12 class=toggle>
+<input type=checkbox id=section-632bb56b075027697eb90eb7e3d29a12 class=toggle checked>
 <label for=section-632bb56b075027697eb90eb7e3d29a12 class="flex justify-between">
 <a href=/msbullet/configuration/>Configuration</a>
 </label>
@@ -60,7 +65,7 @@
 </ul>
 </li>
 <li>
-<input type=checkbox id=section-d9608d9525439e4d6fc7bd13543764bc class=toggle>
+<input type=checkbox id=section-d9608d9525439e4d6fc7bd13543764bc class=toggle checked>
 <label for=section-d9608d9525439e4d6fc7bd13543764bc class="flex justify-between">
 <a href=/msbullet/configuration/tools/>Built-in tools</a>
 </label>
@@ -69,7 +74,7 @@
 <a href=/msbullet/configuration/tools/coverletmsbuild/>Coverlet</a>
 </li>
 <li>
-<a href=/msbullet/configuration/tools/sonaranalyzer/>SonarSource Analyzer</a>
+<a href=/msbullet/configuration/tools/sonaranalyzer/ class=active>SonarSource Analyzer</a>
 </li>
 <li>
 <a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
@@ -94,30 +99,62 @@
 <label for=menu-control>
 <img src=/msbullet/svg/menu.svg class=book-icon alt=Menu>
 </label>
-<strong>Tags</strong>
+<strong>SonarSource Analyzer</strong>
 <label for=toc-control>
 <img src=/msbullet/svg/toc.svg class=book-icon alt="Table of Contents">
 </label>
 </div>
 <aside class="hidden clearfix">
-<nav>
+<nav id=TableOfContents>
 <ul>
-<li class=book-section-flat>
-<strong>Categories</strong>
-<ul>
-</ul>
-</li>
-<li class=book-section-flat>
-<strong>Tags</strong>
-<ul>
-</ul>
-</li>
+<li><a href=#how-to-use-and-customization>How to use and customization.</a></li>
 </ul>
 </nav>
 </aside>
 </header>
+<article class=markdown><h1 id=sonarsource-analyzer>
+SonarSource Analyzer.
+<a class=anchor href=#sonarsource-analyzer>#</a>
+</h1>
+<p>This analyzer is provided as a built-in tool of <strong>MsBullet SDK</strong> to help developers maintain high security and code quality.</p>
+<h2 id=how-to-use-and-customization>
+How to use and customization.
+<a class=anchor href=#how-to-use-and-customization>#</a>
+</h2>
+<p>By default, there is no application of specific configurations within the SDK.</p>
+<blockquote class="book-hint info">
+<strong>NOTE</strong><br>
+For customization of the rules of this tool, you can refer to the <a href=https://github.com/SonarSource/sonar-dotnet>official repository</a>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+<th>Default value</th>
+<th style=text-align:center>Overridable</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SonarAnalyzerCSharpVersion</code></td>
+<td>Set the tool version, by default it use the latest available major.</td>
+<td><code>8.*</code></td>
+<td style=text-align:center>✔️️</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</article>
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
+<div>
+<a class="flex align-center" href=https://github.com/binick/msbullet/edit/main/docs/content/configuration/tools/sonaranalyzer.md target=_blank rel=noopener>
+<img src=/msbullet/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span>
+</a>
+</div>
 </div>
 <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){if(window.getSelection().toString())return;a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
 </footer>
@@ -125,18 +162,9 @@
 </div>
 <aside class=book-toc>
 <div class=book-toc-content>
-<nav>
+<nav id=TableOfContents>
 <ul>
-<li class=book-section-flat>
-<strong>Categories</strong>
-<ul>
-</ul>
-</li>
-<li class=book-section-flat>
-<strong>Tags</strong>
-<ul>
-</ul>
-</li>
+<li><a href=#how-to-use-and-customization>How to use and customization.</a></li>
 </ul>
 </nav>
 </div>

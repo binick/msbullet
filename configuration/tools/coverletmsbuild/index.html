@@ -2,19 +2,19 @@
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="StyleCop Analyzers. #  This analyzer is provided as a built-in tool of MsBullet SDK to enforce standard code conventions
-How to use and customization. #  By default, there is no application of specific configurations within the SDK.
+<meta name=description content="Coverlet. #  This framework is provided as a built-in tool of MsBullet SDK to collect coverage through coverlet.msbuild.
+How to use and customization. #  By default, all projects that have the IsTestProject property set to true collect coverage metrics.
 NOTE
-For customization of the rules of this tool, you can refer to the official documentation     Property Description Default value Overridable Note     StyleCopConfig Specifies the file path of stylecop.">
+To customize this tool, you can refer to the official repository     Property Description Default value Overridable Note     CoverletOutput Specifies the file path where the coverage report will be saved.">
 <meta name=theme-color content="#FFFFFF">
-<meta name=color-scheme content="light dark"><meta property="og:title" content="StyleCop Analyzers">
-<meta property="og:description" content="StyleCop Analyzers. #  This analyzer is provided as a built-in tool of MsBullet SDK to enforce standard code conventions
-How to use and customization. #  By default, there is no application of specific configurations within the SDK.
+<meta name=color-scheme content="light dark"><meta property="og:title" content="Coverlet">
+<meta property="og:description" content="Coverlet. #  This framework is provided as a built-in tool of MsBullet SDK to collect coverage through coverlet.msbuild.
+How to use and customization. #  By default, all projects that have the IsTestProject property set to true collect coverage metrics.
 NOTE
-For customization of the rules of this tool, you can refer to the official documentation     Property Description Default value Overridable Note     StyleCopConfig Specifies the file path of stylecop.">
+To customize this tool, you can refer to the official repository     Property Description Default value Overridable Note     CoverletOutput Specifies the file path where the coverage report will be saved.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://binick.github.io/msbullet/configuration/tools/stylecopanalyzers/"><meta property="article:section" content="configuration">
-<title>StyleCop Analyzers | MsBullet</title>
+<meta property="og:url" content="https://binick.github.io/msbullet/configuration/tools/coverletmsbuild/"><meta property="article:section" content="configuration">
+<title>Coverlet | MsBullet</title>
 <link rel=manifest href=/msbullet/manifest.json>
 <link rel=icon href=/msbullet/favicon.png type=image/x-icon>
 <link rel=stylesheet href=/msbullet/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin=anonymous>
@@ -71,13 +71,13 @@ For customization of the rules of this tool, you can refer to the official docum
 </label>
 <ul>
 <li>
-<a href=/msbullet/configuration/tools/coverletmsbuild/>Coverlet</a>
+<a href=/msbullet/configuration/tools/coverletmsbuild/ class=active>Coverlet</a>
 </li>
 <li>
 <a href=/msbullet/configuration/tools/sonaranalyzer/>SonarSource Analyzer</a>
 </li>
 <li>
-<a href=/msbullet/configuration/tools/stylecopanalyzers/ class=active>StyleCop Analyzers</a>
+<a href=/msbullet/configuration/tools/stylecopanalyzers/>StyleCop Analyzers</a>
 </li>
 </ul>
 </li>
@@ -99,7 +99,7 @@ For customization of the rules of this tool, you can refer to the official docum
 <label for=menu-control>
 <img src=/msbullet/svg/menu.svg class=book-icon alt=Menu>
 </label>
-<strong>StyleCop Analyzers</strong>
+<strong>Coverlet</strong>
 <label for=toc-control>
 <img src=/msbullet/svg/toc.svg class=book-icon alt="Table of Contents">
 </label>
@@ -112,19 +112,19 @@ For customization of the rules of this tool, you can refer to the official docum
 </nav>
 </aside>
 </header>
-<article class=markdown><h1 id=stylecop-analyzers>
-StyleCop Analyzers.
-<a class=anchor href=#stylecop-analyzers>#</a>
+<article class=markdown><h1 id=coverlet>
+Coverlet.
+<a class=anchor href=#coverlet>#</a>
 </h1>
-<p>This analyzer is provided as a built-in tool of <strong>MsBullet SDK</strong> to enforce standard code conventions</p>
+<p>This framework is provided as a built-in tool of <strong>MsBullet SDK</strong> to collect coverage through <a href=https://www.nuget.org/packages/coverlet.msbuild>coverlet.msbuild</a>.</p>
 <h2 id=how-to-use-and-customization>
 How to use and customization.
 <a class=anchor href=#how-to-use-and-customization>#</a>
 </h2>
-<p>By default, there is no application of specific configurations within the SDK.</p>
+<p>By default, all projects that have the <code>IsTestProject</code> property set to true collect coverage metrics.</p>
 <blockquote class="book-hint info">
 <strong>NOTE</strong><br>
-For customization of the rules of this tool, you can refer to the <a href=https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/Configuration.md>official documentation</a>
+To customize this tool, you can refer to the <a href=https://github.com/coverlet-coverage/coverlet>official repository</a>
 </blockquote>
 <table>
 <thead>
@@ -138,23 +138,23 @@ For customization of the rules of this tool, you can refer to the <a href=https:
 </thead>
 <tbody>
 <tr>
-<td><code>StyleCopConfig</code></td>
-<td>Specifies the file path of <code>stylecop.json</code> configuration file.</td>
-<td><code>$(RepoRoot)eng/stylecop.json</code></td>
+<td><code>CoverletOutput</code></td>
+<td>Specifies the file path where the coverage report will be saved.</td>
+<td><code>$(ArtifactsCoverageDir)\$(MSBuildProjectName).xml</code></td>
+<td style=text-align:center>❌️</td>
+<td></td>
+</tr>
+<tr>
+<td><code>CoverletOutputFormat</code></td>
+<td>Specifies the format(s) in which to generate the report.</td>
+<td><code>cobertura</code></td>
 <td style=text-align:center>✔️️</td>
 <td></td>
 </tr>
 <tr>
-<td><code>ShowStyleCopConfig</code></td>
-<td>Specifies whether the <code>stylecop.json</code> file should be displayed within the project root.</td>
-<td><code>false</code></td>
-<td style=text-align:center>✔️️</td>
-<td></td>
-</tr>
-<tr>
-<td><code>StyleCopAnalyzersVersion</code></td>
+<td><code>CoverletMSBuildVersion</code></td>
 <td>Set the tool version, by default it use the latest available major.</td>
-<td><code>1.*</code></td>
+<td><code>3.*</code></td>
 <td style=text-align:center>✔️️</td>
 <td></td>
 </tr>
@@ -164,7 +164,7 @@ For customization of the rules of this tool, you can refer to the <a href=https:
 <footer class=book-footer>
 <div class="flex flex-wrap justify-between">
 <div>
-<a class="flex align-center" href=https://github.com/binick/msbullet/edit/main/docs/content/configuration/tools/stylecopanalyzers.md target=_blank rel=noopener>
+<a class="flex align-center" href=https://github.com/binick/msbullet/edit/main/docs/content/configuration/tools/coverletmsbuild.md target=_blank rel=noopener>
 <img src=/msbullet/svg/edit.svg class=book-icon alt=Edit>
 <span>Edit this page</span>
 </a>
