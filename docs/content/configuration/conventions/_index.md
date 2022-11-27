@@ -1,8 +1,22 @@
 ---
 title: Conventions
+description: There are some useful conventions for keeping behavior consistent across multiple operating systems.
+weight: 10
 ---
 
-# Recommended conventions.
+# Conventions.
+
+## Project Naming.
+
+When a project name ends with `.Tests`, `.UnitTests`, `.IntegrationTests` or `.PerformanceTests` are detected as test projects automatically and the `IsTestProject` property will be evaluated as true.
+
+In addition, for the following suffixes the propriety identifying their specific type will be valued:
+
+ - for `.Tests` or `.UnitTests`, `IsUnitTestProject` will be true
+ - for `.IntegrationTests`, `IsIntegrationTestProject` will be true
+ - for `.PerformanceTests`, `IsPerformanceTestProject` will be true
+
+## Recommended conventions.
 
 ### File Naming.
 
