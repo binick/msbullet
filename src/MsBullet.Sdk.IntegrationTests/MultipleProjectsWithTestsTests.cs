@@ -52,5 +52,22 @@ namespace MsBullet.Sdk.IntegrationTests
                 Assert.Contains(report, outDirPahts);
             }
         }
+
+        [Fact]
+        public void ShouldBeEvaluateReportCoverageOnlyWhenIsTestProject()
+        {
+            // Given
+            TestApp app = this.fixture.ProvideTestApp("MultipleProjectsWithTests").Create(this.output);
+            var args = new[]
+            {
+                "/t:CollectCoverage"
+            };
+
+            // When
+            int exitCode = app.ExecuteBuild(this.output, args);
+
+            // Then
+            Assert.Equal(0, exitCode);
+        }
     }
 }
