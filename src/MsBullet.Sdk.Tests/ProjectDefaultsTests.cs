@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
@@ -18,11 +19,24 @@ namespace MsBullet.Sdk.Tests
     {
         private readonly ITestOutputHelper output;
         private readonly TestProjectFixture fixture;
+        private readonly IReadOnlyDictionary<OSPlatform, string[]> crossTargetBrokenInNet70100;
 
         public ProjectDefaultsTests(ITestOutputHelper output, TestProjectFixture fixture)
         {
             this.output = output;
             this.fixture = fixture;
+            this.crossTargetBrokenInNet70100 = new Dictionary<OSPlatform, string[]>
+            {
+                {
+                    OSPlatform.Linux,
+                    new string[]
+                    {
+                        "net6.0-ios",
+                        "net6.0-tvos",
+                        "net6.0-maccatalyst"
+                    }
+                }
+            };
         }
 
         public static IEnumerable<object[]> TargetFrameworksWithoutShippedRoslynAnalizersShipped => ProjectDefaultsTests.SupportedTargetFrameworks
@@ -141,6 +155,11 @@ namespace MsBullet.Sdk.Tests
         [MemberData(nameof(SupportedTargetFrameworks))]
         public void ShouldHaveOnlyPackagesReferenceWithPrivateAssets(string targetFramework)
         {
+            if (this.IsAKnownBrokenCrossTarget(targetFramework))
+            {
+                return;
+            }
+
             var project = this.ProvideProject(new Dictionary<string, string>
             {
                 { "TargetFramework", targetFramework }
@@ -179,6 +198,11 @@ namespace MsBullet.Sdk.Tests
         [MemberData(nameof(SupportedTargetFrameworks))]
         public virtual void ShouldBeReferenceRoslynAnalyzer(string targetFramework)
         {
+            if (this.IsAKnownBrokenCrossTarget(targetFramework))
+            {
+                return;
+            }
+
             var project = this.ProvideProject(new Dictionary<string, string>
             {
                 { "TargetFramework", targetFramework }
@@ -200,6 +224,11 @@ namespace MsBullet.Sdk.Tests
         [MemberData(nameof(AllNet7TargetFrameworks))]
         public virtual void ShouldEnforchingAllAnalysisRules(string targetFramework)
         {
+            if (this.IsAKnownBrokenCrossTarget(targetFramework))
+            {
+                return;
+            }
+
             var expectedAnalysisMode = ProjectDefaultsTests.AllNet5TargetFrameworks.SelectMany(p => p.Cast<string>()).Contains(targetFramework)
                 ? "AllEnabledByDefault"
                 : "All";
@@ -258,6 +287,13 @@ namespace MsBullet.Sdk.Tests
             project
                 .ShouldCountainProperty("IsPackable")
                 .ShouldEvaluatedEquivalentTo(true);
+        }
+
+        protected bool IsAKnownBrokenCrossTarget(string targetFramework)
+        {
+            return this.crossTargetBrokenInNet70100
+                .SingleOrDefault(t => RuntimeInformation.IsOSPlatform(t.Key), KeyValuePair.Create<OSPlatform, string[]>(default, Array.Empty<string>()))
+                .Value.Contains(targetFramework);
         }
 
         protected virtual Project ProvideProject(IDictionary<string, string> globalProperties = null)

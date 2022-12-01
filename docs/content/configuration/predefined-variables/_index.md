@@ -1,11 +1,17 @@
 ---
 title: Well-known properties
+description: |
+    MsBullet SDK provides a set of predefined properties that store information about the project in the MSBuild context. These properties are evaluated in the same manner as other MSBuild properties.  
+    MsBullet SDK uses the values in the following table to predefine reserved and well-known properties. Reserved properties cannot be overridden, and most well-known properties shouldn't be overridden except in advanced scenarios.
+weight: 1
 bookToc: false
 ---
 
 # Well-known properties.
 
-**MsBullet SDK** provides some properties for internal use, and you can use them in your build logic.
+**MsBullet SDK** provides a set of predefined properties that store information about the project in the MSBuild context. These properties are evaluated in the same manner as other MSBuild properties. For example, to use the `RepoRoot` property, you type `$(RepoRoot)`.
+
+**MsBullet SDK** uses the values in the following table to predefine reserved and well-known properties. Reserved properties cannot be overridden, and most well-known properties shouldn't be overridden except in advanced scenarios.
 
 For all other variables mentioned that are not in the table above, you can find more information in the [official documentation](https://docs.microsoft.com/visualstudio/msbuild/msbuild-reserved-and-well-known-properties "MSBuild reserved and well-known properties").
 

@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <MicrosoftNETTestSdkVersion Condition="'$(MicrosoftNETTestSdkVersion)' == ''">16.*</MicrosoftNETTestSdkVersion>
+    <MicrosoftNETTestSdkVersion Condition="'$(MicrosoftNETTestSdkVersion)' == ''">17.*</MicrosoftNETTestSdkVersion>
 
     <!-- Treat test assemblies as non-shippable (do not publish or sign them). -->
     <IsShippable Condition="'$(IsShippable)' == ''">false</IsShippable>
