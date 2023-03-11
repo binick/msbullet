@@ -4,6 +4,7 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
 
     <NoWarn>$(NoWarn);SA0001;SA1633;SA1200</NoWarn>
+    <NoWarn>$(NoWarn);S2094</NoWarn>
   </PropertyGroup>
 
 </Project>

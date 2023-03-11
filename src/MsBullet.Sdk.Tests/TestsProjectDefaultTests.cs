@@ -47,7 +47,7 @@ namespace MsBullet.Sdk.Tests
             {
                 var items = project.ShouldContainItem("PackageReference");
 
-                foreach (var item in items.ExceptBy(expectedPackageVersions.Select(p => p.Key).Concat(this.FrameworkDependentPackages), i => i.EvaluatedInclude))
+                foreach (var item in items.ExceptBy(expectedPackageVersions.Select(p => p.Key).Concat(FrameworkDependentPackages), i => i.EvaluatedInclude))
                 {
                     item.ShouldContainMetadata("Version").EvaluatedValue
                         .Should()
