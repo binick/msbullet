@@ -20,6 +20,21 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Fact]
+        public void MinimalRepoBuildsWithoutErrors()
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope.
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
+            // When
+            int exitCode = app.ExecuteBuild(this.output);
+
+            // Then
+            Assert.Equal(0, exitCode);
+        }
+
+        [Fact]
         public void MinimalRepoRunTestsWithoutError()
         {
             // Given

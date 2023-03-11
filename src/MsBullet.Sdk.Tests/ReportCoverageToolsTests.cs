@@ -111,7 +111,7 @@ namespace MsBullet.Sdk.Tests
                 .Which
                 .DirectMetadata
                 .Should()
-                .ContainSingle(m => m.Name.Equals("Version"))
+                .ContainSingle(m => m.Name.Equals("Version", StringComparison.OrdinalIgnoreCase))
                 .Which
                 .UnevaluatedValue
                 .Should()

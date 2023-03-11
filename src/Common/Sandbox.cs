@@ -21,7 +21,7 @@ namespace MsBullet.Sdk.Tests.Utilities
 
             foreach (string dir in sourceDirectories)
             {
-                this.CopyRecursive(dir, workDir);
+                Sandbox.CopyRecursive(dir, workDir);
             }
         }
 
@@ -52,15 +52,11 @@ namespace MsBullet.Sdk.Tests.Utilities
             }
         }
 
-        private void CopyRecursive(string srcDir, string destDir)
+        private static void CopyRecursive(string srcDir, string destDir)
         {
             foreach (string srcFileName in Directory.EnumerateFiles(srcDir, "*", SearchOption.AllDirectories))
             {
-                string destFileName = Path.Combine(destDir, srcFileName.Substring(srcDir.Length).TrimStart(new[]
-                {
-                    Path.AltDirectorySeparatorChar,
-                    Path.DirectorySeparatorChar
-                }));
+                string destFileName = Path.Combine(destDir, srcFileName.Substring(srcDir.Length).TrimStart(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
 
                 Directory.CreateDirectory(Path.GetDirectoryName(destFileName));
                 File.Copy(srcFileName, destFileName);
