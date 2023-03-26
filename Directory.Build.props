@@ -9,8 +9,16 @@
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);SA1311;SA1413</NoWarn>
-    <NoWarn Condition="'$(IsShippable)' != 'true'">$(NoWarn);SA0001;SA1600</NoWarn>
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsShippable)' != 'true'"> 
+    <NoWarn>$(NoWarn);SA0001;SA1600</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <NoWarn>$(NoWarn);CA1711</NoWarn>
+    <NoWarn>$(NoWarn);IL2026</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace MsBullet.Sdk.Tests
 {
-    internal class XUnitLogger : ConsoleLogger
+    internal sealed class XUnitLogger : ConsoleLogger
     {
         public XUnitLogger(ITestOutputHelper output)
             : this(output, LoggerVerbosity.Normal)

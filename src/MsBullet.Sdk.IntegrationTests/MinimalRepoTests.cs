@@ -42,7 +42,6 @@ namespace MsBullet.Sdk.IntegrationTests
         public void MinimalRepoPackWithoutErrors(bool isShippable, string destinationFolder)
         {
             // Given
-#pragma warning disable CA2000 // Dispose objects before losing scope
             TestApp app = this.fixture.ProvideTestApp("MinimalRepo")
                 .WithPreCreate("git", "init")
                 .WithPreCreate("git", "remote", "add", "origin", "http://localhost")
@@ -50,7 +49,6 @@ namespace MsBullet.Sdk.IntegrationTests
                 .WithPreCreate("git", "commit", "--allow-empty", "-m", "Dummy happy empty commit.")
                 .Create(this.output);
 
-#pragma warning restore CA2000 // Dispose objects before losing scope
             var expectedVersion = "1.0.0-local.*";
             var packageFileName = $"ClassLib1.{expectedVersion}.nupkg";
 
@@ -66,20 +64,11 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.Single(Directory.GetFiles(Path.Combine(app.WorkingDirectory, "artifacts", "packages", "Debug", destinationFolder), packageFileName));
         }
 
-        [Fact]
+        [Fact(Skip = "This feature will be released on future version")]
         public void MinimalRepoSignsWithoutErrors()
         {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
-            this.output.WriteLine("This feature will be released on future version");
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
-            return;
-
-#pragma warning disable CS0162 // Unreachable code detected
-
             // Given
-#pragma warning disable CA2000 // Dispose objects before losing scope
             TestApp app = this.fixture.ProvideTestApp("MinimalRepo").Create(this.output);
-#pragma warning restore CA2000 // Dispose objects before losing scope
 
             // When
             int exitCode = app.ExecuteBuild(
@@ -98,16 +87,13 @@ namespace MsBullet.Sdk.IntegrationTests
 #pragma warning disable SYSLIB0024 // Type or member is obsolete
             AppDomain.Unload(domain);
 #pragma warning restore SYSLIB0024 // Type or member is obsolete
-#pragma warning restore CS0162 // Unreachable code detected
         }
 
         [Fact]
         public void MinimalRepoVersionWithoutErrors()
         {
             // Given
-#pragma warning disable CA2000 // Dispose objects before losing scope
             TestApp app = this.fixture.ProvideTestApp("MinimalRepo").Create(this.output);
-#pragma warning restore CA2000 // Dispose objects before losing scope
 
             // When
             int exitCode = app.ExecuteBuild(

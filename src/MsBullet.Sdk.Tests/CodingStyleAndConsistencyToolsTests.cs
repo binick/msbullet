@@ -2,12 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
-using Microsoft.CodeAnalysis;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -72,7 +69,7 @@ namespace MsBullet.Sdk.Tests
                 var andWitchConstraint = project
                     .ShouldContainItem("AdditionalFiles")
                     .Should()
-                    .ContainSingle(i => i.EvaluatedInclude.Equals(project.ShouldCountainProperty("StyleCopConfig", string.Empty).EvaluatedValue));
+                    .ContainSingle(i => i.EvaluatedInclude.Equals(project.ShouldCountainProperty("StyleCopConfig", string.Empty).EvaluatedValue, StringComparison.OrdinalIgnoreCase));
 
                 andWitchConstraint
                     .Which
@@ -90,7 +87,7 @@ namespace MsBullet.Sdk.Tests
                     .Which
                     .DirectMetadata
                     .Should()
-                    .ContainSingle(c => c.Name.Equals("Visible"))
+                    .ContainSingle(c => c.Name.Equals("Visible", StringComparison.OrdinalIgnoreCase))
                     .Which
                     .UnevaluatedValue
                     .Should()
@@ -109,7 +106,7 @@ namespace MsBullet.Sdk.Tests
             project
                 .ShouldContainItem("AdditionalFiles")
                 .Should()
-                .NotContain(i => i.EvaluatedInclude.Equals(project.ShouldCountainProperty("StyleCopConfig", string.Empty).EvaluatedValue));
+                .NotContain(i => i.EvaluatedInclude.Equals(project.ShouldCountainProperty("StyleCopConfig", string.Empty).EvaluatedValue, StringComparison.OrdinalIgnoreCase));
         }
 
         [Fact(DisplayName = "Should be referenced StyleCopAnalyzers package")]

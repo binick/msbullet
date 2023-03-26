@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
 using Xunit;
 using Xunit.Abstractions;
@@ -111,11 +112,26 @@ namespace MsBullet.Sdk.Tests
                 .Which
                 .DirectMetadata
                 .Should()
-                .ContainSingle(m => m.Name.Equals("Version"))
+                .ContainSingle(m => m.Name.Equals("Version", StringComparison.OrdinalIgnoreCase))
                 .Which
                 .UnevaluatedValue
                 .Should()
                 .Be("$(ReportGeneratorVersion)");
+        }
+
+        [Theory(DisplayName = "Should not be define report generation target when it is opted out")]
+        [InlineData("ReportCoverage")]
+        [InlineData("ReportCoverageSummary")]
+        public void ShouldNotBeDefineTargetWhenItIsOptedOut(string target)
+        {
+            var project = this.fixture.ProvideUnitTestProject(this.output, new Dictionary<string, string>() { { "UsingToolReportGenerator", "false" } });
+
+            project
+                .ShouldCountainSingleTarget(target)
+                .Value
+                .Condition
+                .Should()
+                .Contain("'$(UsingToolReportGenerator)' == 'true'");
         }
     }
 }

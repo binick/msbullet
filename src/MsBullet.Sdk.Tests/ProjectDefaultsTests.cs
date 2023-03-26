@@ -118,14 +118,14 @@ namespace MsBullet.Sdk.Tests
             new string[] { "uap10.0" }
         };
 
-        public IEnumerable<string> FrameworkDependentPackages => new string[]
+        public static IEnumerable<string> FrameworkDependentPackages => new string[]
         {
             "Microsoft.NETCore.App",
             "NETStandard.Library"
         };
 
-        [Fact(DisplayName = "Should has a valorized engeenering directory name")]
-        public virtual void ShouldHasAValorizedEngeeneringDirectoryName()
+        [Fact(DisplayName = "Should has a valorized engineering directory name")]
+        public virtual void ShouldHasAValorizedEngineeringDirectoryName()
         {
             var project = this.ProvideProject();
 
@@ -165,7 +165,7 @@ namespace MsBullet.Sdk.Tests
                 { "TargetFramework", targetFramework }
             });
 
-            var excludePackages = this.FrameworkDependentPackages;
+            var excludePackages = FrameworkDependentPackages;
 
 #pragma warning disable S1135 // Track uses of "TODO" tags
             /*
@@ -173,10 +173,10 @@ namespace MsBullet.Sdk.Tests
              * Investigate why it is added even though the IsTestProject property is false.
              *
              * Todo: System.Runtime.InteropServices.NFloat.Internal
-             * This package reference is shipped whitin a iOS and macOS runtimes.
+             * This package reference is shipped whit in a iOS and macOS runtimes.
              */
 #pragma warning restore S1135 // Track uses of "TODO" tags
-            bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
+            _ = bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
             if (!isTestProject)
             {
                 excludePackages = excludePackages.Append("Microsoft.NET.Test.Sdk");
@@ -218,11 +218,11 @@ namespace MsBullet.Sdk.Tests
                 .Contain(i => ensureInclude(i, "Microsoft.CodeAnalysis.NetAnalyzers"));
         }
 
-        [Theory(DisplayName = "Should enforching all analysis rules")]
+        [Theory(DisplayName = "Should enforcing all analysis rules")]
         [MemberData(nameof(AllNet5TargetFrameworks))]
         [MemberData(nameof(AllNet6TargetFrameworks))]
         [MemberData(nameof(AllNet7TargetFrameworks))]
-        public virtual void ShouldEnforchingAllAnalysisRules(string targetFramework)
+        public virtual void ShouldEnforcingAllAnalysisRules(string targetFramework)
         {
             if (this.IsAKnownBrokenCrossTarget(targetFramework))
             {
@@ -247,12 +247,12 @@ namespace MsBullet.Sdk.Tests
                 .ShouldEvaluatedEquivalentTo(true);
         }
 
-        [Fact(DisplayName = "Should respect user package reference verions")]
+        [Fact(DisplayName = "Should respect user package reference versions")]
         public virtual void ShouldRespectUserPackageReferenceVersions()
         {
             var project = this.ProvideProject();
 
-            var excludePackages = this.FrameworkDependentPackages;
+            var excludePackages = FrameworkDependentPackages;
 
 #pragma warning disable S1135 // Track uses of "TODO" tags
             /*
@@ -260,7 +260,7 @@ namespace MsBullet.Sdk.Tests
              * Investigate why it is added even though the IsTestProject property is false.
              */
 #pragma warning restore S1135 // Track uses of "TODO" tags
-            bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
+            _ = bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
             if (!isTestProject)
             {
                 excludePackages = excludePackages.Append("Microsoft.NET.Test.Sdk");

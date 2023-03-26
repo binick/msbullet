@@ -50,7 +50,7 @@ namespace MsBullet.Sdk.IntegrationTests
         {
             if (disposing)
             {
-                while (this.disposables.Count > 0)
+                while (!this.disposables.IsEmpty)
                 {
                     if (this.disposables.TryDequeue(out IDisposable disposable))
                     {

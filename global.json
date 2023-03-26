@@ -3,9 +3,9 @@
     "allowPrerelease": false
   },
   "tools": {
-    "dotnet": "7.0.100"
+    "dotnet": "7.0.202"
   },
   "msbuild-sdks": {
-    "MsBullet.Sdk": "0.6.3"
+    "MsBullet.Sdk": "0.6.5"
   }
 }

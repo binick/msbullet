@@ -20,6 +20,21 @@ namespace MsBullet.Sdk.IntegrationTests
         }
 
         [Fact]
+        public void MinimalRepoBuildsWithoutErrors()
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope.
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
+            // When
+            int exitCode = app.ExecuteBuild(this.output);
+
+            // Then
+            Assert.Equal(0, exitCode);
+        }
+
+        [Fact]
         public void MinimalRepoRunTestsWithoutError()
         {
             // Given
@@ -58,7 +73,7 @@ namespace MsBullet.Sdk.IntegrationTests
             Assert.Equal(0, exitCode);
             Assert.True(Directory.Exists(outDir));
 
-            var outDirPahts = Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path));
+            var outDirPahts = Directory.EnumerateFiles(outDir).Select(Path.GetFileName);
             foreach (var report in reports)
             {
                 Assert.Contains(report, outDirPahts);
@@ -86,7 +101,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // Then
             Assert.Equal(0, exitCode);
             Assert.True(Directory.Exists(outDir));
-            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(Path.GetFileName));
         }
 
         [Theory]
@@ -108,7 +123,7 @@ namespace MsBullet.Sdk.IntegrationTests
             // Then
             Assert.Equal(0, exitCode);
             Assert.True(Directory.Exists(outDir));
-            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(Path.GetFileName));
         }
 
         [Theory]
@@ -131,7 +146,53 @@ namespace MsBullet.Sdk.IntegrationTests
             // Then
             Assert.Equal(0, exitCode);
             Assert.True(Directory.Exists(outDir));
-            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(path => Path.GetFileName(path)));
+            Assert.Contains(fileName, Directory.EnumerateFiles(outDir).Select(Path.GetFileName));
+        }
+
+        [Theory]
+        [InlineData("Debug")]
+        [InlineData("Release")]
+        public void MinimalRepoRunTestsShoudNotGenerateCoverageSummaryReportsWhenItsPropertyIsFalse(string configuration)
+        {
+            // Given
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+            var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration, "Reports");
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                $"-configuration {configuration}",
+                "/p:GenerateCoverageReportSummary=false");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.True(Directory.Exists(outDir));
+            Assert.DoesNotContain("Summary", Directory.EnumerateDirectories(outDir));
+        }
+
+        [Theory]
+        [InlineData("Debug")]
+        [InlineData("Release")]
+        public void MinimalRepoRunTestsShoudNotGenerateCoverageReportsWhenReportGeneratorToolIsOptedOut(string configuration)
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            TestApp app = this.fixture.ProvideTestApp("MinimalRepoWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            var outDir = Path.Combine(app.WorkingDirectory, "artifacts", "TestResults", configuration);
+
+            // When
+            int exitCode = app.ExecuteBuild(
+                this.output,
+                "-test",
+                $"-configuration {configuration}",
+                "/p:UsingToolReportGenerator=false");
+
+            // Then
+            Assert.Equal(0, exitCode);
+            Assert.True(Directory.Exists(outDir));
+            Assert.DoesNotContain("Reports", Directory.EnumerateDirectories(outDir));
         }
 
         [Theory]
