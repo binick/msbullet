@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
 
-  <Target Name="ReportCoverage" DependsOnTargets="_GenerateCoverageReport" AfterTargets="CollectCoverage" />
-  <Target Name="ReportCoverageSummary" DependsOnTargets="_GenerateCoverageReportSummary" AfterTargets="ReportCoverage" Condition="'$(GenerateCoverageReportSummary)' != 'false'" />
+  <Target Name="ReportCoverage" DependsOnTargets="_GenerateCoverageReport" Condition="'$(IsTestProject)' == 'true' and '$(UsingToolReportGenerator)' == 'true'" AfterTargets="CollectCoverage" />
+  <Target Name="ReportCoverageSummary" DependsOnTargets="_GenerateCoverageReportSummary" AfterTargets="ReportCoverage" Condition="'$(IsTestProject)' == 'true' and '$(UsingToolReportGenerator)' == 'true' and '$(GenerateCoverageReportSummary)' != 'false'" />
 
   <!-- Import specialized targets files of supported code coverage report generator tool -->
   <Import Project="$(MSBuildThisFileDirectory)$(ReportCoverageToolName)\$(ReportCoverageToolName).targets" Condition="'$(ReportCoverageToolName)' != '' and Exists('$(MSBuildThisFileDirectory)$(ReportCoverageToolName)\$(ReportCoverageToolName).targets')"/>

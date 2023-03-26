@@ -3,14 +3,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using Microsoft.Build.Framework;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace MsBullet.Sdk.IntegrationTests.Utilities
 {
-    internal class MockEngine : IBuildEngine5
+    internal sealed class MockEngine : IBuildEngine5
     {
         private readonly ITestOutputHelper output;
 

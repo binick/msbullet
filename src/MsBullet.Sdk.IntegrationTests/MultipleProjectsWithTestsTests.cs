@@ -1,5 +1,6 @@
 // See the LICENSE.TXT file in the project root for full license information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -24,7 +25,7 @@ namespace MsBullet.Sdk.IntegrationTests
         [InlineData("Release", "", "index.html", "Summary.tex", "Cobertura.xml")]
         [InlineData("Debug", "Html", "index.html", "Cobertura.xml")]
         [InlineData("Release", "Html", "index.html", "Cobertura.xml")]
-        public void MinimalRepoRunTestsShoudGenerateCoverageReportSummary(string configuration, string reportTypes, params string[] reports)
+        public void MinimalRepoRunTestsShoudGenerateCoverageReportSummary(string configuration, string reportTypes, [NotNull] params string[] reports)
         {
             // Given
             TestApp app = this.fixture.ProvideTestApp("MultipleProjectsWithTests").Create(this.output);
@@ -51,6 +52,25 @@ namespace MsBullet.Sdk.IntegrationTests
             {
                 Assert.Contains(report, outDirPahts);
             }
+        }
+
+        [Fact]
+        public void ShouldBeEvaluateReportCoverageOnlyWhenIsTestProject()
+        {
+            // Given
+#pragma warning disable CA2000 // Dispose objects before losing scope
+            TestApp app = this.fixture.ProvideTestApp("MultipleProjectsWithTests").Create(this.output);
+#pragma warning restore CA2000 // Dispose objects before losing scope
+            var args = new[]
+            {
+                "/t:CollectCoverage"
+            };
+
+            // When
+            int exitCode = app.ExecuteBuild(this.output, args);
+
+            // Then
+            Assert.Equal(0, exitCode);
         }
     }
 }

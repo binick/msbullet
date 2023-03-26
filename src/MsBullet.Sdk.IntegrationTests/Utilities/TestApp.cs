@@ -72,7 +72,7 @@ namespace MsBullet.Sdk.IntegrationTests
             psi.UseShellExecute = false;
             psi.RedirectStandardError = true;
             psi.RedirectStandardOutput = true;
-            psi.Environment["PATH"] = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH");
+            psi.Environment["PATH"] = Path.GetDirectoryName(Environment.ProcessPath) + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH");
 
             var process = new Process
             {
@@ -101,9 +101,7 @@ namespace MsBullet.Sdk.IntegrationTests
 
             if (string.IsNullOrEmpty(fileName))
             {
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
                 throw new ArgumentException("Script file is not valorized.", nameof(fileName));
-#pragma warning restore CA1303 // Do not pass literals as localized parameters
             }
 
             if (scriptArgs is null)
@@ -148,11 +146,7 @@ namespace MsBullet.Sdk.IntegrationTests
         {
             foreach (string srcFileName in Directory.EnumerateFiles(srcDir, "*", SearchOption.AllDirectories))
             {
-                string destFileName = Path.Combine(destDir, srcFileName.Substring(srcDir.Length).TrimStart(new[]
-                {
-                    Path.AltDirectorySeparatorChar,
-                    Path.DirectorySeparatorChar
-                }));
+                string destFileName = Path.Combine(destDir, srcFileName.Substring(srcDir.Length).TrimStart(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar));
 
                 Directory.CreateDirectory(Path.GetDirectoryName(destFileName));
                 File.Copy(srcFileName, destFileName);

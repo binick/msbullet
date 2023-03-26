@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Build.Evaluation;
@@ -18,11 +19,24 @@ namespace MsBullet.Sdk.Tests
     {
         private readonly ITestOutputHelper output;
         private readonly TestProjectFixture fixture;
+        private readonly IReadOnlyDictionary<OSPlatform, string[]> crossTargetBrokenInNet70100;
 
         public ProjectDefaultsTests(ITestOutputHelper output, TestProjectFixture fixture)
         {
             this.output = output;
             this.fixture = fixture;
+            this.crossTargetBrokenInNet70100 = new Dictionary<OSPlatform, string[]>
+            {
+                {
+                    OSPlatform.Linux,
+                    new string[]
+                    {
+                        "net6.0-ios",
+                        "net6.0-tvos",
+                        "net6.0-maccatalyst"
+                    }
+                }
+            };
         }
 
         public static IEnumerable<object[]> TargetFrameworksWithoutShippedRoslynAnalizersShipped => ProjectDefaultsTests.SupportedTargetFrameworks
@@ -104,14 +118,14 @@ namespace MsBullet.Sdk.Tests
             new string[] { "uap10.0" }
         };
 
-        public IEnumerable<string> FrameworkDependentPackages => new string[]
+        public static IEnumerable<string> FrameworkDependentPackages => new string[]
         {
             "Microsoft.NETCore.App",
             "NETStandard.Library"
         };
 
-        [Fact(DisplayName = "Should has a valorized engeenering directory name")]
-        public virtual void ShouldHasAValorizedEngeeneringDirectoryName()
+        [Fact(DisplayName = "Should has a valorized engineering directory name")]
+        public virtual void ShouldHasAValorizedEngineeringDirectoryName()
         {
             var project = this.ProvideProject();
 
@@ -141,12 +155,17 @@ namespace MsBullet.Sdk.Tests
         [MemberData(nameof(SupportedTargetFrameworks))]
         public void ShouldHaveOnlyPackagesReferenceWithPrivateAssets(string targetFramework)
         {
+            if (this.IsAKnownBrokenCrossTarget(targetFramework))
+            {
+                return;
+            }
+
             var project = this.ProvideProject(new Dictionary<string, string>
             {
                 { "TargetFramework", targetFramework }
             });
 
-            var excludePackages = this.FrameworkDependentPackages;
+            var excludePackages = FrameworkDependentPackages;
 
 #pragma warning disable S1135 // Track uses of "TODO" tags
             /*
@@ -154,10 +173,10 @@ namespace MsBullet.Sdk.Tests
              * Investigate why it is added even though the IsTestProject property is false.
              *
              * Todo: System.Runtime.InteropServices.NFloat.Internal
-             * This package reference is shipped whitin a iOS and macOS runtimes.
+             * This package reference is shipped whit in a iOS and macOS runtimes.
              */
 #pragma warning restore S1135 // Track uses of "TODO" tags
-            bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
+            _ = bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
             if (!isTestProject)
             {
                 excludePackages = excludePackages.Append("Microsoft.NET.Test.Sdk");
@@ -179,6 +198,11 @@ namespace MsBullet.Sdk.Tests
         [MemberData(nameof(SupportedTargetFrameworks))]
         public virtual void ShouldBeReferenceRoslynAnalyzer(string targetFramework)
         {
+            if (this.IsAKnownBrokenCrossTarget(targetFramework))
+            {
+                return;
+            }
+
             var project = this.ProvideProject(new Dictionary<string, string>
             {
                 { "TargetFramework", targetFramework }
@@ -194,12 +218,17 @@ namespace MsBullet.Sdk.Tests
                 .Contain(i => ensureInclude(i, "Microsoft.CodeAnalysis.NetAnalyzers"));
         }
 
-        [Theory(DisplayName = "Should enforching all analysis rules")]
+        [Theory(DisplayName = "Should enforcing all analysis rules")]
         [MemberData(nameof(AllNet5TargetFrameworks))]
         [MemberData(nameof(AllNet6TargetFrameworks))]
         [MemberData(nameof(AllNet7TargetFrameworks))]
-        public virtual void ShouldEnforchingAllAnalysisRules(string targetFramework)
+        public virtual void ShouldEnforcingAllAnalysisRules(string targetFramework)
         {
+            if (this.IsAKnownBrokenCrossTarget(targetFramework))
+            {
+                return;
+            }
+
             var expectedAnalysisMode = ProjectDefaultsTests.AllNet5TargetFrameworks.SelectMany(p => p.Cast<string>()).Contains(targetFramework)
                 ? "AllEnabledByDefault"
                 : "All";
@@ -218,12 +247,12 @@ namespace MsBullet.Sdk.Tests
                 .ShouldEvaluatedEquivalentTo(true);
         }
 
-        [Fact(DisplayName = "Should respect user package reference verions")]
+        [Fact(DisplayName = "Should respect user package reference versions")]
         public virtual void ShouldRespectUserPackageReferenceVersions()
         {
             var project = this.ProvideProject();
 
-            var excludePackages = this.FrameworkDependentPackages;
+            var excludePackages = FrameworkDependentPackages;
 
 #pragma warning disable S1135 // Track uses of "TODO" tags
             /*
@@ -231,7 +260,7 @@ namespace MsBullet.Sdk.Tests
              * Investigate why it is added even though the IsTestProject property is false.
              */
 #pragma warning restore S1135 // Track uses of "TODO" tags
-            bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
+            _ = bool.TryParse(project.GetPropertyValue("IsTestProject"), out var isTestProject);
             if (!isTestProject)
             {
                 excludePackages = excludePackages.Append("Microsoft.NET.Test.Sdk");
@@ -258,6 +287,13 @@ namespace MsBullet.Sdk.Tests
             project
                 .ShouldCountainProperty("IsPackable")
                 .ShouldEvaluatedEquivalentTo(true);
+        }
+
+        protected bool IsAKnownBrokenCrossTarget(string targetFramework)
+        {
+            return this.crossTargetBrokenInNet70100
+                .SingleOrDefault(t => RuntimeInformation.IsOSPlatform(t.Key), KeyValuePair.Create<OSPlatform, string[]>(default, Array.Empty<string>()))
+                .Value.Contains(targetFramework);
         }
 
         protected virtual Project ProvideProject(IDictionary<string, string> globalProperties = null)
